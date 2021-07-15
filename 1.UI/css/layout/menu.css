@@ -1,0 +1,55 @@
+.menu {
+    height: calc(100vh - 49px);
+    width: 225px;
+    border-right: 1px solid #dedede;
+}
+
+.menu .menu-item {
+    height: 44px;
+    width: 100%;
+    color: #000;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.menu .menu-item:hover {
+    background-color: #e5e5e5;
+    color: #000;
+}
+
+.menu .menu-item-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    background-image: url("../../content/icon/dashboard.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.menu .menu-item-icon.dashboard {
+    background-image: url("../../content/icon/dashboard.png");
+}
+
+.menu .menu-item-icon.report {
+    background-image: url("../../content/icon/report.png");
+}
+
+.menu .menu-item-icon.buy {
+    background-image: url("../../content/icon/dashboard.png");
+}
+
+.menu .menu-item-icon.employee {
+    background-image: url("../../content/icon/dic-employee.png");
+}
+
+.menu .menu-item-icon.setting {
+    background-image: url("../../content/icon/setting.png");
+}
+
+.menu-item .menu-item-text {
+    height: 20px;
+    width: calc(100% - 30px);
+}

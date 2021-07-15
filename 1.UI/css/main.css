@@ -1,0 +1,23 @@
+@import url("../css/base/button.css");
+@import url("../css/base/textbox.css");
+@import url("../css/base/dropdown.css");
+@import url("../css/layout/header.css");
+@import url("../css/layout/menu.css");
+@import url("../css/layout/content.css");
+@import url("../css/layout/popup.css");
+@font-face {
+    font-family: ggsans-regular;
+    src: url("/content/font/GoogleSans-Regular.otf");
+}
+
+@font-face {
+    font-family: ggsans-bold;
+    src: url("../content/font/GoogleSans-Bold.otf");
+}
+
+body {
+    font-family: ggsans-regular;
+    font-size: 13px;
+    margin: 0;
+    position: relative;
+}

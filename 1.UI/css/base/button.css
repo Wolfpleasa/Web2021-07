@@ -9,6 +9,10 @@
     line-height: 40px;
 }
 
+button {
+    border: none;
+}
+
 .button:hover {
     background-color: #2fbebe;
 }

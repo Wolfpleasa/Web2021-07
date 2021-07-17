@@ -39,46 +39,16 @@
     justify-content: space-between;
 }
 
-.filter .searchbox {
-    height: 40px;
-    width: 261px;
-    display: flex;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    margin-left: 24px;
-    box-sizing: border-box;
-}
-
-.filter .searchbox:hover {
-    border-Color: #019160
-}
-
-.searchbox .search-icon {
-    height: 40px;
-    width: 46px;
-    background-image: url("../../content/icon/search.png");
-    background-size: 16px 16px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-position-x: 16px;
-    background-position-y: center;
-    box-sizing: border-box;
-}
-
-.searchbox input {
-    line-height: 40px;
-    width: 250px;
-    border: none;
-    outline: none;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 .department,
 .position {
     height: 40px;
     width: 202px;
-    margin-left: 10px;
+    margin-left: 16px;
+}
+
+.department .dropdown,
+.position .dropdown {
+    width: 202px;
 }
 
 input::placeholder {
@@ -109,90 +79,4 @@ input::placeholder {
     line-height: 40px;
     overflow: scroll;
     width: calc(100% - 48px);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    box-shadow: 1px 1px 1px 1px #ccc;
-}
-
-th {
-    position: sticky;
-    top: 0;
-    background-color: #fff;
-}
-
-tbody tr:nth-child(odd) {
-    background-color: #f2f2f2;
-}
-
-tr {
-    border-bottom: 1px solid #ccc;
-}
-
-td {
-    text-align: center;
-}
-
-.page-navigator {
-    width: calc(100% - 48px);
-    margin: 0px 24px 0px 24px;
-    height: 56px;
-    display: flex;
-    justify-content: space-between;
-    background-color: #ccc;
-    line-height: 56px;
-    /* margin-top: 64px; */
-}
-
-.paging {
-    height: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.btn {
-    width: 32px;
-    height: 32px;
-    line-height: 32px;
-    margin: 0px 10px 0px 10px;
-}
-
-.firstpage {
-    background-image: url('/content/icon/btn-firstpage.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.prevpage {
-    background-image: url('/content/icon/btn-prev-page.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.page-navigator .paging .pagenumber {
-    border-radius: 50%;
-    text-align: center;
-    border: 1px solid #fff;
-}
-
-.page-navigator .paging .pagenumber:active {
-    background-color: #019160 !important;
-}
-
-.page-navigator .paging .pagenumber:hover {
-    background-color: #fff;
-}
-
-.next-page {
-    background-image: url('/content/icon/btn-next-page.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.last-page {
-    background-image: url('/content/icon/btn-lastpage.svg');
-    background-repeat: no-repeat;
-    background-position: center;
 }

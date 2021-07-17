@@ -8,6 +8,7 @@
     <title>Quản lí nhân viên</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/common/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -65,22 +66,48 @@
         </div>
         <div class="filter">
             <div class="d-flex">
-                <div class="searchbox">
-                    <div class="search-icon"></div>
-                    <input type="text" id="searchfield" placeholder="Tìm theo mã, Tên hoặc Số điện thoại" />
-                </div>
+                <div class="input-icon"></div>
+                <input class="field-input-icon" type="text" id="searchfield" placeholder="Tìm theo mã, Tên hoặc Số điện thoại" />
                 <div class="department">
                     <div class="select">
                         <div class="inp">Tất cả phòng ban</div>
                         <div class="X"></div>
                         <div class="select-arrow"></div>
                     </div>
+                    <div class="dropdown d-none">
+                        <div class="dropdown-item">
+                            <div class="dropdown-icon"></div>
+                            <div class="dropdown-text">Giới tính</div>
+                        </div>
+                        <div class="dropdown-item">
+                            <div class="dropdown-icon"></div>
+                            <div class="dropdown-text">Lương</div>
+                        </div>
+                        <div class="dropdown-item">
+                            <div class="dropdown-icon"></div>
+                            <div class="dropdown-text">Ngày sinh</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="position">
                     <div class="select">
-                        <div class="inp">Tất cả vị trí</div>
+                        <div class="inp" id="inp">Tất cả vị trí</div>
                         <div class="X"></div>
                         <div class="select-arrow"></div>
+                    </div>
+                    <div class="dropdown d-none">
+                        <div class="dropdown-item">
+                            <div class="dropdown-icon"></div>
+                            <div class="dropdown-text">Giám đốc</div>
+                        </div>
+                        <div class="dropdown-item">
+                            <div class="dropdown-icon"></div>
+                            <div class="dropdown-text">Chủ tịch</div>
+                        </div>
+                        <div class="dropdown-item">
+                            <div class="dropdown-icon"></div>
+                            <div class="dropdown-text">Bảo vệ</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -325,14 +352,14 @@
         <div class="page-navigator">
             <div class="ml-10 ">Hiển thị 1-10/1000 nhân viên</div>
             <div class="paging">
-                <div class="btn firstpage"></div>
-                <div class="btn prevpage"></div>
+                <div class="btn commonpage firstpage"></div>
+                <div class="btn commonpage prevpage"></div>
                 <div class="btn pagenumber">1</div>
                 <div class="btn pagenumber">2</div>
                 <div class="btn pagenumber">3</div>
                 <div class="btn pagenumber">4</div>
-                <div class="btn next-page"></div>
-                <div class="btn last-page"></div>
+                <div class="btn commonpage next-page"></div>
+                <div class="btn commonpage last-page"></div>
             </div>
             <div class="mr-10 ">10 nhân viên/trang</div>
         </div>
@@ -376,10 +403,11 @@
                                 <div class="X"></div>
                                 <div class="select-arrow"></div>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown d-none">
                                 <div class="dropdown-item">
                                     <div class="dropdown-icon"></div>
                                     <div class="dropdown-text">Nam</div>
+                                    <!-- <i class="fa fa-check white-color"></i> -->
                                 </div>
                                 <div class="dropdown-item">
                                     <div class="dropdown-icon"></div>
@@ -407,6 +435,10 @@
                             <label for="">Nơi cấp</label><br>
                             <input type="text" class="textbox-default">
                         </div>
+                        <div class="col">
+                            <label for="">League of Legend ingame :))))</label><br>
+                            <input type="text" class="textbox-default">
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col">
@@ -419,7 +451,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="B mt-16">
+                <div class="B">
                     <div>B.THÔNG TIN CÔNG VIỆC</div>
                     <div class="line"></div>
                     <div class="row mt-8">
@@ -430,7 +462,7 @@
                                 <div class="X"></div>
                                 <div class="select-arrow"></div>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown d-none">
                                 <div class="dropdown-item">
                                     <div class="dropdown-icon"></div>
                                     <div class="dropdown-text">Giám đốc</div>
@@ -452,7 +484,7 @@
                                 <div class="X"></div>
                                 <div class="select-arrow"></div>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown d-none">
                                 <div class="dropdown-item">
                                     <div class="dropdown-icon"></div>
                                     <div class="dropdown-text">Phòng kế toán</div>
@@ -475,7 +507,7 @@
                         </div>
                         <div class="col">
                             <label for="">Mức lương cơ bản</label><br>
-                            <input type="number" class="textbox-default ta-r pd-19">
+                            <input type="text" class="textbox-default ta-r pd-19">
                             <div class="currency">
                                 (VNĐ)
                             </div>
@@ -494,7 +526,7 @@
                                 <div class="X"></div>
                                 <div class="select-arrow"></div>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown d-none">
                                 <div class="dropdown-item">
                                     <div class="dropdown-icon"></div>
                                     <div class="dropdown-text">Đã nghỉ việc</div>
@@ -520,6 +552,7 @@
     </div>
     <script src="../js/jquery.min.js"></script>
     <script src="../js/employee.js"></script>
+    <script src="../js/base/dropdown.js"></script>
 </body>
 
 </html>

@@ -39,10 +39,14 @@
     text-align: center;
 }
 
-.cl-red {
-    color: red;
-}
-
 .ta-r {
     text-align: right;
+}
+
+.ta-l {
+    text-align: left;
+}
+
+.cl-red {
+    color: red;
 }

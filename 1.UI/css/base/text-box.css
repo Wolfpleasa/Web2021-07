@@ -17,3 +17,7 @@
 .textbox-default:focus {
     border-color: #01b075;
 }
+
+label {
+    font-size: 13px;
+}

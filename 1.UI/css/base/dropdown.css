@@ -11,7 +11,7 @@
     border-color: #2FBE8E !important;
 }
 
-.select:active {
+.select:focus {
     border-color: #01b075 !important;
 }
 

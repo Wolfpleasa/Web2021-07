@@ -29,6 +29,11 @@
     background-repeat: no-repeat;
 }
 
+.menu .menu-item:active {
+    background-color: #019160 !important;
+    color: #fff;
+}
+
 .menu .menu-item-icon.dashboard {
     background-image: url("../../content/icon/dashboard.png");
 }

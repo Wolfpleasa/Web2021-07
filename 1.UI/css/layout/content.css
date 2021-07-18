@@ -51,10 +51,6 @@
     width: 202px;
 }
 
-input::placeholder {
-    font-size: 11px;
-}
-
 .department .select,
 .position .select {
     width: calc(100% - 2px);

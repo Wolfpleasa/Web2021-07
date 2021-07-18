@@ -2,6 +2,12 @@ table {
     width: 100%;
     border-collapse: collapse;
     box-shadow: 1px 1px 1px 1px #ccc;
+    text-align: left;
+}
+
+thead,
+tbody {
+    width: 100%;
 }
 
 th {
@@ -18,19 +24,76 @@ tr {
     border-bottom: 1px solid #ccc;
 }
 
-
 tr:hover {
     background-color: #e9ebee !important;
 }
 
 td {
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+tr th:first-child {
+    padding-left: 16px;
+}
+
+tr th:nth-child(4) {
     text-align: center;
 }
 
-tr td:nth-child(9){
+tr th:nth-child(9) {
     text-align: right;
 }
 
-/* tr td:nth-child(4){
+tr td:first-child {
+    padding-left: 16px;
+    max-width: 11%;
+}
+
+tr td:nth-child(9) {
+    text-align: right;
+}
+
+tr td:nth-child(4) {
     text-align: center;
-} */
+}
+
+tr th:last-child {
+    padding-left: 16px;
+}
+
+tr td:last-child {
+    padding-left: 16px;
+}
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+
+/* Track */
+
+ ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

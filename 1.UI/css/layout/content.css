@@ -49,6 +49,7 @@
 .department .dropdown,
 .position .dropdown {
     width: 202px;
+    height: 120px;
 }
 
 .department .select,

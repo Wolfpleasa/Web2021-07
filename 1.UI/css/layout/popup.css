@@ -7,7 +7,7 @@
     border: 2px solid #000;
     background-color: #fff;
     border-radius: 4px;
-    /* visibility: hidden; */
+    visibility: hidden;
 }
 
 
@@ -149,7 +149,7 @@ col .select .X {
 .currency {
     position: absolute;
     height: 0px;
-    bottom: 173px;
+    bottom: 182px;
     right: 35px;
     font-style: italic;
     z-index: 1;
@@ -166,7 +166,7 @@ col .select .X {
 .foot {
     width: 100%;
     height: 60px;
-    background-color: #e9ebee;
+    background-color: #E5E5E5;
     margin-top: 24px;
     display: flex;
     flex-direction: row-reverse;
@@ -197,11 +197,15 @@ col .select .X {
     width: 100px;
     border: 0;
     padding: 0;
-    color: #fff;
+    color: #000;
     text-align: center;
-    background-color: #cccccc;
+    background-color: #E5E5E5;
     line-height: 36px;
     margin: 0 24px 0 24px;
+}
+
+.foot .button.cancel:hover {
+    background-color: #bbbbbb;
 }
 
 
@@ -330,50 +334,10 @@ col .select .X {
         padding-right: 45px;
     }
     .currency {
-        top: 254px;
-        right: 35px;
+        top: 225px;
     }
     .col .dropdown {
         height: 120px;
         width: 225px;
-    }
-    /* phần footer của popup */
-    .foot {
-        width: 100%;
-        height: 60px;
-        background-color: #bbbbbb;
-        margin-top: 24px;
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-        text-align: center;
-        bottom: 0;
-    }
-    .foot .button.save {
-        width: 100px;
-        height: 36px;
-        padding: 0;
-        color: #fff;
-        background-color: #019160;
-        background-image: url("../../content/icon/save.png");
-        background-size: 16px 16px;
-        background-repeat: no-repeat;
-        background-position-x: 16px;
-        background-position-y: center;
-        margin: 0 24px 0 16px;
-    }
-    .foot .button.save:hover {
-        background-color: #2FBE8E;
-    }
-    .foot .button.cancel {
-        height: 36px;
-        width: 100px;
-        border: 0;
-        padding: 0;
-        color: #fff;
-        text-align: center;
-        background-color: #cccccc;
-        line-height: 36px;
-        margin: 0 24px 0 24px;
     }
 }

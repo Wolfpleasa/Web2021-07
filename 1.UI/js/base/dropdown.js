@@ -5,13 +5,12 @@
 $(".select-arrow").click(function() {
     let me = $(this),
         dropdown = me.parent().parent().find(".dropdown");
-    // if ($(".select-arrow").hasClass("rot-180")) {
-    //     $(".dropdown").slideUp("slow");
-    //     $(".select-arrow").removeClass("rot-180");
-    //     $(".select-arrow").addClass("rot-0");
-    // }
+    if ($(".select-arrow.rot-180").not(me).hasClass("rot-180")) {
+        $(".select-arrow.rot-180").addClass("rot-0");
+        $(".select-arrow.rot-180").removeClass("rot-180");
+    }
     $(".dropdown").slideUp("slow");
-    if ($(this).hasClass("rot-180")) {
+    if (me.hasClass("rot-180")) {
         me.addClass("rot-0");
         me.removeClass("rot-180");
         dropdown.slideUp("slow");
@@ -26,10 +25,12 @@ $(".inp").click(function() {
     let me = $(this),
         arrow = me.parent().find(".select-arrow"),
         dropdown = me.parent().parent().find(".dropdown");
-
+    if ($(".select-arrow.rot-180").not(arrow).hasClass("rot-180")) {
+        $(".select-arrow.rot-180").addClass("rot-0");
+        $(".select-arrow.rot-180").removeClass("rot-180");
+    }
     $(".dropdown").slideUp("slow");
     console.log("arrow")
-    debugger;
     if (arrow.hasClass("rot-180")) {
         arrow.addClass("rot-0");
         arrow.removeClass("rot-180");
@@ -58,7 +59,7 @@ $(".dropdown-item").click(function() {
     $(".X").click(function() {
         $(this).attr("style", "visibility: hidden;")
         $(this).parent().find(".inp").text(text);
-        me.removeClass("bg-select");
+        $(this).parent().find(me).removeClass("bg-select");
     })
 })
 

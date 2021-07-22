@@ -21,7 +21,7 @@ $(".content-header #btnAdd").click(function() {
         const employeeCode = $('#txtEmployeeCode').val();
         const fullName = $('#txtFullName').val();
         const dateOfBirth = $('#txtDateOfBirth').val();
-        const gender = $('#txtGender').attr("Value");
+        const gender = parseInt($('#txtGender').attr("Value"));
         const identityNumber = $('#txtIdentityNumber').val();
         const identityDate = $('#txtIdentityDate').val();
         const identityPlace = $('#txtIdentityPlace').val();
@@ -32,7 +32,7 @@ $(".content-header #btnAdd").click(function() {
         const personalTaxCode = $('#txtPersonalTaxCode').val();
         const salary = CommonFn.formatNumber($('#txtSalary').val());
         const joinDate = $('#txtJoinDate').val();
-        const workStatus = $('#txtWorkStatus').attr("Value");
+        const workStatus = parseInt($('#txtWorkStatus').attr("Value"));
 
         let employee = {
             "employeeCode": employeeCode,
@@ -59,7 +59,7 @@ $(".content-header #btnAdd").click(function() {
             dataType: "json",
         }).done(res => {
             alert("Thêm mới thành công");
-            loadData();
+            location.reload();
             $("#popup").hide();
             $(".wrapper").removeClass("fade");
 
@@ -113,9 +113,9 @@ function getPosition() {
             const positionName = position['PositionName'];
             const positionId = position['PositionId'];
             let dropdown = $(".dropdown.dd-Position");
-            let item = `<div class="dropdown-item">
+            let item = `<div class="dropdown-item" Value = "${positionId}">
             <div class="dropdown-icon"></div>
-            <div class="dropdown-text" Value = "${positionId}">${positionName}</div>
+            <div class="dropdown-text" >${positionName}</div>
             </div>`
             dropdown.append(item);
         })
@@ -136,13 +136,12 @@ function getDepartment() {
             const departmentName = department['DepartmentName'];
             const departmentId = department['DepartmentId'];
             let dropdown = $(".dropdown.dd-Department");
-            let item = `<div class="dropdown-item">
+            let item = `<div class="dropdown-item" Value = "${departmentId}">
             <div class="dropdown-icon"></div>
-            <div class="dropdown-text" Value = "${departmentId}">${departmentName}</div>
+            <div class="dropdown-text" >${departmentName}</div>
             </div>`
             dropdown.append(item);
         })
-
     })
 };
 
@@ -151,32 +150,13 @@ function getDepartment() {
  * Ngọc 16/7/2021
  */
 $(".head-close, .button.cancel").click(function() {
+    //reset border các ô input
+    $("#popup").find(".textbox-default").css('border', '1px solid #bbbbbb');
+    //reset bỏ chọn các dropdown-item
+    $("#popup").find(".dropdown-item").removeClass('bg-select');
     $("#popup").hide();
     $(".wrapper").removeClass("fade");
-    $(".X").attr("style", "visibility: hidden;")
-})
-
-/**
- * reload lại trang
- * Ngọc 16/7/2021
- */
-$(".refresh").click(function() {
-    location.reload();
-})
-
-/**
- * Load ảnh từ máy lên form thêm mới
- * Ngọc 16/7/2021
- */
-$('.image').click(function() {
-    $('#myFile').trigger('click');
-})
-
-$('#myFile').click(function(e) {
-    $('#myFile').change(function(e) {
-        var img = URL.createObjectURL(e.target.files[0]);
-        $('.image').css("background-image", `url(${img})`);
-    })
+    $(".X").attr("style", "visibility: hidden;");
 })
 
 /**
@@ -249,7 +229,7 @@ $('input[required]').blur(function() {
 
 
 /**
- * Hàm bấp đúp vào tr để lên form sửa 
+ * Hàm bấm đúp vào tr để lên form sửa 
  * Ngọc 21/7/2021
  */
 
@@ -257,11 +237,6 @@ $("tbody").on("dblclick", "tr", function() {
     let me = $(this),
         employeeId = me.attr("Value");
 
-    // //Load dữ liệu cho vị trí
-    // getPosition();
-
-    // //Load dữ liệu cho phòng ban
-    // getDepartment();
     $("#popup").show();
     for (let i = 0; i < employees.length; i++) {
         let employee = employees[i];
@@ -283,13 +258,19 @@ $("tbody").on("dblclick", "tr", function() {
             $('#txtSalary').val(CommonFn.formatMoney(employee.Salary));
             $('#txtJoinDate').val(employee.JoinDate);
             $('#txtWorkStatus').attr("Value", `${employee.WorkStatus}`);
+
+            $('#txtGender').parent().parent().find(`.dropdown-item[value='${employee.Gender}']`).addClass('bg-select');
+            $('#txtPositionName').parent().parent().find(`.dropdown-item[value='${employee.PositionId}']`).addClass('bg-select');
+            $('#txtDepartmentName').parent().parent().find(`.dropdown-item[value='${employee.DepartmentId}']`).addClass('bg-select');
+
+
         }
     }
     $('#btnSave').click(function() {
         const employeeCode = $('#txtEmployeeCode').val();
         const fullName = $('#txtFullName').val();
         const dateOfBirth = $('#txtDateOfBirth').val();
-        const gender = $('#txtGender').attr("Value");
+        const gender = parseInt($('#txtGender').attr("Value"));
         const identityNumber = $('#txtIdentityNumber').val();
         const identityDate = $('#txtIdentityDate').val();
         const identityPlace = $('#txtIdentityPlace').val();
@@ -300,7 +281,7 @@ $("tbody").on("dblclick", "tr", function() {
         const personalTaxCode = $('#txtPersonalTaxCode').val();
         const salary = CommonFn.formatNumber($('#txtSalary').val());
         const joinDate = $('#txtJoinDate').val();
-        const workStatus = $('#txtWorkStatus').attr("Value");
+        const workStatus = parseInt($('#txtWorkStatus').attr("Value"));
 
         let employeeEdit = {
             "employeeCode": employeeCode,
@@ -327,7 +308,7 @@ $("tbody").on("dblclick", "tr", function() {
             dataType: "json",
         }).done(res => {
             alert("Sửa thành công");
-            loadData();
+            location.reload();
             $("#popup").hide();
             $(".wrapper").removeClass("fade");
 
@@ -338,41 +319,86 @@ $("tbody").on("dblclick", "tr", function() {
 })
 
 /**
- * Hàm click vào tr để xóa Hàng
- * Ngọc 21/07/99
+ * Hàm click chọn tr 
+ * Ngọc 21/07/2021
  */
 $("tbody").on("click", "tr", function() {
-    let me = $(this),
-        employeeId = me.attr("Value");
-
-    $("#warning-popup").show();
-    $(".wrapper").addClass("fade");
-
-    for (let i = 0; i < employees.length; i++) {
-        let employee = employees[i];
-        if (employeeId == employee["EmployeeId"]) {
-            $("#warning-popup .head .head-text").text(`Xóa thông tin nhân viên ${employee.FullName}`);
-            $("#warning-popup .main .text").html(`Bạn có chắc muốn xóa thông tin của nhân viên <b>${employee.FullName}</b> này không`);
-        }
-    }
-
-    $('#btnConfirm').click(function() {
-        $.ajax({
-            url: `http://cukcuk.manhnv.net/v1/Employees/${employeeId}`,
-            method: "DELETE",
-        }).done(res => {
-            alert("Xóa thành công");
-            loadData();
-            $("#warning-popup").hide();
-            $(".wrapper").removeClass("fade");
-
-        }).fail(function(res) {
-            console.log(res);
-        });
-    })
+    let me = $(this);
+    me.toggleClass("tr-select");
 })
 
+/**
+ * Hàm bấm chuột phải vào các hàng được click chuột trái để xóa Hàng
+ * Ngọc 21/07/2021
+ */
+$("tbody").on("mousedown", "tr.tr-select", function(e) {
+    let me = $(this),
+        employeeId = me.attr("Value");
+    if (e.which == 3) {
+        alert("Mở form Xóa nhân viên");
+        $("#warning-popup").show();
+        $(".wrapper").addClass("fade");
+
+        for (let i = 0; i < employees.length; i++) {
+            let employee = employees[i];
+            if (employeeId == employee["EmployeeId"]) {
+                $("#warning-popup .head .head-text").text(`Xóa thông tin nhân viên ${employee.FullName}`);
+                $("#warning-popup .main .text").html(`Bạn có chắc muốn xóa thông tin của nhân viên <b>${employee.FullName}</b> này không`);
+            }
+        }
+
+        $('#btnConfirm').click(function() {
+            $.ajax({
+                url: `http://cukcuk.manhnv.net/v1/Employees/${employeeId}`,
+                method: "DELETE",
+            }).done(res => {
+                alert("Xóa thành công");
+                location.reload();
+                $("#warning-popup").hide();
+                $(".wrapper").removeClass("fade");
+
+            }).fail(function(res) {
+                console.log(res);
+            });
+        })
+    }
+
+})
+
+
+/**
+ * Hàm đóng warning-popup
+ * Ngọc 21/07/2021 
+ */
 $(".head-close, .button.cancel").click(function() {
     $("#warning-popup").hide();
     $(".wrapper").removeClass("fade");
+})
+
+/**
+ * reload lại trang
+ * Ngọc 16/7/2021
+ */
+$(".refresh").click(function() {
+    location.reload();
+})
+
+/**
+ * Hàm mở ảnh trong máy 
+ * Ngọc 16/7/2021
+ */
+$('.image').click(function() {
+    $('#myFile').trigger('click');
+})
+
+
+/**
+ * Hàm load ảnh trong máy lên form 
+ * Ngọc 16/7/2021
+ */
+$('#myFile').click(function(e) {
+    $('#myFile').change(function(e) {
+        var img = URL.createObjectURL(e.target.files[0]);
+        $('.image').css("background-image", `url(${img})`);
+    })
 })

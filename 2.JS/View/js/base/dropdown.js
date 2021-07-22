@@ -49,18 +49,19 @@ $(".dropdown").on("click", ".dropdown-item", function() {
     let me = $(this),
         val = me.find(".dropdown-text").text(),
         text = me.parent().parent().find(".inp"),
-        value = me.find(".dropdown-text").attr("Value");
+        value = me.attr("Value");
+
     text.attr("Value", `${value}`);
+    text.text(val);
     me.parents('.dropdown').find('.dropdown-item').removeClass("bg-select");
     me.addClass("bg-select");
-    me.parent().parent().find(".inp").text(val);
     me.parent().parent().find(".X").attr("style", "visibility: visible;");
     //bấm X thì các .dropdown-item được bỏ chọn và khôi phục text như lúc đầu
     $(".X").click(function() {
         $(this).attr("style", "visibility: hidden;")
         $(this).parent().find(".inp").text("Chưa chọn");
         $(this).parent().find(".inp").attr("Value", "-1");
-        $(this).parent().find(me).removeClass("bg-select");
+        $(this).parent().parent().find(me).removeClass("bg-select");
     })
 })
 

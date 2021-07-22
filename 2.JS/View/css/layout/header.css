@@ -72,7 +72,7 @@
 .header-right .user .user-avatar {
     width: 32px;
     height: 32px;
-    margin: 6px 16px 8px 16px;
+    margin: 8px 16px 8px 16px;
     border-radius: 50%;
     background-image: url("../../content/icon/avatar-default.png");
     background-size: contain;

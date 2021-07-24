@@ -25,3 +25,8 @@ $(".toggle-menu").click(function() {
     }
 
 });
+
+$(".menu-item").click(function() {
+    $(".menu-item").removeClass("selected");
+    $(this).addClass("selected");
+})

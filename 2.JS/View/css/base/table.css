@@ -23,7 +23,8 @@ tr:hover {
 }
 
 tr.tr-select {
-    background-color: pink !important;
+    background-color: #019160 !important;
+    color: #fff;
 }
 
 

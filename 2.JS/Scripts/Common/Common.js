@@ -64,7 +64,6 @@ CommonFn.convertDate = dateSrc => {
     } else {
         dateString = "123";
     }
-
     return dateString;
 }
 
@@ -76,13 +75,12 @@ CommonFn.getValueEnum = (data, enumName) => {
     let enumeration = Enumeration[enumName],
         resource = Resource[enumName];
 
-    for (propName in enumeration) {
-        if (enumeration[propName] == data) {
-            data = resource[propName];
-        }
+    for (var key in enumeration) {
+        if (enumeration[key] == data)
+            data = resource[key];
     }
 
-    return data;
+    return data
 }
 
 /**

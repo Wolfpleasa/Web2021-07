@@ -85,6 +85,37 @@
         //     "ModifiedBy": null
         // }
     </script>
+    <script>
+        /*
+                $('#btnSave').click(function() {
+                    let employee = {};
+
+                    me.form.find("[FieldName]").each(function() {
+                        let cell = $(this),
+                            dataType = cell.attr("DataType"),
+                            fieldName = cell.attr("FieldName"),
+                            value = me.getValueForm(cell, dataType);
+
+                        employee[fieldName] = value;
+                    })
+
+                    $.ajax({
+                        url: "http://cukcuk.manhnv.net/v1/Employees",
+                        method: "POST",
+                        data: JSON.stringify(employee),
+                        contentType: "application/json;charset=utf-8",
+                        dataType: "json",
+                    }).done(res => {
+                        alert("Thêm mới thành công");
+                        location.reload();
+                        me.form.hide();
+                        $(".wrapper").removeClass("fade");
+
+                    }).fail(function(res) {
+                        console.log(res);
+                    });
+                })*/
+    </script>
 </body>
 
 </html>

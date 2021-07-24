@@ -39,6 +39,11 @@
     color: #fff;
 }
 
+.menu .menu-item.selected {
+    background-color: #019160 !important;
+    color: #fff;
+}
+
 
 /* .menu .menu-item:nth-last-child(3) {
     background-color: #019160 !important;
@@ -71,6 +76,15 @@
     display: block;
     white-space: nowrap;
     overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.menu .menu-item.selected a {
+    color: #fff;
 }
 
 .toggle-menu {

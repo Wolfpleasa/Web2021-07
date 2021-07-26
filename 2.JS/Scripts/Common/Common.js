@@ -17,6 +17,19 @@ CommonFn.formatMoney = money => {
 }
 
 /**
+ * Hàm kiểm tra chuổi chỉ chứa số
+ * Ngọc 24/07/2021
+ */
+CommonFn.onlyNumber = number => {
+    let part = /[^0-9]/g,
+        res = number.match(part);
+    if (!res) {
+        return true;
+    }
+    return false;
+}
+
+/**
  * Hàm format số tiền về số bth
  * Ngọc 18/7/2021
  */
@@ -43,8 +56,7 @@ CommonFn.formatDate = dateSrc => {
  * Ngọc 18/7/2021
  */
 CommonFn.isDateFormat = (date) => {
-    let regex = new RegExp("([0-9]{4}[-](0[1-9]|1[0-2])[-]([0-2]{1}[0-9]{1}|3[0-1]{1})|([0-2]{1}[0-9]{1}|3[0-1]{1})[-](0[1-9]|1[0-2])[-][0-9]{4})");
-
+    let regex = new RegExp("([0-9]{4}[-](0[1-9]|1[0-2])[-]([0-2]{1}[0-9]{1}|3[0-1]{1})|([0-2]{1}[0-9]{1}|3[0-1]{1})[/](0[1-9]|1[0-2])[/][0-9]{4})");
     return regex.test(date);
 }
 

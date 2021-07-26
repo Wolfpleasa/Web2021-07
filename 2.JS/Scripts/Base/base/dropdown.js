@@ -65,6 +65,18 @@ $(".dropdown").on("click", ".dropdown-item", function() {
     })
 })
 
+/**
+ * Bấm chọn các nội dung trong dropdown thì bỏ viền đỏ 
+ * Ngọc 16/7/2021
+ */
+$(".dropdown").on("click", ".dropdown-item", function() {
+    let me = $(this),
+        select = me.parent().parent().find(".select");
+
+    select.removeClass("notValidControl");
+})
+
+
 
 /**
  * Sự kiện bấm bất kì thứ gì ngoài cái mũi tên thì dropdown ẩn đi 

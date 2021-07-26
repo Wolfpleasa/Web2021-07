@@ -52,6 +52,7 @@ tr th:first-child {
 }
 
 tr th:nth-child(2) {
+    padding-left: 16px;
     max-width: 164px;
 }
 
@@ -66,6 +67,7 @@ tr th:nth-child(4) {
 
 tr th:nth-child(5) {
     max-width: 119px;
+    margin-left: 16px;
 }
 
 tr th:nth-child(6) {
@@ -113,6 +115,7 @@ tr td:first-child {
 }
 
 tr td:nth-child(2) {
+    padding-left: 16px;
     max-width: 164px;
 }
 
@@ -127,6 +130,7 @@ tr td:nth-child(4) {
 
 tr td:nth-child(5) {
     max-width: 119px;
+    margin-left: 16px;
 }
 
 tr td:nth-child(6) {

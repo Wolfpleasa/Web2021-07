@@ -82,10 +82,10 @@
     cursor: pointer;
 }
 
-.content #gridEmployee {
+.content #gridEntity {
     height: calc(100vh - 217px);
     margin: 0px 24px 0px 24px;
     line-height: 40px;
     overflow: scroll;
-    width: calc(100% - 48px);
+    max-width: calc(100% - 48px);
 }

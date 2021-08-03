@@ -25,7 +25,6 @@
 }
 
 .select .X {
-    visibility: hidden;
     height: 16px;
     width: 16px;
     margin-top: 12px;
@@ -77,7 +76,6 @@
     height: auto;
     margin-top: 1px;
     border-radius: 4px;
-    /* display: none; */
 }
 
 .dropdown .dropdown-item {

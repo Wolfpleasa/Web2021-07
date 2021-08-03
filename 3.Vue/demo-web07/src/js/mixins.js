@@ -13,10 +13,10 @@ export const CommonFn = {
         },
 
         /**
-         * Hàm kiểm tra chuổi chỉ chứa số
+         * Hàm kiểm tra chuổi chỉ chứa chữ số
          * Ngọc 24/07/2021
          */
-        onlyNumber(number) {
+        isNumber(number) {
             let part = /[^0-9]/g,
                 res = number.match(part);
             if (!res) {

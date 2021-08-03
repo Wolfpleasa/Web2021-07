@@ -40,6 +40,7 @@
     background-size: contain;
     background-position: center;
     right: 0;
+    cursor: pointer;
 }
 
 .toast.message-red .toast-icon {

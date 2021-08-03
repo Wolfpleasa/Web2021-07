@@ -8,7 +8,7 @@
   >
     <div class="head">
       <div class="head-text">THÔNG TIN NHÂN VIÊN</div>
-      <div class="head-close" @click="btnCancelonClick"></div>
+      <div class="head-close" @click="btnDialogCancelonClick"></div>
     </div>
     <div class="main">
       <div class="avatar">
@@ -30,7 +30,7 @@
                 type="text"
                 FieldName="EmployeeCode"
                 class="textbox-default"
-                id="txtEmployeeCode"
+                ref="txtEmployeeCode"
                 required
                 v-model="employee.EmployeeCode"
               />
@@ -62,34 +62,13 @@
             </div>
             <div class="col">
               <label for="">Giới tính</label><br />
-              <div class="select">
-                <div
-                  FieldName="Gender"
-                  DataType="Enum"
-                  EnumName="Gender"
-                  class="inp"
-                  id="txtGender"
-                  Value="-1"
-                >
-                  Chưa chọn
-                </div>
-                <div class="X"></div>
-                <div class="select-arrow rot-0"></div>
-              </div>
-              <div class="dropdown d-none">
-                <div class="dropdown-item" Value="1">
-                  <div class="dropdown-icon"></div>
-                  <div class="dropdown-text">Nam</div>
-                </div>
-                <div class="dropdown-item" Value="0">
-                  <div class="dropdown-icon"></div>
-                  <div class="dropdown-text">Nữ</div>
-                </div>
-                <div class="dropdown-item" Value="2">
-                  <div class="dropdown-icon"></div>
-                  <div class="dropdown-text">Khác</div>
-                </div>
-              </div>
+              <Dropdown
+                defaultName="Chưa chọn"
+                itemId="Gender"
+                itemName="GenderName"
+                :selectedId="employee.Gender + ''"
+                @chooseDropdownItem="chooseDropdownItem"
+              />
             </div>
           </div>
           <div class="row">
@@ -104,7 +83,7 @@
                 class="textbox-default"
                 id="txtIdentityNumber"
                 required
-                  v-model="employee.IdentityNumber"
+                v-model="employee.IdentityNumber"
               />
             </div>
             <div class="col">
@@ -115,7 +94,7 @@
                 DataType="Date"
                 class="textbox-default"
                 id="txtIdentityDate"
-                  v-model="employee.IdentityDate"
+                v-model="employee.IdentityDate"
               />
             </div>
           </div>
@@ -127,7 +106,7 @@
                 FieldName="IdentityPlace"
                 class="textbox-default"
                 id="txtIdentityPlace"
-                  v-model="employee.IdentityPlace"
+                v-model="employee.IdentityPlace"
               />
             </div>
           </div>
@@ -154,7 +133,7 @@
                 class="textbox-default"
                 id="txtPhoneNumber"
                 required
-                  v-model="employee.PhoneNumber"
+                v-model="employee.PhoneNumber"
               />
             </div>
           </div>
@@ -165,22 +144,26 @@
           <div class="row mt-8">
             <div class="col">
               <label for="">Vị trí</label><br />
-              <Dropdown DropdownText="Tất cả vị trí" />
-              <DropdownDetail
+              <Dropdown
+                :defaultName="employee.PositionName"
                 dd_dropdown="dd-Position"
                 Url="v1/Positions"
                 itemId="PositionId"
+                :selectedId="employee.PositionId + ''"
                 itemName="PositionName"
+                @chooseDropdownItem="chooseDropdownItem"
               />
             </div>
             <div class="col">
               <label for="">Phòng ban</label><br />
-              <Dropdown DropdownText="Tất cả phòng ban" />
-              <DropdownDetail
+              <Dropdown
+                :defaultName="employee.DepartmentName"
                 dd_dropdown="dd-Department"
                 Url="api/Department"
+                :selectedId="employee.DepartmentId + ''"
                 itemId="DepartmentId"
                 itemName="DepartmentName"
+                @chooseDropdownItem="chooseDropdownItem"
               />
             </div>
           </div>
@@ -193,7 +176,7 @@
                 DataType="OnlyNumber"
                 class="textbox-default"
                 id="txtPersonalTaxCode"
-                 v-model="employee.PersonalTaxCode"
+                v-model="employee.PersonalTaxCode"
               />
             </div>
             <div class="col">
@@ -202,10 +185,11 @@
                 type="text"
                 FieldName="Salary"
                 DataType="Number"
-                id="txtSalary"
+                ref="txtSalary"
                 class="textbox-default ta-r pd-19"
                 maxlength="15"
-                v-model= "employee.Salary"
+                v-model="employee.Salary"
+                @input="convertMoney"
               />
               <div class="currency">(VNĐ)</div>
             </div>
@@ -219,39 +203,18 @@
                 DataType="Date"
                 class="textbox-default"
                 id="txtJoinDate"
-                 v-model="employee.JoinDate"
+                v-model="employee.JoinDate"
               />
             </div>
             <div class="col">
               <label for="">Tình trạng công việc</label><br />
-              <div class="select">
-                <div
-                  FieldName="WorkStatus"
-                  DataType="Enum"
-                  EnumName="WorkStatus"
-                  class="inp"
-                  id="txtWorkStatus"
-                  Value="-1"
-                >
-                  Chưa chọn
-                </div>
-                <div class="X"></div>
-                <div class="select-arrow rot-0"></div>
-              </div>
-              <div class="dropdown d-none">
-                <div class="dropdown-item" Value="0">
-                  <div class="dropdown-icon"></div>
-                  <div class="dropdown-text">Đang làm việc</div>
-                </div>
-                <div class="dropdown-item" Value="1">
-                  <div class="dropdown-icon"></div>
-                  <div class="dropdown-text">Nghỉ có phép</div>
-                </div>
-                <div class="dropdown-item">
-                  <div class="dropdown-icon" Value="2"></div>
-                  <div class="dropdown-text">Bị đuổi việc</div>
-                </div>
-              </div>
+              <Dropdown
+                defaultName="Chưa chọn"
+                itemId="WorkStatus"
+                itemName="WorkStatusName"
+                :selectedId="employee.WorkStatus + ''"
+                @chooseDropdownItem="chooseDropdownItem"
+              />
             </div>
           </div>
         </div>
@@ -266,7 +229,7 @@
       />
 
       <Button
-        @btn-click="btnCancelonClick"
+        @btn-click="btnDialogCancelonClick"
         buttonText="Hủy"
         id="btnCancel"
         subClass="cancel d-flex"
@@ -277,17 +240,15 @@
 
 <script>
 import axios from "axios";
-import {CommonFn} from "../../js/mixins.js";
+import { CommonFn } from "../../js/mixins.js";
 
 import Button from "../../components/base/BaseButton.vue";
 import Dropdown from "../../components/base/BaseDropdown.vue";
-import DropdownDetail from "../../components/base/BaseDropdownDetail.vue";
 export default {
-  mixins : [CommonFn],
+  mixins: [CommonFn],
   name: "EmployeeDetail",
   components: {
     Dropdown,
-    DropdownDetail,
     Button,
   },
 
@@ -303,30 +264,45 @@ export default {
       require: true,
     },
     formMode: Number,
+    reopen: Boolean,
   },
 
   data() {
     return {
       employee: {},
+      defaultName: "",
+      selectedId: "",
     };
   },
+
   watch: {
-    employeeId: function (value) {
+    reopen: function () {
       let me = this;
       //Gọi Api lấy thông tin chi tiết:
-      axios
-        .get(`http://cukcuk.manhnv.net/v1/Employees/${value}`)
-        .then((res) => {
-          me.employee = res.data;
-          me.employee["Salary"] = CommonFn.formatMoney(me.employee["Salary"]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (me.formMode == 0) {
+        this.employee = {};
+        this.getNewCode();
+      } else {
+        axios
+          .get(`http://cukcuk.manhnv.net/v1/Employees/${this.employeeId}`)
+          .then((res) => {
+            me.employee = res.data;
+            me.employee.Salary = me.formatMoney(res.data.Salary);
+            me.employee.DateOfBirth = me.convertDate(res.data.DateOfBirth);
+            me.employee.JoinDate = me.convertDate(res.data.JoinDate);
+            me.employee.IdentityDate = me.convertDate(res.data.IdentityDate);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
-    formMode: function(){
-      this.employee = {};
-    }
+    formMode: function () {
+      if (this.formMode == 0) {
+        this.employee = {};
+        this.getNewCode();
+      }
+    },
   },
 
   methods: {
@@ -334,36 +310,132 @@ export default {
      * Hàm đóng popup
      * Ngọc 29/07/2021
      */
-    btnCancelonClick() {
+    btnDialogCancelonClick() {
       let me = this;
-      me.$emit("btnCancelonClick");
+      me.$emit("btnDialogCancelonClick");
     },
-    
+
     /**
      * Sự kiện bấm nút lưu
      * Ngọc 29/07/2021
      */
     btnSaveonClick() {
+      let me = this;
+      me.employee.Salary = me.formatNumber(me.employee.Salary);
       if (this.formMode == 0) {
         axios
-          .post(`http://cukcuk.manhnv.net/v1/Employees/` , this.employee)
+          .post(`http://cukcuk.manhnv.net/v1/Employees/`, this.employee)
           .then(() => {
-            alert("Thêm thành công")
+            me.$emit(
+              "callToastMessage",
+              "Thêm dữ liệu thành công",
+              "message-green"
+            );
+            me.$emit("btnSaveonClick");
           })
           .catch((err) => {
             console.log(err);
           });
       } else {
         axios
-          .put(`http://cukcuk.manhnv.net/v1/Employees/${this.employeeId}` , this.employee)
+          .put(
+            `http://cukcuk.manhnv.net/v1/Employees/${this.employeeId}`,
+            this.employee
+          )
           .then(() => {
-            alert("Sửa thành công")
+            me.$emit(
+              "callToastMessage",
+              "Sửa dữ liệu thành công",
+              "message-green"
+            );
+            me.$emit("btnSaveonClick");
           })
           .catch((err) => {
             console.log(err);
           });
       }
     },
+
+    /**
+     * Lấy mã nhân viên mới
+     * Ngọc 1/8/2021
+     */
+    getNewCode() {
+      let me = this;
+      axios
+        .get(`http://cukcuk.manhnv.net/v1/Employees/NewEmployeeCode`)
+        .then((res) => {
+          let newEmployee = {};
+          newEmployee.EmployeeCode = res.data;
+          me.employee = newEmployee;
+          me.$refs.txtEmployeeCode.focus();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    /**
+     * Hàm tự động format tiền lương được nhập
+     * Ngọc 2/8/2021
+     */
+    convertMoney() {
+      let me = this;
+      let val = me.employee.Salary;
+      let val1 = me.formatNumber(val);
+      me.employee.Salary = me.formatMoney(val1);
+    },
+    /**
+     * Hàm lấy id của dropdown được chọn gán vào obj employee
+     * Ngọc 31/07/2021
+     */
+    chooseDropdownItem(itemValue, itemID) {
+      this.employee[itemID] = itemValue;
+    },
+
+    /**
+     * Hàm format số tiền
+     * Ngọc 18/7/2021
+     */
+    formatMoney(money) {
+      if (money && !isNaN(money)) {
+        return money.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1.");
+      } else {
+        return money;
+      }
+    },
+
+    /**
+     * Chuyển đổi ngày tháng
+     * Ngọc 18/7/2021
+     */
+    convertDate(dateSrc) {
+      let dateString = "";
+      if (dateSrc) {
+        let date = new Date(dateSrc),
+          year = date.getFullYear().toString(),
+          month = (date.getMonth() + 1).toString().padStart(2, "0"),
+          day = date.getDate().toString().padStart(2, "0");
+
+        dateString = `${year}-${month}-${day}`;
+      } else {
+        dateString = "123";
+      }
+      return dateString;
+    },
+
+    /**
+     * Hàm format số tiền về số bth
+     * Ngọc 18/7/2021
+     */
+    formatNumber(money) {
+      let salary = money.replaceAll(".", "");
+      return salary;
+    },
+  },
+
+  created() {
+    // this.formMode = 1;
   },
 };
 </script>

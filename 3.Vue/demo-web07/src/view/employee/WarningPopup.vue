@@ -1,6 +1,6 @@
 <template>
   <div
-    id="warning-popup"
+    :id= "idPopup"
     :class="{ 'd-none': dnone }"
     :employeeId= "employeeId"
   >
@@ -15,14 +15,14 @@
     <div class="foot">
       <Button
         @btn-click="btnConfirmonClick"
-        buttonText="Xóa"
+        :buttonText="btnConfirmText"
         id="btnConfirm"
         subClass="confirm d-flex"
       />
 
       <Button
         @btn-click="btnCancelonClick"
-        buttonText="Hủy"
+        :buttonText="btnCancelText"
         id="btnCancel"
         subClass="cancel d-flex"
       />
@@ -53,6 +53,9 @@ export default {
     },
     warning: String,
     warningText: String,
+    idPopup: String,
+    btnCancelText:String,
+    btnConfirmText:String,
   },
 
   data() {
@@ -68,14 +71,13 @@ export default {
     btnCancelonClick() {
       let me = this;
       me.$emit("btnCancelonClick");
-         //me.dnone = true;
     },
     /**
      * Hàm bấm nút xác nhận xóa
      * Ngọc 29/07/2021
      */
     btnConfirmonClick() {
-     this.$emit("btnConfirmonClick");
+     this.$emit("btnConfirmonClick" , this.idPopup);
     },
   },
 };

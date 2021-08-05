@@ -4,6 +4,7 @@
     border-radius: 4px;
     border: 1px solid #D2D2D2;
     box-sizing: border-box;
+    outline: none;
 }
 
 .select:hover {

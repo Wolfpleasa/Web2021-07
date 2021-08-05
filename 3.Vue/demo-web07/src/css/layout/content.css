@@ -14,7 +14,13 @@
 .content.expand {
     width: calc(100% - 52px);
     left: 52px;
-    transition: left 1s;
+    transition: width 1s;
+}
+
+.content.narrow {
+    width: calc(100% - 225px);
+    left: 224px;
+    transition: width 1s;
 }
 
 .content .content-header {

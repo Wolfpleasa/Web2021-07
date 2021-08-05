@@ -1,32 +1,30 @@
-
-
 <template>
-     <div class="menu">
+     <div :class="['menu' ,{'expand' : isToggle}, {'narrow': !isToggle}]" >
             <div class="menu-item">
                 <div class="menu-item-icon dashboard"></div>
-                <div class="menu-item-text">Tổng quan</div>
+                <div :class="['menu-item-text', {'v-hidden': !isToggle}]">Tổng quan</div>
             </div>
             <div class="menu-item">
                 <div class="menu-item-icon report"></div>
-                <div class="menu-item-text">Báo cáo</div>
+                <div :class="['menu-item-text', {'v-hidden': !isToggle}]">Báo cáo</div>
             </div>
             <div class="menu-item">
                 <div class="menu-item-icon buy"></div>
-                <div class="menu-item-text">Mua hàng</div>
+                <div :class="['menu-item-text', {'v-hidden': !isToggle}]">Mua hàng</div>
             </div>
             <div class="menu-item">
                 <div class="menu-item-icon employee"></div>
-                <div class="menu-item-text"><a href="employee.html">Danh mục nhân viên</a></div>
+                <div :class="['menu-item-text', {'v-hidden': !isToggle}]"><a href="employee.html">Danh mục nhân viên</a></div>
             </div>
             <div class="menu-item">
                 <div class="menu-item-icon employee"></div>
-                <div class="menu-item-text"><a href="customer.html">Danh mục khách hàng</a></div>
+                <div :class="['menu-item-text', {'v-hidden': !isToggle}]"><a href="customer.html">Danh mục khách hàng</a></div>
             </div>
             <div class="menu-item">
                 <div class="menu-item-icon setting"></div>
-                <div class="menu-item-text">Thiết lập hệ thống</div>
+                <div :class="['menu-item-text', {'v-hidden': !isToggle}]">Thiết lập hệ thống</div>
             </div>
-            <div class="toggle-menu"></div>
+            <div :class="['toggle-menu', isToggle ?'rot-0':'rot-180' ]" @click="$emit('toggleMenu')"></div>
     </div>
 </template>
 
@@ -34,7 +32,7 @@
 export default {
   name: 'Menu',
   props: {
-    msg: String
+    isToggle: Boolean,
   }
 }
 </script>

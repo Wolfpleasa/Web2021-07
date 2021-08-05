@@ -1,27 +1,25 @@
 <template>
-  <div
-    :id= "idPopup"
-    :class="{ 'd-none': dnone }"
-    :employeeId= "employeeId"
-  >
+  <div :id="idPopup" :class="{ 'd-none': dnone }" :employeeId="employeeId">
     <div class="head">
-      <div class="head-text">{{warning}}</div>
-      <div class="head-close" @click="btnCancelonClick"></div>
+      <div class="head-text">{{ warning }}</div>
+      <div class="head-close" @click="btnCancelOnClick"></div>
     </div>
     <div class="main">
       <div class="warning"></div>
-      <div class="text">{{warningText}}</div>
+      <div class="text" v-html="warningText"></div>
     </div>
     <div class="foot">
       <Button
-        @btn-click="btnConfirmonClick"
+        tabindex="0"
+        @btn-click="btnConfirmOnClick"
         :buttonText="btnConfirmText"
         id="btnConfirm"
         subClass="confirm d-flex"
       />
 
       <Button
-        @btn-click="btnCancelonClick"
+        tabindex="0"
+        @btn-click="btnCancelOnClick"
         :buttonText="btnCancelText"
         id="btnCancel"
         subClass="cancel d-flex"
@@ -31,8 +29,7 @@
 </template>
 
 <script>
-
-import Button from "../../components/base/BaseButton.vue";
+import Button from "../base/BaseButton.vue";
 
 export default {
   name: "WarningPopup",
@@ -54,8 +51,8 @@ export default {
     warning: String,
     warningText: String,
     idPopup: String,
-    btnCancelText:String,
-    btnConfirmText:String,
+    btnCancelText: String,
+    btnConfirmText: String,
   },
 
   data() {
@@ -68,20 +65,32 @@ export default {
      * Hàm đóng popup
      * Ngọc 29/07/2021
      */
-    btnCancelonClick() {
+    btnCancelOnClick() {
       let me = this;
-      me.$emit("btnCancelonClick");
+      me.$emit("btnCancelOnClick");
     },
     /**
      * Hàm bấm nút xác nhận xóa
      * Ngọc 29/07/2021
      */
-    btnConfirmonClick() {
-     this.$emit("btnConfirmonClick" , this.idPopup);
+    btnConfirmOnClick() {
+      this.$emit("btnConfirmOnClick", this.idPopup);
     },
+
+    /**
+     * Hàm tự focus vào nút xác nhận
+     * Ngọc 4/8/2021
+     */
+    // focusOnConfirm() {
+    //   this.refs.btnConfirm.focus();
+    //   alert("123");
+    // },
   },
+
+  // created() {
+  //   this.focusOnConfirm();
+  // },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

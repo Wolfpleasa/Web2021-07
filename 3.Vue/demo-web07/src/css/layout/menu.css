@@ -9,6 +9,11 @@
     transition: width 1s;
 }
 
+.menu.expand {
+    width: 225px;
+    transition: width 1s;
+}
+
 .menu .menu-item {
     height: 44px;
     width: 100%;

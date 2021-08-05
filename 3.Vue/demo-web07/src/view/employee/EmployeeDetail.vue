@@ -8,7 +8,7 @@
   >
     <div class="head">
       <div class="head-text">THÔNG TIN NHÂN VIÊN</div>
-      <div class="head-close" @click="btnDialogCancelonClick"></div>
+      <div class="head-close" @click="btnDialogCancelOnClick"></div>
     </div>
     <div class="main">
       <div class="avatar">
@@ -27,6 +27,7 @@
               <label for="">Mã nhân viên<span class="cl-red">(*)</span></label
               ><br />
               <input
+                tabindex="0"
                 type="text"
                 FieldName="EmployeeCode"
                 class="textbox-default"
@@ -39,6 +40,7 @@
               <label for="">Họ và tên<span class="cl-red">(*)</span></label
               ><br />
               <input
+                tabindex="0"
                 type="text"
                 FieldName="FullName"
                 class="textbox-default"
@@ -52,6 +54,7 @@
             <div class="col">
               <label for="">Ngày sinh</label><br />
               <input
+                tabindex="0"
                 type="date"
                 FieldName="DateOfBirth"
                 DataType="Date"
@@ -63,6 +66,8 @@
             <div class="col">
               <label for="">Giới tính</label><br />
               <Dropdown
+                className="column"
+                tabindex="0"
                 defaultName="Chưa chọn"
                 itemId="Gender"
                 itemName="GenderName"
@@ -77,6 +82,7 @@
                 >Số CMTND/ Căn cước<span class="cl-red">(*)</span></label
               ><br />
               <input
+                tabindex="0"
                 type="text"
                 FieldName="IdentityNumber"
                 DataType="OnlyNumber"
@@ -89,6 +95,7 @@
             <div class="col">
               <label for="">Ngày cấp</label><br />
               <input
+                tabindex="0"
                 type="date"
                 FieldName="IdentityDate"
                 DataType="Date"
@@ -102,6 +109,7 @@
             <div class="col">
               <label for="">Nơi cấp</label><br />
               <input
+                tabindex="0"
                 type="text"
                 FieldName="IdentityPlace"
                 class="textbox-default"
@@ -115,6 +123,7 @@
               <label for="">Email<span class="cl-red">(*)</span></label
               ><br />
               <input
+                tabindex="0"
                 type="text"
                 FieldName="Email"
                 class="textbox-default"
@@ -127,6 +136,7 @@
               <label for="">Số điện thoại<span class="cl-red">(*)</span></label
               ><br />
               <input
+                tabindex="0"
                 type="text"
                 FieldName="PhoneNumber"
                 DataType="OnlyNumber"
@@ -145,6 +155,7 @@
             <div class="col">
               <label for="">Vị trí</label><br />
               <Dropdown
+                tabindex="0"
                 :defaultName="employee.PositionName"
                 dd_dropdown="dd-Position"
                 Url="v1/Positions"
@@ -157,6 +168,7 @@
             <div class="col">
               <label for="">Phòng ban</label><br />
               <Dropdown
+                tabindex="0"
                 :defaultName="employee.DepartmentName"
                 dd_dropdown="dd-Department"
                 Url="api/Department"
@@ -171,6 +183,7 @@
             <div class="col">
               <label for="">Mã số thuế cá nhân</label><br />
               <input
+                tabindex="0"
                 type="text"
                 FieldName="PersonalTaxCode"
                 DataType="OnlyNumber"
@@ -182,6 +195,7 @@
             <div class="col">
               <label for="">Mức lương cơ bản</label><br />
               <input
+                tabindex="0"
                 type="text"
                 FieldName="Salary"
                 DataType="Number"
@@ -198,6 +212,7 @@
             <div class="col">
               <label for="">Ngày gia nhập công ty</label><br />
               <input
+                tabindex="0"
                 type="date"
                 FieldName="JoinDate"
                 DataType="Date"
@@ -209,6 +224,7 @@
             <div class="col">
               <label for="">Tình trạng công việc</label><br />
               <Dropdown
+                tabindex="0"
                 defaultName="Chưa chọn"
                 itemId="WorkStatus"
                 itemName="WorkStatusName"
@@ -222,14 +238,16 @@
     </div>
     <div class="foot">
       <Button
-        @btn-click="btnSaveonClick"
+        tabindex="0"
+        @btn-click="btnSaveOnClick"
         buttonText="Lưu"
         id="btnSave"
         subClass="save d-flex"
       />
 
       <Button
-        @btn-click="btnDialogCancelonClick"
+        tabindex="0"
+        @btn-click="btnDialogCancelOnClick"
         buttonText="Hủy"
         id="btnCancel"
         subClass="cancel d-flex"
@@ -244,6 +262,8 @@ import { CommonFn } from "../../js/mixins.js";
 
 import Button from "../../components/base/BaseButton.vue";
 import Dropdown from "../../components/base/BaseDropdown.vue";
+//import WarningPopup from "../../components/layout/WarningPopup.vue";
+
 export default {
   mixins: [CommonFn],
   name: "EmployeeDetail",
@@ -279,27 +299,25 @@ export default {
     reopen: function () {
       let me = this;
       //Gọi Api lấy thông tin chi tiết:
-      if (me.formMode == 0) {
-        this.employee = {};
-        this.getNewCode();
-      } else {
-        axios
-          .get(`http://cukcuk.manhnv.net/v1/Employees/${this.employeeId}`)
-          .then((res) => {
-            me.employee = res.data;
-            me.employee.Salary = me.formatMoney(res.data.Salary);
-            me.employee.DateOfBirth = me.convertDate(res.data.DateOfBirth);
-            me.employee.JoinDate = me.convertDate(res.data.JoinDate);
-            me.employee.IdentityDate = me.convertDate(res.data.IdentityDate);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      axios
+        .get(`http://cukcuk.manhnv.net/v1/Employees/${this.employeeId}`)
+        .then((res) => {
+          me.employee = res.data;
+          me.employee.Salary = me.formatMoney(res.data.Salary);
+          me.employee.DateOfBirth = me.convertDate(res.data.DateOfBirth);
+          me.employee.JoinDate = me.convertDate(res.data.JoinDate);
+          me.employee.IdentityDate = me.convertDate(res.data.IdentityDate);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     formMode: function () {
       if (this.formMode == 0) {
-        this.employee = {};
+        let newEntity = {};
+        newEntity.DepartmentName = "";
+        newEntity.PositionName = "";
+        this.employee = newEntity;
         this.getNewCode();
       }
     },
@@ -310,16 +328,16 @@ export default {
      * Hàm đóng popup
      * Ngọc 29/07/2021
      */
-    btnDialogCancelonClick() {
+    btnDialogCancelOnClick() {
       let me = this;
-      me.$emit("btnDialogCancelonClick");
+      me.$emit("btnDialogCancelOnClick");
     },
 
     /**
      * Sự kiện bấm nút lưu
      * Ngọc 29/07/2021
      */
-    btnSaveonClick() {
+    btnSaveOnClick() {
       let me = this;
       me.employee.Salary = me.formatNumber(me.employee.Salary);
       if (this.formMode == 0) {
@@ -331,7 +349,7 @@ export default {
               "Thêm dữ liệu thành công",
               "message-green"
             );
-            me.$emit("btnSaveonClick");
+            me.$emit("btnSaveOnClick");
           })
           .catch((err) => {
             console.log(err);
@@ -348,7 +366,7 @@ export default {
               "Sửa dữ liệu thành công",
               "message-green"
             );
-            me.$emit("btnSaveonClick");
+            me.$emit("btnSaveOnClick");
           })
           .catch((err) => {
             console.log(err);

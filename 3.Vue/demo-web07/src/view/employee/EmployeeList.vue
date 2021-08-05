@@ -1,20 +1,20 @@
 <template>
   <div>
     <Header />
-    <Menu />
-    <div class="content">
+    <Menu :isToggle="isToggle" @toggleMenu="toggleMenu" />
+    <div :class="['content', { narrow: isToggle }, { expand: !isToggle }]">
       <div class="content-header">
         <div class="title">Danh sách nhân viên</div>
         <div class="d-flex">
           <Button
-            @btn-click="btnDeleteonClick"
+            @btn-click="btnDeleteOnClick"
             iconName="icon-delete"
             buttonText="Xóa nhân viên"
             id="btnDelete"
             :class="{ 'v-hidden': HideBtnDelete }"
           />
           <Button
-            @btn-click="btnAddonClick"
+            @btn-click="btnAddOnClick"
             iconName="icon-add"
             buttonText="Thêm nhân viên"
             id="btnAdd"
@@ -93,28 +93,14 @@
           </tbody>
         </table>
       </div>
-      <div class="page-navigator">
-        <!-- <div class="ml-10" id="div1-paging"></div> -->
-        <div class="ml-10">Hiển thị 1-10/1000 nhân viên</div>
-        <div class="paging">
-          <div class="btn common-page first-page"></div>
-          <div class="btn common-page prev-page"></div>
-          <div class="btn page-number">1</div>
-          <div class="btn page-number">2</div>
-          <div class="btn page-number">3</div>
-          <div class="btn page-number">4</div>
-          <div class="btn common-page next-page"></div>
-          <div class="btn common-page last-page"></div>
-        </div>
-        <div class="mr-10" id="div2-paging">10 nhân viên/trang</div>
-      </div>
+      <PageNavigation />
     </div>
     <EmployeeDetail
       v-bind:dnone="DialogHasDnone"
       :employeeId="employeeId"
       :formMode="formMode"
-      @btnDialogCancelonClick="btnDialogCancelonClick"
-      @btnSaveonClick="btnSaveonClick"
+      @btnDialogCancelOnClick="btnDialogCancelOnClick"
+      @btnSaveOnClick="btnSaveOnClick"
       @callToastMessage="callToastMessage"
       :reopen="reopen"
     />
@@ -123,12 +109,12 @@
       :idPopup="idPopup"
       v-bind:dnone="WarningHasDnone"
       :employeeId="employeeId"
-      @btnCancelonClick="btnCancelonClick"
+      @btnCancelOnClick="btnCancelOnClick"
       :warning="warning"
       :warningText="warningText"
       :btnCancelText="btnCancelText"
       :btnConfirmText="btnConfirmText"
-      @btnConfirmonClick="btnConfirmonClick"
+      @btnConfirmOnClick="btnConfirmOnClick"
     />
 
     <ToastMessage
@@ -152,9 +138,10 @@ import FieldInputIcon from "../../components/base/BaseFieldInputIcon.vue";
 import Dropdown from "../../components/base/BaseDropdown.vue";
 import CheckBox from "../../components/base/BaseCheckBox.vue";
 import ToastMessage from "../../components/base/BaseToastMessage.vue";
+import PageNavigation from "../../components/base/BasePageNavigation.vue";
 
 import EmployeeDetail from "./EmployeeDetail.vue";
-import WarningPopup from "./WarningPopup.vue";
+import WarningPopup from "../../components/layout/WarningPopup.vue";
 export default {
   mixins: [CommonFn],
   name: "EmployeeList",
@@ -166,29 +153,39 @@ export default {
     CheckBox,
     ToastMessage,
     FieldInputIcon,
+    PageNavigation,
     EmployeeDetail,
     WarningPopup,
   },
   data() {
     return {
+      //EmployeeList
       employees: [],
+      //checkbox,tr
+      isSelected: [],
+      checked: false,
+      //button delete
+      HideBtnDelete: true,
+      //ToastMessage
+      HideToastMessage: true,
+      ToastMessageText: "",
+      //EmployeeDetail
       DialogHasDnone: true,
       employeeId: null,
-      subClass: "",
+      reopen: true,
       formMode: -1,
-      isSelected: [],
+      subClass: "",
+      // popup
       WarningHasDnone: true,
       warning: "",
       warningText: "",
-      reopen: true,
-      HideBtnDelete: true,
-      HideToastMessage: true,
-      ToastMessageText: "",
-      checked: false,
-      active: false,
       idPopup: "",
       btnCancelText: "",
       btnConfirmText: "",
+      //menu
+      isToggle: true,
+      //silde
+      active: false,
     };
   },
 
@@ -197,42 +194,16 @@ export default {
      * Hàm mở popup
      * Ngọc 29/07/2021
      */
-    btnAddonClick() {
+    btnAddOnClick() {
       let me = this;
       me.DialogHasDnone = false;
       this.formMode = 0;
     },
 
-    /**
-     * Hàm đóng popup
-     * Ngọc 29/07/2021
-     */
-    btnCancelonClick() {
-      let me = this;
-      me.WarningHasDnone = true;
-    },
+   
 
     /**
-
-     */
-    btnDialogCancelonClick() {
-      let me = this;
-      let custom = "";
-      me.WarningHasDnone = false;
-      me.idPopup = "notify-popup";
-      me.warning = "Đóng Form thông tin chung ";
-      if (this.formMode == 0) {
-        custom = "nhập";
-      } else {
-        custom = "sửa";
-      }
-      me.warningText = `Bạn có chắc muốn đóng thông tin form ${custom} thông tin nhân viên hay không`;
-      me.btnCancelText = "Tiếp tục nhập";
-      me.btnConfirmText = "Đóng";
-    },
-
-    /**
-     * Hàm mở popup để sửa
+     * Hàm mở form detail để sửa
      * Ngọc 29/07/2021
      */
     onDoubleClick(employeeId) {
@@ -247,9 +218,12 @@ export default {
      * Ngọc 1/8/2021
      */
     clickCheckboxTd(index) {
-      this.$set(this.isSelected, index, !this.isSelected[index]);
-      this.HideBtnDelete = false;
-      this.checked = this.CheckAllCBTd();
+      let me = this;
+      me.isSelected[index] = !me.isSelected[index];
+      me.HideBtnDelete = false;
+      setTimeout(function () {
+        me.checked = me.CheckAllCBTd();
+      }, 10);
     },
 
     /**
@@ -257,12 +231,14 @@ export default {
      * Ngọc 1/8/2021
      */
     CheckAllCBTd() {
+      let me = true;
       for (var i = 0; i < this.isSelected.length; i++) {
         if (!this.isSelected[i]) {
-          return false;
+          me = false;
+          break;
         }
       }
-      return true;
+      return me;
     },
 
     /**
@@ -270,12 +246,13 @@ export default {
      * Ngọc 1/8/2021
      */
     clickCheckboxTh() {
-      this.HideBtnDelete = false;
       this.checked = !this.checked;
       if (this.checked) {
-        for (var i = 0; i < this.isSelected.length; i++) {
-          this.isSelected[i] = true;
-        }
+        this.isSelected.fill(true);
+        this.HideBtnDelete = false;
+      } else {
+        this.isSelected.fill(false);
+        this.HideBtnDelete = true;
       }
     },
 
@@ -308,7 +285,7 @@ export default {
      * Hàm bấm nút xóa
      * Ngọc 30/07/2021
      */
-    btnDeleteonClick() {
+    btnDeleteOnClick() {
       let me = this;
       var count = 0;
       this.isSelected.forEach((selected) => {
@@ -318,7 +295,7 @@ export default {
       });
       if (count > 1) {
         me.warning = `Xóa thông tin của ${count} nhân viên`;
-        me.warningText = `Xác nhận xóa thông tin của ${count} nhân viên này không`;
+        me.warningText = `Xác nhận xóa thông tin của <b>${count} nhân viên </b> này không`;
       } else {
         let fullname = "";
         this.isSelected.forEach((selected, index) => {
@@ -327,7 +304,7 @@ export default {
           }
         });
         me.warning = `Xóa thông tin của nhân  viên ${fullname}`;
-        me.warningText = `Xác nhận xóa thông tin của nhân viên ${fullname} `;
+        me.warningText = `Xác nhận xóa thông tin của nhân viên <b>${fullname} </b>`;
       }
       me.WarningHasDnone = false;
       me.idPopup = "warning-popup";
@@ -336,10 +313,10 @@ export default {
     },
 
     /**
-     * Hàm bấm nút xác nhận xóa
+     * Hàm bấm nút xác nhận 
      * Ngọc 30/07/2021
      */
-    btnConfirmonClick(idPopup) {
+    btnConfirmOnClick(idPopup) {
       let me = this;
       if (idPopup == "warning-popup") {
         this.isSelected.forEach((selected, index) => {
@@ -351,7 +328,6 @@ export default {
                 me.callToastMessage("Xóa dữ liệu thành công", "message-green");
                 me.isSelected = [];
                 me.loadDataTable();
-                //me.resetTr();
               })
               .catch((err) => {
                 console.log(err);
@@ -377,7 +353,7 @@ export default {
       axios
         .get("http://cukcuk.manhnv.net/v1/Employees")
         .then((res) => {
-          me.employees = res.data;
+          me.employees = res.data.slice(0, 100);
           me.resetTr();
         })
         .catch((res) => {
@@ -396,11 +372,40 @@ export default {
       });
     },
 
+     /**
+     * Hàm đóng popup
+     * Ngọc 29/07/2021
+     */
+    btnCancelOnClick() {
+      let me = this;
+      me.WarningHasDnone = true;
+    },
+
+    /**
+     * Hàm bấm hủy hoặc nút X ở form detail 
+     * Ngọc 30/07/2021
+     */
+    btnDialogCancelOnClick() {
+      let me = this;
+      let custom = "";
+      me.WarningHasDnone = false;
+      me.idPopup = "notify-popup";
+      me.warning = "Đóng Form thông tin chung ";
+      if (this.formMode == 0) {
+        custom = "nhập";
+      } else {
+        custom = "sửa";
+      }
+      me.warningText = `Bạn có chắc muốn đóng thông tin form ${custom} <b>"Thông tin nhân viên"</b> hay không`;
+      me.btnCancelText = "Tiếp tục nhập";
+      me.btnConfirmText = "Đóng";
+    },
+
     /**
      * Hàm bấm lưu xong thì đóng popup được EmployeeDetail gửi lên
      * Ngọc 30/07/2021
      */
-    btnSaveonClick() {
+    btnSaveOnClick() {
       //Đống form thêm/sửa
       this.DialogHasDnone = true;
       // reset formMode
@@ -431,6 +436,14 @@ export default {
       this.ToastMessageText = "";
       this.subClass = "";
       this.active = false;
+    },
+
+    /**
+     * Hàm chuyển đổi menu do <Menu/> gửi lên
+     * Ngọc 3/8/2021
+     */
+    toggleMenu() {
+      this.isToggle = !this.isToggle;
     },
   },
 

@@ -3,6 +3,7 @@ table {
     border-collapse: collapse;
     box-shadow: 1px 1px 1px 1px #ccc;
     text-align: left;
+    background-color: #fff;
 }
 
 thead,

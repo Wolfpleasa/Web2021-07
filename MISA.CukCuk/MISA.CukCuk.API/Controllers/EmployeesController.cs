@@ -22,10 +22,10 @@ namespace MISA.CukCuk.API.Controllers
         {
             //Truy cập vào database:
             // 1.Khai báo đối tượng
-            var connectionString = "Host = 47.241.69.179;" +
-                "Database = MISA.CukCuk_Demo_NVMANH;" +
-                "User Id = dev;" +
-                "Password = 12345678";
+            var connectionString = "Host = localhost;" +
+                 "Database = MISA.CukCuk_Demo;" +
+                 "User Id = root;" +
+                 "Password = 123456";
             // 2.Khởi tạo đối tượng kết nối với database
             IDbConnection dbConnection = new MySqlConnection(connectionString);
             // 3.Lấy dữ liệu
@@ -42,10 +42,10 @@ namespace MISA.CukCuk.API.Controllers
         {
             //Truy cập vào database:
             // 1.Khai báo đối tượng
-            var connectionString = "Host = 47.241.69.179;" +
-                "Database = MISA.CukCuk_Demo_NVMANH;" +
-                "User Id = dev;" +
-                "Password = 12345678";
+            var connectionString = "Host = localhost;" +
+                "Database = MISA.CukCuk_Demo;" +
+                "User Id = root;" +
+                "Password = 123456";
             // 2.Khởi tạo đối tượng kết nối với database
             IDbConnection dbConnection = new MySqlConnection(connectionString);
             // 3.Lấy dữ liệu
@@ -60,15 +60,15 @@ namespace MISA.CukCuk.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult InsertEmployee(Employee employee)
+        public IActionResult InsertEmployee([FromBody]Employee employee)
         {
             employee.EmployeeId = Guid.NewGuid();
             //Truy cập vào database:
             // 1.Khai báo đối tượng
-            var connectionString = "Host = 47.241.69.179;" +
-                "Database = MISA.CukCuk_Demo_NVMANH;" +
-                "User Id = dev;" +
-                "Password = 12345678";
+            var connectionString = "Host = localhost;" +
+                "Database = MISA.CukCuk_Demo;" +
+                "User Id = root;" +
+                "Password = 123456";
             // 2.Khởi tạo đối tượng kết nối với database
             IDbConnection dbConnection = new MySqlConnection(connectionString);
             //khai báo dynamicParam:
@@ -112,15 +112,14 @@ namespace MISA.CukCuk.API.Controllers
         }
 
         [HttpPut("{employeeId}")]
-        public IActionResult UpdateEmployee(Guid employeeId)
+        public IActionResult UpdateEmployee(Guid employeeId, Employee employee)
         {
-            var employee = this.GetCustomerById(employeeId);
             //Truy cập vào database:
             // 1.Khai báo đối tượng
-            var connectionString = "Host = 47.241.69.179;" +
-                "Database = MISA.CukCuk_Demo_NVMANH;" +
-                "User Id = dev;" +
-                "Password = 12345678";
+            var connectionString = "Host = localhost;" +
+                 "Database = MISA.CukCuk_Demo;" +
+                 "User Id = root;" +
+                 "Password = 123456";
             // 2.Khởi tạo đối tượng kết nối với database
             IDbConnection dbConnection = new MySqlConnection(connectionString);
             //khai báo dynamicParam:
@@ -128,11 +127,9 @@ namespace MISA.CukCuk.API.Controllers
 
             // 3.Thêm dữ liệu vào database
             var columnsName = string.Empty;
-            var columnsParam = string.Empty;
 
             //Đọc từng property của object:
             var properties = employee.GetType().GetProperties();
-
 
             //Duyệt từng property:
             foreach (var prop in properties)
@@ -155,8 +152,8 @@ namespace MISA.CukCuk.API.Controllers
             columnsName = columnsName.Remove(columnsName.Length - 1, 1);
            
             var sqlCommand = $"UPDATE Employee SET {columnsName} WHERE EmployeeId = @EmployeeIdParam ";
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@EmployeeIdParam", employeeId);
+
+            dynamicParam.Add("@EmployeeIdParam", employeeId);
             var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
 
             // Trả về cho client
@@ -169,10 +166,10 @@ namespace MISA.CukCuk.API.Controllers
         {
             //Truy cập vào database:
             // 1.Khai báo đối tượng
-            var connectionString = "Host = 47.241.69.179;" +
-                "Database = MISA.CukCuk_Demo_NVMANH;" +
-                "User Id = dev;" +
-                "Password = 12345678";
+            var connectionString = "Host = localhost;" +
+                 "Database = MISA.CukCuk_Demo;" +
+                 "User Id = root;" +
+                 "Password = 123456";
             // 2.Khởi tạo đối tượng kết nối với database
             IDbConnection dbConnection = new MySqlConnection(connectionString);
 
@@ -180,7 +177,7 @@ namespace MISA.CukCuk.API.Controllers
             var sqlCommand = $"DELETE FROM Employee WHERE EmployeeId = @EmployeeIdParam";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@EmployeeIdParam", employeeId);
-            var rowEffects = dbConnection.Execute(sqlCommand);
+            var rowEffects = dbConnection.Execute(sqlCommand, param: parameters);
 
             // 4.Trả về cho client
             var response = StatusCode(200, rowEffects);

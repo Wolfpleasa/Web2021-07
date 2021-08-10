@@ -1,7 +1,7 @@
 <template>
      <div class="page-navigator">
         <!-- <div class="ml-10" id="div1-paging"></div> -->
-        <div class="ml-10">Hiển thị 1-10/1000 nhân viên</div>
+        <div class="ml-10"><b>Hiển thị 1-10/{{totalEntity}} nhân viên</b></div>
         <div class="paging">
           <div class="btn common-page first-page"></div>
           <div class="btn common-page prev-page"></div>
@@ -20,7 +20,7 @@
 export default {
   name: "BasePageNavigation",
   props: {
-      
+      totalEntity: String,
   },
 };
 </script>

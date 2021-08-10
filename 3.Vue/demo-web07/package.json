@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-axios": "^3.2.5",
+    "vue-clickaway": "^2.2.2",
     "vue-slide-up-down": "^2.0.1"
   },
   "devDependencies": {

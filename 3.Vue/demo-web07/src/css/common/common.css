@@ -1,5 +1,5 @@
 .d-flex {
-    display: flex;
+    display: flex !important;
 }
 
 .d-none {
@@ -21,6 +21,14 @@
 
 .selected-row {
     background: rgb(223, 218, 218);
+}
+
+.o-40 {
+    opacity: 0.4;
+}
+
+.o-80 {
+    opacity: 0.8;
 }
 
 .mr-10 {
@@ -73,9 +81,8 @@
     height: 100%;
     top: 0;
     left: 0;
-    display: none;
 }
 
-.notValidControl {
-    border-color: red !important;
+.notValid {
+    border-color: #FF4747 !important;
 }

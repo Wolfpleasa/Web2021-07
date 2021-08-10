@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj": {}
+    "D:\\MISA JSC\\Web2021_07\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj": {}
   },
   "projects": {
-    "D:\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj": {
+    "D:\\MISA JSC\\Web2021_07\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj",
+        "projectUniqueName": "D:\\MISA JSC\\Web2021_07\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj",
         "projectName": "MISA.CukCuk.API",
-        "projectPath": "D:\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj",
+        "projectPath": "D:\\MISA JSC\\Web2021_07\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj",
         "packagesPath": "C:\\Users\\ME\\.nuget\\packages\\",
-        "outputPath": "D:\\MISA.CukCuk\\MISA.CukCuk.API\\obj\\",
+        "outputPath": "D:\\MISA JSC\\Web2021_07\\MISA.CukCuk\\MISA.CukCuk.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ME\\AppData\\Roaming\\NuGet\\NuGet.Config",

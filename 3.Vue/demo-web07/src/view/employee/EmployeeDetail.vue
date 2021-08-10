@@ -1,257 +1,263 @@
 <template>
-  <div
-    id="popup"
-    :class="{ 'd-none': dnone }"
-    :employeeId="employeeId"
-    :formMode="formMode"
-    Item="EmployeeCode"
-  >
-    <div class="head">
-      <div class="head-text">THÔNG TIN NHÂN VIÊN</div>
-      <div class="head-close" @click="btnDialogCancelOnClick"></div>
-    </div>
-    <div class="main">
-      <div class="avatar">
-        <div class="image"></div>
-        <div class="ta-center">(Vui lòng chọn ảnh có định</div>
-        <div class="ta-center">dạng</div>
-        <div class="ta-center">.jqg,.jepg,.png,.gif.)</div>
-        <input class="d-none" type="file" name="" id="myFile" />
+  <div :class="['p-absolute', { 'd-none': dnone }, { 'o-80': blurr }]">
+    <div
+      id="popup"
+      :employeeId="employeeId"
+      :formMode="formMode"
+      Item="EmployeeCode"
+    >
+      <div class="head">
+        <div class="head-text">THÔNG TIN NHÂN VIÊN</div>
+        <div class="head-close" @click="btnDialogCancelOnClick"></div>
       </div>
-      <div class="info">
-        <div class="A">
-          <div>A. THÔNG TIN CHUNG:</div>
-          <div class="line"></div>
-          <div class="row mt-8">
-            <div class="col">
-              <label for="">Mã nhân viên<span class="cl-red">(*)</span></label
-              ><br />
-              <input
-                tabindex="0"
-                type="text"
-                FieldName="EmployeeCode"
-                class="textbox-default"
-                ref="txtEmployeeCode"
-                required
-                v-model="employee.EmployeeCode"
-              />
+      <div class="main">
+        <div class="avatar">
+          <div class="image"></div>
+          <div class="ta-center">(Vui lòng chọn ảnh có định</div>
+          <div class="ta-center">dạng</div>
+          <div class="ta-center">.jqg,.jepg,.png,.gif.)</div>
+          <input class="d-none" type="file" name="" id="myFile" />
+        </div>
+        <div class="info">
+          <div class="A">
+            <div>A. THÔNG TIN CHUNG:</div>
+            <div class="line"></div>
+            <div class="row mt-8">
+              <div class="col">
+                <Input
+                  labelText="Mã nhân viên"
+                  tabindex="0"
+                  type="text"
+                  FieldName="EmployeeCode"
+                  obligate="true"
+                  autoFocus="true"
+                  ref="requiredEmployeeCode"
+                  :reFocus="reFocus"
+                  v-model="employee.EmployeeCode"
+                  :initValue="employee.EmployeeCode"
+                />
+              </div>
+              <div class="col">
+                <Input
+                  labelText="Họ và tên"
+                  tabindex="0"
+                  type="text"
+                  FieldName="FullName"
+                  ref="requiredFullName"
+                  obligate="true"
+                  v-model="employee.FullName"
+                  :initValue="employee.FullName"
+                />
+              </div>
             </div>
-            <div class="col">
-              <label for="">Họ và tên<span class="cl-red">(*)</span></label
-              ><br />
-              <input
-                tabindex="0"
-                type="text"
-                FieldName="FullName"
-                class="textbox-default"
-                id="txtFullName"
-                v-model="employee.FullName"
-                required
-              />
+            <div class="row">
+              <div class="col">
+                <Input
+                  labelText="Ngày sinh"
+                  tabindex="0"
+                  type="date"
+                  FieldName="DateOfBirth"
+                  obligate="false"
+                  ref="DateOfBirth"
+                  checkDate="true"
+                  v-model="employee.DateOfBirth"
+                  :initValue="employee.DateOfBirth"
+                />
+              </div>
+              <div class="col">                
+                <Dropdown
+                  labelText="Giới tính"
+                  className="column"
+                  tabindex="0"
+                  defaultName=""
+                  itemId="Gender"
+                  ref="DropdownGender"
+                  itemName="GenderName"
+                  :selectedId="employee.Gender + ''"
+                  @chooseDropdownItem="chooseDropdownItem"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <Input
+                  labelText="Số CMTND/ Căn cước"
+                  tabindex="0"
+                  type="text"
+                  onlyHasNumber="true"
+                  FieldName="IdentityNumber"
+                  obligate="true"
+                  ref="requiredIdentityNumber"
+                  v-model="employee.IdentityNumber"
+                  :initValue="employee.IdentityNumber"
+                />
+              </div>
+              <div class="col">
+                <Input
+                  labelText="Ngày cấp"
+                  tabindex="0"
+                  type="date"
+                  FieldName="IdentityDate"
+                  obligate="false"
+                  checkDate="true"
+                  ref="IdentityDate"
+                  v-model="employee.IdentityDate"
+                  :initValue="employee.IdentityDate"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <Input
+                  labelText="Nơi cấp"
+                  tabindex="0"
+                  type="text"
+                  FieldName="IdentityPlace"
+                  obligate="false"
+                  v-model="employee.IdentityPlace"
+                  :initValue="employee.IdentityPlace"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <Input
+                  labelText="Email"
+                  tabindex="0"
+                  type="text"
+                  FieldName="Email"
+                  obligate="true"
+                  ref="requiredEmail"
+                  v-model="employee.Email"
+                  :initValue="employee.Email"
+                />
+              </div>
+              <div class="col">
+                <Input
+                  labelText="Số điện thoại"
+                  tabindex="0"
+                  type="text"
+                  onlyHasNumber="true"
+                  FieldName="PhoneNumber"
+                  obligate="true"
+                  ref="requiredPhoneNumber"
+                  v-model="employee.PhoneNumber"
+                  :initValue="employee.PhoneNumber"
+                />
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col">
-              <label for="">Ngày sinh</label><br />
-              <input
-                tabindex="0"
-                type="date"
-                FieldName="DateOfBirth"
-                DataType="Date"
-                class="textbox-default"
-                id="txtDateOfBirth"
-                v-model="employee.DateOfBirth"
-              />
+          <div class="B">
+            <div>B.THÔNG TIN CÔNG VIỆC</div>
+            <div class="line"></div>
+            <div class="row mt-8">
+              <div class="col">
+                <Dropdown
+                  labelText="Vị trí"
+                  tabindex="0"
+                  :defaultName="employee.PositionName"
+                  dd_dropdown="dd-Position"
+                  Url="v1/Positions"
+                  itemId="PositionId"
+                  ref="DropdownPosition"
+                  :selectedId="employee.PositionId + ''"
+                  itemName="PositionName"
+                  @chooseDropdownItem="chooseDropdownItem"
+                />
+              </div>
+              <div class="col">              
+                <Dropdown
+                  labelText="Phòng ban"
+                  tabindex="0"
+                  :defaultName="employee.DepartmentName"
+                  dd_dropdown="dd-Department"
+                  Url="api/Department"
+                  ref="DropdownDepartment"
+                  :selectedId="employee.DepartmentId + ''"
+                  itemId="DepartmentId"
+                  itemName="DepartmentName"
+                  @chooseDropdownItem="chooseDropdownItem"
+                />
+              </div>
             </div>
-            <div class="col">
-              <label for="">Giới tính</label><br />
-              <Dropdown
-                className="column"
-                tabindex="0"
-                defaultName="Chưa chọn"
-                itemId="Gender"
-                itemName="GenderName"
-                :selectedId="employee.Gender + ''"
-                @chooseDropdownItem="chooseDropdownItem"
-              />
+            <div class="row">
+              <div class="col">
+                <Input
+                  labelText="Mã số thuế cá nhân"
+                  tabindex="0"
+                  type="text"
+                  FieldName="PersonalTaxCode"
+                  obligate="false"
+                  onlyHasNumber="true"
+                  ref="PersonalTaxCodeNumber"
+                  v-model="employee.PersonalTaxCode"
+                  :initValue="employee.PersonalTaxCode"
+                />
+              </div>
+              <div class="col">
+                <Input
+                  labelText="Mức lương cơ bản"
+                  tabindex="0"
+                  type="text"
+                  onlyHasNumber="true"
+                  FieldName="Salary"
+                  obligate="false"
+                  ref="SalaryNumber"
+                  subClass="ta-r pd-19"
+                  v-model="employee.Salary"
+                  :initValue="employee.Salary"
+                  @convertMoney="convertMoney"
+                />
+                <div class="currency">(VNĐ)</div>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for=""
-                >Số CMTND/ Căn cước<span class="cl-red">(*)</span></label
-              ><br />
-              <input
-                tabindex="0"
-                type="text"
-                FieldName="IdentityNumber"
-                DataType="OnlyNumber"
-                class="textbox-default"
-                id="txtIdentityNumber"
-                required
-                v-model="employee.IdentityNumber"
-              />
-            </div>
-            <div class="col">
-              <label for="">Ngày cấp</label><br />
-              <input
-                tabindex="0"
-                type="date"
-                FieldName="IdentityDate"
-                DataType="Date"
-                class="textbox-default"
-                id="txtIdentityDate"
-                v-model="employee.IdentityDate"
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for="">Nơi cấp</label><br />
-              <input
-                tabindex="0"
-                type="text"
-                FieldName="IdentityPlace"
-                class="textbox-default"
-                id="txtIdentityPlace"
-                v-model="employee.IdentityPlace"
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for="">Email<span class="cl-red">(*)</span></label
-              ><br />
-              <input
-                tabindex="0"
-                type="text"
-                FieldName="Email"
-                class="textbox-default"
-                id="txtEmail"
-                required
-                v-model="employee.Email"
-              />
-            </div>
-            <div class="col">
-              <label for="">Số điện thoại<span class="cl-red">(*)</span></label
-              ><br />
-              <input
-                tabindex="0"
-                type="text"
-                FieldName="PhoneNumber"
-                DataType="OnlyNumber"
-                class="textbox-default"
-                id="txtPhoneNumber"
-                required
-                v-model="employee.PhoneNumber"
-              />
+            <div class="row">
+              <div class="col">
+                <Input
+                  labelText="Ngày gia nhập công ty"
+                  tabindex="0"
+                  type="date"
+                  FieldName="JoinDate"
+                  obligate="false"
+                  checkDate="true"
+                  ref="JoinDate"
+                  v-model="employee.JoinDate"
+                  :initValue="employee.JoinDate"
+                />
+              </div>
+              <div class="col">                
+                <Dropdown
+                  labelText="Tình trạng công việc"
+                  tabindex="0"
+                  defaultName=""
+                  itemId="WorkStatus"
+                  ref="DropdownWorkStatus"
+                  itemName="WorkStatusName"
+                  :selectedId="employee.WorkStatus + ''"
+                  @chooseDropdownItem="chooseDropdownItem"
+                />
+              </div>
             </div>
           </div>
         </div>
-        <div class="B">
-          <div>B.THÔNG TIN CÔNG VIỆC</div>
-          <div class="line"></div>
-          <div class="row mt-8">
-            <div class="col">
-              <label for="">Vị trí</label><br />
-              <Dropdown
-                tabindex="0"
-                :defaultName="employee.PositionName"
-                dd_dropdown="dd-Position"
-                Url="v1/Positions"
-                itemId="PositionId"
-                :selectedId="employee.PositionId + ''"
-                itemName="PositionName"
-                @chooseDropdownItem="chooseDropdownItem"
-              />
-            </div>
-            <div class="col">
-              <label for="">Phòng ban</label><br />
-              <Dropdown
-                tabindex="0"
-                :defaultName="employee.DepartmentName"
-                dd_dropdown="dd-Department"
-                Url="api/Department"
-                :selectedId="employee.DepartmentId + ''"
-                itemId="DepartmentId"
-                itemName="DepartmentName"
-                @chooseDropdownItem="chooseDropdownItem"
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for="">Mã số thuế cá nhân</label><br />
-              <input
-                tabindex="0"
-                type="text"
-                FieldName="PersonalTaxCode"
-                DataType="OnlyNumber"
-                class="textbox-default"
-                id="txtPersonalTaxCode"
-                v-model="employee.PersonalTaxCode"
-              />
-            </div>
-            <div class="col">
-              <label for="">Mức lương cơ bản</label><br />
-              <input
-                tabindex="0"
-                type="text"
-                FieldName="Salary"
-                DataType="Number"
-                ref="txtSalary"
-                class="textbox-default ta-r pd-19"
-                maxlength="15"
-                v-model="employee.Salary"
-                @input="convertMoney"
-              />
-              <div class="currency">(VNĐ)</div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for="">Ngày gia nhập công ty</label><br />
-              <input
-                tabindex="0"
-                type="date"
-                FieldName="JoinDate"
-                DataType="Date"
-                class="textbox-default"
-                id="txtJoinDate"
-                v-model="employee.JoinDate"
-              />
-            </div>
-            <div class="col">
-              <label for="">Tình trạng công việc</label><br />
-              <Dropdown
-                tabindex="0"
-                defaultName="Chưa chọn"
-                itemId="WorkStatus"
-                itemName="WorkStatusName"
-                :selectedId="employee.WorkStatus + ''"
-                @chooseDropdownItem="chooseDropdownItem"
-              />
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
-    <div class="foot">
-      <Button
-        tabindex="0"
-        @btn-click="btnSaveOnClick"
-        buttonText="Lưu"
-        id="btnSave"
-        subClass="save d-flex"
-      />
+      <div class="foot">
+        <ButtonIcon
+          tabindex="0"
+          @btn-click="btnSaveOnClick"
+          buttonText="Lưu"
+          id="btnSave"
+          subClass="save d-flex"
+        />
 
-      <Button
-        tabindex="0"
-        @btn-click="btnDialogCancelOnClick"
-        buttonText="Hủy"
-        id="btnCancel"
-        subClass="cancel d-flex"
-      />
+        <Button
+          tabindex="0"
+          @btn-click="btnDialogCancelOnClick"
+          buttonText="Hủy"
+          id="btnCancel"
+          subClass="cancel"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -260,16 +266,19 @@
 import axios from "axios";
 import { CommonFn } from "../../js/mixins.js";
 
+import ButtonIcon from "../../components/base/BaseButtonIcon.vue";
 import Button from "../../components/base/BaseButton.vue";
+import Input from "../../components/base/BaseInput.vue";
 import Dropdown from "../../components/base/BaseDropdown.vue";
-//import WarningPopup from "../../components/layout/WarningPopup.vue";
 
 export default {
   mixins: [CommonFn],
   name: "EmployeeDetail",
   components: {
     Dropdown,
+    ButtonIcon,
     Button,
+    Input,
   },
 
   props: {
@@ -285,6 +294,8 @@ export default {
     },
     formMode: Number,
     reopen: Boolean,
+    response: String,
+    blurr: Boolean,
   },
 
   data() {
@@ -292,6 +303,8 @@ export default {
       employee: {},
       defaultName: "",
       selectedId: "",
+      initValue: "",
+      reFocus: false,
     };
   },
 
@@ -299,31 +312,89 @@ export default {
     reopen: function () {
       let me = this;
       //Gọi Api lấy thông tin chi tiết:
-      axios
-        .get(`http://cukcuk.manhnv.net/v1/Employees/${this.employeeId}`)
-        .then((res) => {
-          me.employee = res.data;
-          me.employee.Salary = me.formatMoney(res.data.Salary);
-          me.employee.DateOfBirth = me.convertDate(res.data.DateOfBirth);
-          me.employee.JoinDate = me.convertDate(res.data.JoinDate);
-          me.employee.IdentityDate = me.convertDate(res.data.IdentityDate);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (me.formMode == 1) {
+        axios
+          .get(`http://cukcuk.manhnv.net/v1/Employees/${me.employeeId}`)
+          .then((res) => {
+            me.employee = res.data;
+            me.employee.Salary = me.formatMoney(res.data.Salary);
+            me.employee.DateOfBirth = me.convertDate(res.data.DateOfBirth);
+            me.employee.JoinDate = me.convertDate(res.data.JoinDate);
+            me.employee.IdentityDate = me.convertDate(res.data.IdentityDate);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
     formMode: function () {
       if (this.formMode == 0) {
-        let newEntity = {};
-        newEntity.DepartmentName = "";
-        newEntity.PositionName = "";
-        this.employee = newEntity;
-        this.getNewCode();
+        this.resetPopup();
+      }
+    },
+    dnone: function () {
+      this.reFocus = !this.reFocus;
+    },
+    response: function () {
+      let me = this;
+      let responseMess = me.response.split("__")[0];
+      if (responseMess == "Lưu") {
+        me.employee.Salary = me.formatNumber(me.employee.Salary);
+        //Thêm nhân viên mới
+        if (me.formMode == 0) {
+          axios
+            .post(`http://cukcuk.manhnv.net/v1/Employees/`, me.employee)
+            .then(() => {
+              me.$emit(
+                "callToastMessage",
+                "Thêm dữ liệu thành công",
+                "message-green"
+              );
+              me.$emit("resetAfterSaveData");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+        // sửa nhân viên
+        else if (me.formMode == 1) {
+          axios
+            .put(
+              `http://cukcuk.manhnv.net/v1/Employees/${me.employeeId}`,
+              me.employee
+            )
+            .then(() => {
+              me.$emit(
+                "callToastMessage",
+                "Sửa dữ liệu thành công",
+                "message-green"
+              );
+              me.$emit("resetAfterSaveData");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       }
     },
   },
 
   methods: {
+    /**
+     * Hàm reset form thêm
+     * ngọc 10/8/2021 
+     */
+    resetPopup(){
+      // cho object nhân viên về rỗng
+        let newEntity = {};
+        newEntity.DepartmentId = "";
+        newEntity.PositionId = "";
+        newEntity.Gender = -1;
+        this.employee = newEntity;
+        // gọi hàm lấy mã nhân viên mới
+        this.getNewCode();
+    },
+
     /**
      * Hàm đóng popup
      * Ngọc 29/07/2021
@@ -339,38 +410,9 @@ export default {
      */
     btnSaveOnClick() {
       let me = this;
-      me.employee.Salary = me.formatNumber(me.employee.Salary);
-      if (this.formMode == 0) {
-        axios
-          .post(`http://cukcuk.manhnv.net/v1/Employees/`, this.employee)
-          .then(() => {
-            me.$emit(
-              "callToastMessage",
-              "Thêm dữ liệu thành công",
-              "message-green"
-            );
-            me.$emit("btnSaveOnClick");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        axios
-          .put(
-            `http://cukcuk.manhnv.net/v1/Employees/${this.employeeId}`,
-            this.employee
-          )
-          .then(() => {
-            me.$emit(
-              "callToastMessage",
-              "Sửa dữ liệu thành công",
-              "message-green"
-            );
-            me.$emit("btnSaveOnClick");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+
+      if (me.validateForm()) {
+        me.$emit("btnSaveOnClick", me.employee.FullName);
       }
     },
 
@@ -386,11 +428,191 @@ export default {
           let newEmployee = {};
           newEmployee.EmployeeCode = res.data;
           me.employee = newEmployee;
-          me.$refs.txtEmployeeCode.focus();
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    /**
+     * Hàm kiển tra dữ liệu
+     * Ngọc 2-6-2021
+     */
+    validateForm() {
+      let me = this,
+        isValid = true;
+
+      if (isValid) {
+        isValid = me.isRequired();
+      }
+
+      if (isValid) {
+        isValid = me.validateDropdown();
+      }
+
+      if (isValid) {
+        isValid = me.validateFieldNumber();
+      }
+
+      if (isValid) {
+        isValid = me.validateFieldDate();
+      }
+
+      // if (isValid) {
+      //     isValid = me.validateCode(formMode, itemId);
+      // }
+
+      if (isValid) {
+        isValid = me.validateEmail();
+      }
+
+      if (isValid) {
+        isValid = me.validatePhoneNumber();
+      }
+
+      return isValid;
+    },
+
+    /**
+     * Hàm kiểm tra bắt buộc nhập các dữ liệu bắt buộc
+     * Ngọc 8/8/2021
+     */
+    isRequired() {
+      let me = this;
+      let isValid = true;
+
+      for (let [key] of Object.entries(me.$refs)) {
+        if (key.includes("required")) {
+          let valRes = me.$refs[key].isRequired();
+
+          if (valRes == false) {
+            me.$emit(
+              "callToastMessage",
+              "Không được để trống các trường bắt buộc",
+              "message-red"
+            );
+            isValid = false;
+          }
+        }
+      }
+
+      return isValid;
+    },
+
+    validateDropdown() {
+      let me = this;
+      let isValid = true;
+
+      for (let [key] of Object.entries(me.$refs)) {
+        if (key.includes("Dropdown")) {
+          let valRes = me.$refs[key].validateDropdown();
+          //console.log(key, "|", valRes);
+          if (valRes == false) {
+            me.$emit(
+              "callToastMessage",
+              "Vui lòng chọn giá trị ở các ô có lựa chọn",
+              "message-red"
+            );
+            isValid = false;
+          }
+        }
+      }
+
+      return isValid;
+    },
+
+    /**
+     * Hàm kiểm tra chỉ chứa chữ số
+     * Ngọc 9/8/2021
+     */
+    validateFieldNumber() {
+      let me = this;
+      let isValid = true;
+
+      for (let [key] of Object.entries(me.$refs)) {
+        if (key.includes("Number")) {
+          let valRes = me.$refs[key].ContainNumber();
+
+          if (valRes == false) {
+            me.$emit(
+              "callToastMessage",
+              "Các ô sau chỉ chứa chữ số nhé",
+              "message-red"
+            );
+            isValid = false;
+          }
+        }
+      }
+
+      return isValid;
+    },
+
+    /**
+     * Hàm kiểm tra xem ngày tháng đúng định dạng không
+     * Ngọc 9/8/2021
+     */
+    validateFieldDate() {
+      let me = this,
+        isValid = true;
+
+      for (let [key] of Object.entries(me.$refs)) {
+        if (key.includes("Date")) {
+          let valRes = me.$refs[key].validateFieldDate();
+         
+          if (valRes == false) {
+            me.$emit(
+              "callToastMessage",
+              "Ngày tháng không đúng định dạng",
+              "message-red"
+            );
+            isValid = false;
+          }
+        }
+      }
+
+      return isValid;
+    },
+
+    /**
+     * Hàm kiểm tra Email
+     * Ngọc 8/8/2021
+     */
+    validateEmail() {
+      let me = this,
+        isValid = true,
+        valRes = me.$refs.requiredEmail.validateEmail();
+
+      if (valRes == false) {
+        me.$emit(
+          "callToastMessage",
+          "Email không đúng định dạng",
+          "message-red"
+        );
+        isValid = false;
+      }
+
+      return isValid;
+    },
+
+    /**
+     * Hàm kiểm tra số điện thoại
+     * Ngọc 8/8/2021
+     */
+    validatePhoneNumber() {
+      let me = this,
+        isValid = true,
+        valRes = me.$refs.requiredPhoneNumber.validatePhoneNumber();
+
+      if (valRes == false) {
+        me.$emit(
+          "callToastMessage",
+          "Số điện thoại không đúng định dạng",
+          "message-red"
+        );
+        isValid = false;
+      }
+
+      return isValid;
     },
 
     /**
@@ -450,10 +672,6 @@ export default {
       let salary = money.replaceAll(".", "");
       return salary;
     },
-  },
-
-  created() {
-    // this.formMode = 1;
   },
 };
 </script>

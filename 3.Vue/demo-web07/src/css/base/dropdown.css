@@ -5,6 +5,7 @@
     border: 1px solid #D2D2D2;
     box-sizing: border-box;
     outline: none;
+    background-color: #fff;
 }
 
 .select:hover {

@@ -15,6 +15,7 @@
     width: 100%;
     height: 100%;
     justify-content: space-between;
+    overflow-y: auto;
 }
 
 .toast .toast-message .d-flex {

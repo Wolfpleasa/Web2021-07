@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fKnoOk/fMO4Tv+LnmBi43PjNF6oXgF5lzJDYtsKjXN4CLQFlFONX74rcy+4xvr7M/rfWJNB5morzqkaAoPkJZQ==",
+  "dgSpecHash": "5LRbQ+3ODIlhnYWRWy6w81dHzsD+WMdsB2qRVBuKaWyli1vWIIEDI3VLWjb74EgyntnKZf+RBwWpZH7xlk3yTQ==",
   "success": true,
-  "projectFilePath": "D:\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj",
+  "projectFilePath": "D:\\MISA JSC\\Web2021_07\\MISA.CukCuk\\MISA.CukCuk.API\\MISA.CukCuk.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ME\\.nuget\\packages\\dapper\\2.0.90\\dapper.2.0.90.nupkg.sha512",
     "C:\\Users\\ME\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",

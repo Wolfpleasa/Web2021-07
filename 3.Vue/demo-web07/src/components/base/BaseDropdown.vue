@@ -1,13 +1,16 @@
 <template>
-  <div :class="className">
+  <div :class="['p-relative',className]">
+    <div :class="{'d-none' : !labelText}">
+      <label for="">{{ labelText }}</label><br />
+    </div>
+    <ToolTip :hideToolTip="hideToolTip" :ToolTipText="ToolTipText"/>
     <div
-      class="select"
+      :class="['select', { notValid: hasNotValid }]"
       :tabindex="tabindex"
       v-on:keyup.enter="SelectOnClick"
       v-on:keydown="keydownOnSelect($event)"
-      v-on:keyup.space="
-        chooseDropdownItemByKey($event)
-      "
+      v-on:keyup.space="chooseDropdownItemByKey($event)"
+      v-on-clickaway="closeDropDown"
     >
       <div class="inp" @click="SelectOnClick">{{ currentName }}</div>
       <div :class="['X', { 'v-hidden': HideX }]" @click="clearChoice"></div>
@@ -30,7 +33,6 @@
           :Value="item[itemId]"
           :class="['dropdown-item', index == currentIndex ? 'bg-select' : '']"
           @click="chooseDropdownItem(item[itemId], item[itemName], index)"
-          
         >
           <div class="dropdown-icon"></div>
           <div class="dropdown-text">{{ item[itemName] }}</div>
@@ -42,9 +44,17 @@
 
 <script>
 import axios from "axios";
+import { mixin as clickaway } from "vue-clickaway";
 
+import ToolTip from "./BaseToolTip.vue";
 export default {
+  mixins: [clickaway],
   name: "BaseDropdown",
+
+  components: {
+    ToolTip,
+  },
+
   props: {
     defaultName: String,
     className: String,
@@ -54,17 +64,30 @@ export default {
     itemName: String,
     selectedId: String,
     tabindex: String,
+    labelText:String,
   },
 
   data() {
     return {
+      //các department,position
       items: [],
+      // nút X
       HideX: true,
+      // quay mũi tên
       rotate: false,
+      // ẩn/hiện các item
       dnone: true,
+      // tên hiển thị
       currentName: this.defaultName,
       currentIndex: -1,
+      //slidedown/up
       active: false,
+      // border đỏ
+      hasNotValid: false,
+      //hiện/ẩn tooltip
+      hideToolTip: true,
+      //nội dung tooltip
+      ToolTipText: "",
     };
   },
   methods: {
@@ -80,7 +103,6 @@ export default {
         event.preventDefault();
         this.currentIndex = this.currentIndex < 0 ? -1 : this.currentIndex;
         this.currentIndex = (this.currentIndex + 1) % this.items.length;
-        
       } else if (event.code == "ArrowUp") {
         event.preventDefault();
         this.currentIndex = this.currentIndex < 0 ? 0 : this.currentIndex;
@@ -99,9 +121,9 @@ export default {
       if (event.code == "Space") {
         event.preventDefault();
         let item = this.items[this.currentIndex],
-            itemName = item[this.itemName],
-            itemValue = item[this.itemId];
-        this.chooseDropdownItem(itemValue, itemName, this.currentIndex)
+          itemName = item[this.itemName],
+          itemValue = item[this.itemId];
+        this.chooseDropdownItem(itemValue, itemName, this.currentIndex);
       }
     },
 
@@ -116,7 +138,7 @@ export default {
       this.currentName = itemName;
       this.$emit("chooseDropdownItem", itemValue, this.itemId);
     },
-    
+
     /**
      * Sự kiện bấm để hiện/ ẩn dropdown
      * Ngọc 31/07/2021
@@ -128,14 +150,25 @@ export default {
     },
 
     /**
+     * Sự kiện đóng dropdown(sử dụng vue-clickaway)
+     * Ngọc 8/8/2021
+     */
+    closeDropDown() {
+      this.rotate = false;
+      this.dnone = true;
+      this.active = false;
+    },
+
+    /**
      * Sự kiện bấm nút X để xóa lựa chọn
      * Ngọc 31/07/2021
      */
     clearChoice() {
-      this.currentId = "";
+      this.currentIndex = -1;
       this.HideX = true;
       this.currentName = this.defaultName;
       this.dnone = true;
+      this.$emit("chooseDropdownItem", "", this.itemId);
 
       if (this.rotate) {
         this.rotate = !this.rotate;
@@ -151,18 +184,45 @@ export default {
      */
     setValueDropdown() {
       let me = this;
+      // nếu selectedId(PostionId,DepartmentId) mà tồn tại(tức là được Employeelist truyền vào => form sửa dùng)
       if ((me.selectedId + "").length > 0) {
+        //duyệt từng items(department,postion)
         me.items.forEach(function (item, index) {
+          // nếu selectedId(PostionId,DepartmentId) từ cha truyền vào mà trùng với itemId(PostionId,DepartmentId) trong list
           if (me.selectedId == item[me.itemId]) {
+            // gán currentIndex = index (để hàng tương ứng được tích)
             me.currentIndex = index;
+            // hiện thị tên của itemName(PostionName,DepartmentName) của hàng được chọn
             me.currentName = item[me.itemName];
           }
         });
       } else {
-        me.currentId = -1;
+        // form thêm dùng
+        //không hàng nào được tích
         me.currentIndex = -1;
+        // không hiển thị tên gì cả
         me.currentName = " ";
+        // ẩn nút X
+        me.HideX = true;
       }
+    },
+
+    /**
+     * Hàm kiểm tra xem dropdown có được chọn hay không
+     * Ngọc 8/8/2021
+     */
+    validateDropdown() {
+      let me = this;
+      if (me.currentIndex == -1) {
+        me.hasNotValid = true;
+        // hiện tooltip
+        this.hideToolTip = false;
+        this.ToolTipText = "Vui lòng chọn giá trị cho hộp này"
+        return false;
+      }
+
+      me.hasNotValid = false;
+      return true;
     },
   },
 
@@ -225,7 +285,22 @@ export default {
     selectedId: function () {
       this.setValueDropdown();
     },
+
+    currentIndex: function () {
+      if (this.currentIndex != -1) {
+        this.hasNotValid = false;
+        this.hideToolTip = true;
+      }
+
+      if(this.currentIndex == -1){
+        this.hasNotValid = true;
+        // hiện tooltip
+        this.hideToolTip = false;
+        this.ToolTipText = "Vui lòng chọn giá trị cho hộp này"
+      }
+    },
   },
+  
 };
 </script>
 

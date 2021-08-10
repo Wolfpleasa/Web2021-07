@@ -70,24 +70,32 @@
 
 #warning-popup .foot .button.confirm {
     width: 100px;
-    height: 36px;
     padding: 0;
     color: #fff;
     background-color: #F65454;
     margin: 0 24px 0 0;
     cursor: pointer;
-    line-height: 36px;
+    text-align: center;
+}
+
+#warning-popup .foot .button.cancel {
+    margin-right: 16px;
+    height: 40px;
+    line-height: 40px;
 }
 
 #notify-popup .foot .button.confirm {
     width: 100px;
-    height: 36px;
     padding: 0;
     color: #fff;
     background-color: #019160;
     margin: 0 24px 0 16px;
     cursor: pointer;
-    line-height: 36px;
+    text-align: center;
+}
+
+#notify-popup .foot .button.confirm:focus {
+    background-color: #2fbebe;
 }
 
 #notify-popup .foot .button.confirm:hover {
@@ -100,38 +108,31 @@
     border-bottom-right-radius: 4px;
 }
 
-#warning-popup .foot .button.cancel {
-    margin: 0 16px;
-    width: 100px;
-    height: 36px;
-    border: 0;
-    color: #000;
-    text-align: center;
-    background-color: #E5E5E5;
-    line-height: 36px;
-    cursor: pointer;
-}
-
-#notify-popup .foot .button.cancel {
+#notify-popup .foot .button.cancel.w-auto {
     margin: 0;
     width: auto;
-    height: 36px;
+    height: 40px;
     padding-right: 24px;
-    padding-left: 0;
+    padding-left: 24px;
     border: 0;
     color: #000;
     text-align: center;
     background-color: #E5E5E5;
-    line-height: 36px;
     cursor: pointer;
+    line-height: 40px;
 }
 
-#notify-popup .foot .button.cancel .button-icon {
-    width: 0px;
-}
-
-#notify-popup .foot .button.confirm .button-icon {
-    margin-right: 4px;
+#notify-popup .foot .button.cancel.w-100 {
+    margin: 0;
+    padding-right: 0px;
+    height: 40px;
+    width: 100px;
+    border: 0;
+    color: #000;
+    text-align: center;
+    background-color: #E5E5E5;
+    line-height: 40px;
+    cursor: pointer;
 }
 
 #warning-popup .foot .button.cancel:hover {

@@ -4,11 +4,11 @@
     @click="$emit('btn-click')"
     :class="['button', subClass]"
     :id="id"
-    ref="btnREF"
     v-on:keyup.enter="$emit('btn-click')"
     v-on:keydown="keydownOnSelect($event)"
   >
-    {{ buttonText }}
+    <div :class="['button-icon', iconName]"></div>
+    <div class="button-text">{{ buttonText }}</div>
   </div>
 </template>
 
@@ -22,12 +22,10 @@ export default {
     iconName: String,
     buttonText: String,
     tabindex: String,
-    autoFocus: String,
-    reFocus: Boolean,
   },
 
   methods: {
-    /**
+     /**
      * Hàm ngăn chặn sự kiện mặc định của nút tab, dùng thì mới thực hiện được nút enter
      * Ngọc 4/8/2021
      */
@@ -37,17 +35,9 @@ export default {
       }
     },
   },
-
-  watch: {
-    reFocus: function () {
-      if (this.autoFocus == "true") {
-        this.$refs.btnREF.focus();
-      }
-    },
-  },
 };
 </script>
 
 <style scoped>
-@import url("../../css/base/button.css");
+  @import url("../../css/base/button-icon.css");
 </style>

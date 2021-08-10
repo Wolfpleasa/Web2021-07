@@ -14,11 +14,11 @@
             </div>
             <div class="menu-item">
                 <div class="menu-item-icon employee"></div>
-                <div :class="['menu-item-text', {'v-hidden': !isToggle}]"><a href="employee.html">Danh mục nhân viên</a></div>
+                <div :class="['menu-item-text', {'v-hidden': !isToggle}]">Danh mục nhân viên</div>
             </div>
             <div class="menu-item">
                 <div class="menu-item-icon employee"></div>
-                <div :class="['menu-item-text', {'v-hidden': !isToggle}]"><a href="customer.html">Danh mục khách hàng</a></div>
+                <div :class="['menu-item-text', {'v-hidden': !isToggle}]">Danh mục khách hàng</div>
             </div>
             <div class="menu-item">
                 <div class="menu-item-icon setting"></div>

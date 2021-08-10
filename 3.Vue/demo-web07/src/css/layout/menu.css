@@ -17,7 +17,6 @@
 .menu .menu-item {
     height: 44px;
     width: 100%;
-    color: #000;
     display: flex;
     align-items: center;
     padding-left: 16px;
@@ -27,7 +26,6 @@
 
 .menu .menu-item:hover {
     background-color: #e5e5e5;
-    color: #000;
 }
 
 .menu .menu-item-icon {
@@ -44,16 +42,16 @@
     color: #fff;
 }
 
-.menu .menu-item.selected {
-    background-color: #019160 !important;
-    color: #fff;
-}
 
-
-/* .menu .menu-item:nth-last-child(3) {
+/* .menu .menu-item.selected {
     background-color: #019160 !important;
     color: #fff;
 } */
+
+.menu .menu-item:nth-last-child(4) {
+    background-color: #019160 !important;
+    color: #fff !important;
+}
 
 .menu .menu-item-icon.dashboard {
     background-image: url("../../assets/icon/dashboard.png");
@@ -83,14 +81,15 @@
     overflow: hidden;
 }
 
-a {
+
+/* a {
     text-decoration: none;
     color: #000;
 }
 
 .menu .menu-item.selected a {
     color: #fff;
-}
+} */
 
 .toggle-menu {
     float: right;

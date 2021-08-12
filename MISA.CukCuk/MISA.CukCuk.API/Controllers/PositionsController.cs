@@ -1,25 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MISA.CukCuk.API.Model;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using MISA.CukCuk.API.Model;
-using System.Data;
-using MySqlConnector;
-using Dapper;
-
 
 namespace MISA.CukCuk.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
+    public class PositionsController : ControllerBase
     {
-        //GET,POST,PUT,DELETE
-        #region method Get
         [HttpGet]
-        public IActionResult GetAllEmployee()
+        public IActionResult GetAllPosition()
         {
             //Truy cập vào database:
             // 1.Khai báo đối tượng
@@ -27,19 +24,22 @@ namespace MISA.CukCuk.API.Controllers
                  "Database = MISA.CukCuk_Demo;" +
                  "User Id = root;" +
                  "Password = 123456";
+
             // 2.Khởi tạo đối tượng kết nối với database
             IDbConnection dbConnection = new MySqlConnection(connectionString);
+
             // 3.Lấy dữ liệu
-            var sqlCommand = "SELECT * FROM Employee";
-            var employees = dbConnection.Query<object>(sqlCommand);
+            var sqlCommand = "SELECT * FROM Position";
+            var departments = dbConnection.Query<object>(sqlCommand);
             // Trả về cho client
 
-            var response = StatusCode(200, employees);
+            var response = StatusCode(200, departments);
             return response;
         }
 
-        [HttpGet("{employeeId}")]
-        public IActionResult GetEmployeeById(Guid employeeId)
+
+        [HttpGet("{positionId}")]
+        public IActionResult GetPositionById(Guid positionId)
         {
             //Truy cập vào database:
             // 1.Khai báo đối tượng
@@ -50,83 +50,20 @@ namespace MISA.CukCuk.API.Controllers
             // 2.Khởi tạo đối tượng kết nối với database
             IDbConnection dbConnection = new MySqlConnection(connectionString);
             // 3.Lấy dữ liệu
-            var sqlCommand = $"SELECT * FROM Employee WHERE EmployeeId = @EmployeeIdParam";
+            var sqlCommand = $"SELECT * FROM  Position WHERE positionId = @PositionIdParam";
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@EmployeeIdParam", employeeId);
-            var employee = dbConnection.QueryFirstOrDefault<object>(sqlCommand, param: parameters);
+            parameters.Add("@PositionIdParam", positionId);
+            var position = dbConnection.QueryFirstOrDefault<object>(sqlCommand, param: parameters);
             // Trả về cho client
 
-            var response = StatusCode(200, employee);
+            var response = StatusCode(200, position);
             return response;
         }
-
-        [HttpGet("NewEmployeeCode")]
-        public IActionResult getNewEmployeeCode()
-        {
-            //Truy cập vào database:
-            // 1.Khai báo đối tượng
-            var connectionString = "Host = localhost;" +
-                 "Database = MISA.CukCuk_Demo;" +
-                 "User Id = root;" +
-                 "Password = 123456";
-            // 2.Khởi tạo đối tượng kết nối với database
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
-
-            //Thực hiện query lấy mảng mã nhân viên  từ csdl
-            string sqlCommand = "SELECT EmployeeCode FROM Employee ORDER BY EmployeeCode DESC LIMIT 1";
-            var employeeCode = dbConnection.QueryFirstOrDefault<string>(sqlCommand);
-
-            //var Heading = ((IDictionary<string, object>)employeeCodeRow).Keys.ToArray();
-            //var details = ((IDictionary<string, object>)employeeCodeRow);
-            //var employeeCode = details[Heading[0]];
-            // Xử lí sinh mã  mới
-            int currentMax = 0;
-
-            try
-            {
-                int codeValue = int.Parse(employeeCode.ToString().Split("-")[1]);
-                if (currentMax < codeValue)
-                {
-                    currentMax = codeValue;
-                }
-            }
-            catch (Exception)
-            {
-                var errorResponse = StatusCode(500, 1);
-                return errorResponse;
-            }
-
-
-            string newEmployeeCode = "NV-" + (currentMax + 1);
-            var response = StatusCode(200, newEmployeeCode);
-            return response;
-        }
-
-        [HttpGet("{pagenumber}/{pagesize}")]
-        public IActionResult pagination(int pagenumber, int pagesize)
-        {
-            //Truy cập vào database:
-            // 1.Khai báo đối tượng
-            var connectionString = "Host = localhost;" +
-                 "Database = MISA.CukCuk_Demo;" +
-                 "User Id = root;" +
-                 "Password = 123456";
-            // 2.Khởi tạo đối tượng kết nối với database
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
-
-            // 3.Bắt đầu phần trang
-
-
-            var response = StatusCode(200);
-            return response;
-        }
-        #endregion
-
 
         [HttpPost]
-        public IActionResult InsertEmployee([FromBody]Employee employee)
+        public IActionResult InsertPosition([FromBody] Position position)
         {
-            employee.EmployeeId = Guid.NewGuid();
+            position.PositionId = Guid.NewGuid();
             //Truy cập vào database:
             // 1.Khai báo đối tượng
             var connectionString = "Host = localhost;" +
@@ -143,7 +80,7 @@ namespace MISA.CukCuk.API.Controllers
             var columnsParam = string.Empty;
 
             //Đọc từng property của object:
-            var properties = employee.GetType().GetProperties();
+            var properties = position.GetType().GetProperties();
 
 
             //Duyệt từng property:
@@ -153,7 +90,7 @@ namespace MISA.CukCuk.API.Controllers
                 var propName = prop.Name;
 
                 //Lấy value của prop:
-                var propValue = prop.GetValue(employee);
+                var propValue = prop.GetValue(position);
 
                 //Lấy kiểu dữ liệu của prop:
                 var propType = prop.PropertyType;
@@ -166,7 +103,7 @@ namespace MISA.CukCuk.API.Controllers
             }
             columnsName = columnsName.Remove(columnsName.Length - 1, 1);
             columnsParam = columnsParam.Remove(columnsParam.Length - 1, 1);
-            var sqlCommand = $"INSERT INTO Employee({columnsName}) VALUES({columnsParam}) ";
+            var sqlCommand = $"INSERT INTO Position ({columnsName}) VALUES ({columnsParam}) ";
 
             var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
             // Trả về cho client
@@ -175,8 +112,8 @@ namespace MISA.CukCuk.API.Controllers
             return response;
         }
 
-        [HttpPut("{employeeId}")]
-        public IActionResult UpdateEmployee(Guid employeeId, Employee employee)
+        [HttpPut("{positionId}")]
+        public IActionResult UpdatePosition(Guid positionId, Position position)
         {
             //Truy cập vào database:
             // 1.Khai báo đối tượng
@@ -193,7 +130,7 @@ namespace MISA.CukCuk.API.Controllers
             var columnsName = string.Empty;
 
             //Đọc từng property của object:
-            var properties = employee.GetType().GetProperties();
+            var properties = position.GetType().GetProperties();
 
             //Duyệt từng property:
             foreach (var prop in properties)
@@ -202,7 +139,7 @@ namespace MISA.CukCuk.API.Controllers
                 var propName = prop.Name;
 
                 //Lấy value của prop:
-                var propValue = prop.GetValue(employee);
+                var propValue = prop.GetValue(position);
 
                 //Lấy kiểu dữ liệu của prop:
                 var propType = prop.PropertyType;
@@ -211,13 +148,13 @@ namespace MISA.CukCuk.API.Controllers
                 dynamicParam.Add($"@{propName}", propValue);
 
                 columnsName += $"{propName} = @{propName},";
-         
+
             }
             columnsName = columnsName.Remove(columnsName.Length - 1, 1);
-           
-            var sqlCommand = $"UPDATE Employee SET {columnsName} WHERE EmployeeId = @EmployeeIdParam ";
 
-            dynamicParam.Add("@EmployeeIdParam", employeeId);
+            var sqlCommand = $"UPDATE Position SET {columnsName} WHERE positionId = @PositionIdParam ";
+
+            dynamicParam.Add("@PositionIdParam", positionId);
             var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
 
             // Trả về cho client
@@ -225,8 +162,8 @@ namespace MISA.CukCuk.API.Controllers
             return response;
         }
 
-        [HttpDelete("{employeeId}")]
-        public IActionResult DeleteEmployee(Guid employeeId)
+        [HttpDelete("{positionId}")]
+        public IActionResult DeleteDepartment(Guid positionId)
         {
             //Truy cập vào database:
             // 1.Khai báo đối tượng
@@ -238,20 +175,14 @@ namespace MISA.CukCuk.API.Controllers
             IDbConnection dbConnection = new MySqlConnection(connectionString);
 
             // 3.Lấy dữ liệu
-            var sqlCommand = $"DELETE FROM Employee WHERE EmployeeId = @EmployeeIdParam";
+            var sqlCommand = $"DELETE FROM Position WHERE PositionId = @PositionIdParam";
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@EmployeeIdParam", employeeId);
+            parameters.Add("@PositionIdParam", positionId);
             var rowEffects = dbConnection.Execute(sqlCommand, param: parameters);
 
             // 4.Trả về cho client
             var response = StatusCode(200, rowEffects);
             return response;
         }
-
-     
     }
-
-    
 }
-
-

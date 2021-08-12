@@ -107,5 +107,78 @@ namespace MISA.CukCuk.API.Controllers
             var response = StatusCode(200, customer);
             return response;
         }
+
+        [HttpPut("{employeeId}")]
+        public IActionResult UpdateEmployee(Guid customerId, Customer customer)
+        {
+            //Truy cập vào database:
+            // 1.Khai báo đối tượng
+            var connectionString = "Host = localhost;" +
+                 "Database = MISA.CukCuk_Demo;" +
+                 "User Id = root;" +
+                 "Password = 123456";
+            // 2.Khởi tạo đối tượng kết nối với database
+            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            //khai báo dynamicParam:
+            var dynamicParam = new DynamicParameters();
+
+            // 3.Thêm dữ liệu vào database
+            var columnsName = string.Empty;
+
+            //Đọc từng property của object:
+            var properties = customer.GetType().GetProperties();
+
+            //Duyệt từng property:
+            foreach (var prop in properties)
+            {
+                //lấy tên của prop:
+                var propName = prop.Name;
+
+                //Lấy value của prop:
+                var propValue = prop.GetValue(customer);
+
+                //Lấy kiểu dữ liệu của prop:
+                var propType = prop.PropertyType;
+
+                //thêm param tương ứng với mỗi property của đối tượng
+                dynamicParam.Add($"@{propName}", propValue);
+
+                columnsName += $"{propName} = @{propName},";
+
+            }
+            columnsName = columnsName.Remove(columnsName.Length - 1, 1);
+
+            var sqlCommand = $"UPDATE Customer SET {columnsName} WHERE EmployeeId = @EmployeeIdParam ";
+
+            dynamicParam.Add("@EmployeeIdParam", customerId);
+            var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
+
+            // Trả về cho client
+            var response = StatusCode(200, rowEffects);
+            return response;
+        }
+
+        [HttpDelete("{customerId}")]
+        public IActionResult DeleteCustomer(Guid customerId)
+        {
+            //Truy cập vào database:
+            // 1.Khai báo đối tượng
+            var connectionString = "Host = localhost;" +
+                 "Database = MISA.CukCuk_Demo;" +
+                 "User Id = root;" +
+                 "Password = 123456";
+            // 2.Khởi tạo đối tượng kết nối với database
+            IDbConnection dbConnection = new MySqlConnection(connectionString);
+
+            // 3.Lấy dữ liệu
+            var sqlCommand = $"DELETE FROM Customer WHERE EmployeeId = @EmployeeIdParam";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@EmployeeIdParam", customerId);
+            var rowEffects = dbConnection.Execute(sqlCommand, param: parameters);
+
+            // 4.Trả về cho client
+            var response = StatusCode(200, rowEffects);
+            return response;
+        }
     }
 }

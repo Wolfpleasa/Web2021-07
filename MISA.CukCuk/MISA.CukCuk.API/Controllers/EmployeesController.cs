@@ -261,7 +261,9 @@ namespace MISA.CukCuk.API.Controllers
                 var connectionString = "Host = localhost;" +
                     "Database = MISA.CukCuk_Demo;" +
                     "User Id = root;" +
-                    "Password = 123456";
+                    "Password = 123456;" + 
+                    "Allow User Variables=true;";
+
                 // 2.Khởi tạo đối tượng kết nối với database
                 IDbConnection dbConnection = new MySqlConnection(connectionString);
                 //khai báo dynamicParam:
@@ -269,8 +271,8 @@ namespace MISA.CukCuk.API.Controllers
                 // .2.1 Check mã trùng
                 var validateCommand = "SELECT * FROM Employee WHERE EmployeeCode = @EmployeeCodeParam";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@EmployeeIdParam", employee.EmployeeCode);
-                var employeeCheck = dbConnection.QueryFirstOrDefault<Employee>(validateCommand);
+                parameters.Add("@EmployeeCodeParam", employee.EmployeeCode);
+                var employeeCheck = dbConnection.QueryFirstOrDefault<object>(validateCommand, param: parameters);
                 // Trả về cho client
                 if (employeeCheck != null)
                 {
@@ -389,7 +391,8 @@ namespace MISA.CukCuk.API.Controllers
                 var connectionString = "Host = localhost;" +
                      "Database = MISA.CukCuk_Demo;" +
                      "User Id = root;" +
-                     "Password = 123456";
+                     "Password = 123456;" +
+                     "Allow User Variables=true;";
                 // 2.Khởi tạo đối tượng kết nối với database
                 IDbConnection dbConnection = new MySqlConnection(connectionString);
                 //khai báo dynamicParam:
@@ -397,8 +400,8 @@ namespace MISA.CukCuk.API.Controllers
                 // .2.1 Check mã trùng
                 var validateCommand = "SELECT * FROM Employee WHERE EmployeeCode = @EmployeeCodeParam";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@EmployeeIdParam", employee.EmployeeCode);
-                Employee employeeCheck = dbConnection.QueryFirstOrDefault<Employee>(validateCommand);
+                parameters.Add("@EmployeeCodeParam", employee.EmployeeCode);
+                Employee employeeCheck = dbConnection.QueryFirstOrDefault<Employee>(validateCommand, param: parameters);
                 // Trả về cho client
                 if (employeeCheck != null && employeeCheck.EmployeeId != employee.EmployeeId)
                 {

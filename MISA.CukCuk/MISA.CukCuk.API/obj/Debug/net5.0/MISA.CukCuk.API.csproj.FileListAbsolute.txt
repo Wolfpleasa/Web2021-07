@@ -60,3 +60,5 @@ D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\ref\MISA.CukCuk.API.dll
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.pdb
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.genruntimeconfig.cache
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.Properties.Resource.resources
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.csproj.GenerateResource.cache

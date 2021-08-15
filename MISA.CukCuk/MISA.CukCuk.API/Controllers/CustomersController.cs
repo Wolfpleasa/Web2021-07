@@ -4,11 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MISA.CukCuk.API.Model;
+using MISA.Core.Entities;
 using System.Data;
 using MySqlConnector;
 using Dapper;
 using System.Text.RegularExpressions;
+using MISA.Core.Interfaces.Services;
 
 namespace MISA.CukCuk.API.Controllers
 {
@@ -16,6 +17,11 @@ namespace MISA.CukCuk.API.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
+        ICustomerService _customerSevice;
+        public CustomersController(ICustomerService customerSevice)
+        {
+            _customerSevice = customerSevice;
+        }
         //GET,POST,PUT,DELETE
         #region method GET
         /// <summary>
@@ -30,10 +36,10 @@ namespace MISA.CukCuk.API.Controllers
             {
                 //Truy cập vào database:
                 // 1.Khai báo đối tượng
-                var connectionString = "Host = 47.241.69.179;" +
-                    "Database = MISA.CukCuk_Demo_NVMANH;" +
-                    "User Id = dev;" +
-                    "Password = 12345678";
+                var connectionString = "Host = localhost;" +
+                  "Database = MISA.CukCuk_Demo;" +
+                  "User Id = root;" +
+                  "Password = 123456";
                 // 2.Khởi tạo đối tượng kết nối với database
                 IDbConnection dbConnection = new MySqlConnection(connectionString);
                 // 3.Lấy dữ liệu
@@ -78,10 +84,10 @@ namespace MISA.CukCuk.API.Controllers
             {
                 //Truy cập vào database:
                 // 1.Khai báo đối tượng
-                var connectionString = "Host = 47.241.69.179;" +
-                    "Database = MISA.CukCuk_Demo_NVMANH;" +
-                    "User Id = dev;" +
-                    "Password = 12345678";
+                var connectionString = "Host = localhost;" +
+                     "Database = MISA.CukCuk_Demo;" +
+                     "User Id = root;" +
+                     "Password = 123456";
                 // 2.Khởi tạo đối tượng kết nối với database
                 IDbConnection dbConnection = new MySqlConnection(connectionString);
                 // 3.Lấy dữ liệu
@@ -147,7 +153,7 @@ namespace MISA.CukCuk.API.Controllers
                     return errorResponse;
                 }
 
-                string newCustomerCode = "NV-" + (currentMax + 1);
+                string newCustomerCode = "KH-" + (currentMax + 1);
                 var response = StatusCode(200, newCustomerCode);
                 return response;
             }
@@ -178,104 +184,17 @@ namespace MISA.CukCuk.API.Controllers
         public IActionResult InsertCustomer(Customer customer)
         {
             try
-            {   
-                // Kiểm tra dữ liệu
-                // 1. Mã khách hàng bắt buộc nhập
-                if (customer.CustomerCode == "" || customer.CustomerCode == null)
-                {
-                    var errorObj = new
-                    {
-                        userMsg = Properties.Resource.Error_Message_UserVN,
-                        errorCode = "misa-001",
-                        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
-                        traceId = ""
-                    };
-                    return BadRequest(errorObj);
-                }
-
-                // 2. Email phải đúng định dạng
-                var emailFormat = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-                var isMatch = Regex.IsMatch(customer.Email, emailFormat, RegexOptions.IgnoreCase);
-                if (isMatch == false)
-                {
-                    var errorObj = new
-                    {
-                        userMsg = Properties.Resource.Error_Email,
-                        errorCode = "misa-003",
-                        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-003",
-                        traceId = ""
-                    };
-                    return BadRequest(errorObj);
-                }
-                // 3. Check mã trùng
-
-                customer.CustomerId = Guid.NewGuid();
-                //Truy cập vào database:
-                // 1.Khai báo đối tượng
-                var connectionString = "Host = 47.241.69.179;" +
-                    "Database = MISA.CukCuk_Demo_NVMANH;" +
-                    "User Id = dev;" +
-                    "Password = 12345678";
-                // 2.Khởi tạo đối tượng kết nối với database
-                IDbConnection dbConnection = new MySqlConnection(connectionString);
-                //khai báo dynamicParam:
-                var dynamicParam = new DynamicParameters();
-                // .2.1 Check mã trùng
-                var validateCommand = "SELECT * FROM Customer WHERE CustomerCode = @CustomerCodeParam";
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@CustomerIdParam", customer.CustomerCode);
-                var customerCheck = dbConnection.QueryFirstOrDefault<Customer>(validateCommand);
-                // Trả về cho client
-                if (customerCheck != null)
-                {
-                    var errorObj = new
-                    {
-                        userMsg = Properties.Resource.Duplicate_Code,
-                        errorCode = "misa-003",
-                        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-003",
-                        traceId = ""
-                    };
-                    return BadRequest(errorObj);
-                }
-                // 3.Thêm dữ liệu vào database
-                var columnsName = string.Empty;
-                var columnsParam = string.Empty;
-
-                //Đọc từng property của object:
-                var properties = customer.GetType().GetProperties();
-
-
-                //Duyệt từng property:
-                foreach (var prop in properties)
-                {
-                    //lấy tên của prop:
-                    var propName = prop.Name;
-
-                    //Lấy value của prop:
-                    var propValue = prop.GetValue(customer);
-
-                    //Lấy kiểu dữ liệu của prop:
-                    var propType = prop.PropertyType;
-
-                    //thêm param tương ứng với mỗi property của đối tượng
-                    dynamicParam.Add($"@{propName}", propValue);
-
-                    columnsName += $"@{propName},";
-                    columnsParam += $"@{propName},";
-                }
-                columnsName = columnsName.Remove(columnsName.Length - 1, 1);
-                columnsParam = columnsParam.Remove(columnsParam.Length - 1, 1);
-                var sqlCommand = $"INSERT INTO Customer({columnsName}) VALUES({columnsParam}) ";
-                var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
+            {
+                var serviceResult = _customerSevice.Add(customer);                          
 
                 // Trả về cho client
-                if (rowEffects > 0)
+                if (serviceResult.isValid == true)
                 {
-                    return StatusCode(201);
+                    return StatusCode(201, serviceResult.Data);
                 }
                 else
                 {
-                    return StatusCode(204);
+                    return BadRequest(serviceResult.Data);
                 }
             }
             catch (Exception ex)
@@ -283,7 +202,7 @@ namespace MISA.CukCuk.API.Controllers
                 var errorObj = new
                 {
                     devMsg = ex.Message,
-                    userMsg = Properties.Resource.Error_Message_UserVN,
+                    userMsg = MISA.Core.Properties.ResourceVN.Error_Message_UserVN,
                     errorCode = "misa-001",
                     moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
                     traceId = ""
@@ -339,9 +258,10 @@ namespace MISA.CukCuk.API.Controllers
                 //Truy cập vào database:
                 // 1.Khai báo đối tượng
                 var connectionString = "Host = localhost;" +
-                     "Database = MISA.CukCuk_Demo;" +
-                     "User Id = root;" +
-                     "Password = 123456";
+                 "Database = MISA.CukCuk_Demo;" +
+                "User Id = root;" +
+                "Password = 123456;" +
+                "Allow User Variables=true;";
                 // 2.Khởi tạo đối tượng kết nối với database
                 IDbConnection dbConnection = new MySqlConnection(connectionString);
                 //khai báo dynamicParam:
@@ -350,8 +270,8 @@ namespace MISA.CukCuk.API.Controllers
                 // .2.1 Check mã trùng
                 var validateCommand = "SELECT * FROM Customer WHERE CustomerCode = @CustomerCodeParam";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@CustomerIdParam", customer.CustomerCode);
-                Customer customerCheck = dbConnection.QueryFirstOrDefault<Customer>(validateCommand);
+                parameters.Add("@CustomerCodeParam", customer.CustomerCode);
+                Customer customerCheck = dbConnection.QueryFirstOrDefault<Customer>(validateCommand, param: parameters);
                 // Trả về cho client
                 if (customerCheck != null && customerCheck.CustomerId != customer.CustomerId)
                 {

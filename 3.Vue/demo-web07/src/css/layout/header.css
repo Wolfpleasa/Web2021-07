@@ -67,6 +67,31 @@
     width: auto;
     justify-content: center;
     display: flex;
+    position: relative;
+}
+
+.header-right .user .redDot {
+    position: absolute;
+    height: 4px;
+    width: 4px;
+    justify-content: center;
+    left: 10px;
+    margin: 16px 0px;
+    background-image: url("../../assets/icon/reddot.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.header-right .user .bell {
+    height: 16px;
+    width: 16px;
+    justify-content: center;
+    margin: 16px 0px;
+    background-image: url("../../assets/icon/notification.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .header-right .user .user-avatar {

@@ -49,7 +49,6 @@ D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.AssemblyInfoInputs.cache
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.AssemblyInfo.cs
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.csproj.CoreCompileInputs.cache
-D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.MvcApplicationPartsAssemblyInfo.cs
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.MvcApplicationPartsAssemblyInfo.cache
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\staticwebassets\MISA.CukCuk.API.StaticWebAssets.Manifest.cache
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\staticwebassets\MISA.CukCuk.API.StaticWebAssets.xml
@@ -62,3 +61,7 @@ D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.genruntimeconfig.cache
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.Properties.Resource.resources
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.csproj.GenerateResource.cache
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Core.dll
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Infrastructure.dll
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Core.pdb
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Infrastructure.pdb

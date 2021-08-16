@@ -1,36 +1,43 @@
 <template>
-  <div>
-    <div class="p-relative">
-      <div v-if="labelText.length > 0">
-        <label for=""
-          >{{ labelText }}
-          <span v-if="obligate == 'true'"
-            >(<span class="cl-red">*</span>)</span
-          ></label
-        ><br />
-      </div>
-      <ToolTip :hideToolTip="hideToolTip" :ToolTipText="ToolTipText" />
-      <input
-        :tabindex="tabindex"
-        :type="type"
-        :FieldName="FieldName"
-        :class="['textbox-default', subClass, { notValid: hasNotValid }]"
-        ref="inputREF"
-        :obligate="obligate"
-        :onlyHasNumber="onlyHasNumber"
-        :checkDate="checkDate"
-        v-model="inputValue"
-        @input="onInput($event.target.value)"
-        @blur="onBlur($event.target.value)"
-      />
+  <div class="p-relative" >
+    <div v-if="labelText.length > 0">
+      <label for=""
+        >{{ labelText }}
+        <span v-if="obligate == 'true'"
+          >(<span class="cl-red">*</span>)</span
+        ></label
+      ><br />
     </div>
+    <ToolTip :hideToolTip="hideToolTip" :ToolTipText="ToolTipText" />
+    <input
+      :tabindex="tabindex"
+      :type="type"
+      :placeholder="placeholder"
+      :FieldName="FieldName"
+      :class="['textbox-default', subClass, { notValid: hasNotValid }]"
+      ref="inputREF"
+      :obligate="obligate"
+      :onlyHasNumber="onlyHasNumber"
+      :checkDate="checkDate"
+      v-model="inputValue"
+      @input="onInput($event.target.value)"
+      @blur="onBlur($event.target.value)"
+    />
+    <div
+      v-if="type == 'text'"
+      :class="['input-clear-icon', { 'v-hidden': isHide }]"
+      @click="clearInput"
+    ></div>
   </div>
 </template>
 
 <script>
+import { mixin as clickaway } from "vue-clickaway";
+
 import ToolTip from "./BaseToolTip.vue";
 
 export default {
+  mixins: [clickaway],
   name: "BaseInput",
   components: {
     ToolTip,
@@ -40,6 +47,7 @@ export default {
     labelText: String,
     tabindex: String,
     type: String,
+    placeholder: String,
     FieldName: String,
     initValue: String,
     subClass: String,
@@ -55,14 +63,31 @@ export default {
   },
   data() {
     return {
+      // Giá trị/Nội dung hiện tại
       inputValue: "",
+      // Ẩn/hiện viền đỏ
       hasNotValid: false,
+      // Ẩn/hiện tooltip
       hideToolTip: true,
+      // Nội dung tooltip
       ToolTipText: "",
+      // Ẩn/hiện icon X
+      isHide: true,
     };
   },
 
   methods: {
+    /**
+     * Hàm xóa dữ liệu được nhập trong 1 ô
+     * Ngọc 11/8/2021
+     */
+    clearInput() {
+      // Xóa giá trị hiện tại
+      this.inputValue = "";
+      // Ẩn nút X
+      this.isHide = true;
+    },
+
     /**
      * Hàm bind dữ liệu vào input
      * Ngọc 7/8/2021
@@ -71,6 +96,8 @@ export default {
       let me = this;
       //emit thắng vào v-model của cha
       me.$emit("input", inputValue);
+      // Hiện icon X
+      me.isHide = false;
 
       //format ô input tiền lương
       if (me.FieldName == "Salary") {
@@ -200,7 +227,7 @@ export default {
         val = me.$refs.inputREF.value;
 
       if (me.obligate == "true" && val == "") {
-        //thêm border đỏ
+        // Thêm border đỏ
         me.hasNotValid = true;
         // hiện tooltip
         me.hideToolTip = false;
@@ -313,6 +340,17 @@ export default {
     },
 
     /**
+     * Hàm loại bỏ lỗi và tooltip cảnh báo khi mở lại form
+     * Ngọc 10/8/2021
+     */
+    removeError() {
+      let me = this;
+      me.hasNotValid = false;
+      me.hideToolTip = true;
+      me.isHide = true;
+    },
+
+    /**
      * Hàm kiểm tra chuổi chỉ chứa chữ số
      * Ngọc 24/07/2021
      */
@@ -351,12 +389,14 @@ export default {
   watch: {
     initValue: function () {
       this.inputValue = this.initValue;
+     
     },
 
     reFocus: function () {
       if (this.autoFocus == "true") {
         this.$refs.inputREF.focus();
       }
+       
     },
   },
 };

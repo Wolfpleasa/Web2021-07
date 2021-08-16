@@ -1,10 +1,10 @@
 <template>
-  <div :class="['p-absolute', { 'd-none': dnone }, { 'o-80': blurr }]">
     <div
       id="popup"
       :employeeId="employeeId"
       :formMode="formMode"
       Item="EmployeeCode"
+      :class="['z-index-2' ,{ 'd-none': dnone }]"
     >
       <div class="head">
         <div class="head-text">THÔNG TIN NHÂN VIÊN</div>
@@ -31,7 +31,7 @@
                   FieldName="EmployeeCode"
                   obligate="true"
                   autoFocus="true"
-                  ref="requiredEmployeeCode"
+                  ref="txtrequiredEmployeeCode"
                   :reFocus="reFocus"
                   v-model="employee.EmployeeCode"
                   :initValue="employee.EmployeeCode"
@@ -43,7 +43,7 @@
                   tabindex="0"
                   type="text"
                   FieldName="FullName"
-                  ref="requiredFullName"
+                  ref="txtrequiredFullName"
                   obligate="true"
                   v-model="employee.FullName"
                   :initValue="employee.FullName"
@@ -58,7 +58,7 @@
                   type="date"
                   FieldName="DateOfBirth"
                   obligate="false"
-                  ref="DateOfBirth"
+                  ref="txtDateOfBirth"
                   checkDate="true"
                   v-model="employee.DateOfBirth"
                   :initValue="employee.DateOfBirth"
@@ -84,10 +84,11 @@
                   labelText="Số CMTND/ Căn cước"
                   tabindex="0"
                   type="text"
+                  placeholder = "9-12 chữ số"
                   onlyHasNumber="true"
-                  FieldName="IdentityNumber"
+                  FieldName="txtIdentityNumber"
                   obligate="true"
-                  ref="requiredIdentityNumber"
+                  ref="txtrequiredIdentityNumber"
                   v-model="employee.IdentityNumber"
                   :initValue="employee.IdentityNumber"
                 />
@@ -97,7 +98,7 @@
                   labelText="Ngày cấp"
                   tabindex="0"
                   type="date"
-                  FieldName="IdentityDate"
+                  FieldName="txtIdentityDate"
                   obligate="false"
                   checkDate="true"
                   ref="IdentityDate"
@@ -112,7 +113,7 @@
                   labelText="Nơi cấp"
                   tabindex="0"
                   type="text"
-                  FieldName="IdentityPlace"
+                  FieldName="txtIdentityPlace"
                   obligate="false"
                   v-model="employee.IdentityPlace"
                   :initValue="employee.IdentityPlace"
@@ -125,9 +126,10 @@
                   labelText="Email"
                   tabindex="0"
                   type="text"
+                  placeholder="youremail@gmail.com"
                   FieldName="Email"
                   obligate="true"
-                  ref="requiredEmail"
+                  ref="txtrequiredEmail"
                   v-model="employee.Email"
                   :initValue="employee.Email"
                 />
@@ -137,10 +139,11 @@
                   labelText="Số điện thoại"
                   tabindex="0"
                   type="text"
+                  placeholder="10 chữ số"
                   onlyHasNumber="true"
                   FieldName="PhoneNumber"
                   obligate="true"
-                  ref="requiredPhoneNumber"
+                  ref="txtrequiredPhoneNumber"
                   v-model="employee.PhoneNumber"
                   :initValue="employee.PhoneNumber"
                 />
@@ -189,7 +192,7 @@
                   FieldName="PersonalTaxCode"
                   obligate="false"
                   onlyHasNumber="true"
-                  ref="PersonalTaxCodeNumber"
+                  ref="txtPersonalTaxCodeNumber"
                   v-model="employee.PersonalTaxCode"
                   :initValue="employee.PersonalTaxCode"
                 />
@@ -202,7 +205,7 @@
                   onlyHasNumber="true"
                   FieldName="Salary"
                   obligate="false"
-                  ref="SalaryNumber"
+                  ref="txtSalaryNumber"
                   subClass="ta-r pd-19"
                   v-model="employee.Salary"
                   :initValue="employee.Salary"
@@ -217,7 +220,7 @@
                   labelText="Ngày gia nhập công ty"
                   tabindex="0"
                   type="date"
-                  FieldName="JoinDate"
+                  FieldName="txtJoinDate"
                   obligate="false"
                   checkDate="true"
                   ref="JoinDate"
@@ -259,7 +262,6 @@
         />
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -295,7 +297,6 @@ export default {
     formMode: Number,
     reopen: Boolean,
     response: String,
-    blurr: Boolean,
   },
 
   data() {
@@ -393,6 +394,20 @@ export default {
         this.employee = newEntity;
         // gọi hàm lấy mã nhân viên mới
         this.getNewCode();
+        // bỏ các tooltip cảnh báo nếu đang lỗi
+        this.removeError();
+    },
+
+    /**
+     * Hàm loại bỏ các tooltip cảnh báo
+     * Ngọc 10/8/2021
+     */
+    removeError(){
+      let me = this
+      for (let [key] of Object.entries(me.$refs)) {
+        if (key.includes("txt")) 
+         me.$refs[key].removeError();      
+      }
     },
 
     /**
@@ -580,7 +595,7 @@ export default {
     validateEmail() {
       let me = this,
         isValid = true,
-        valRes = me.$refs.requiredEmail.validateEmail();
+        valRes = me.$refs.txtrequiredEmail.validateEmail();
 
       if (valRes == false) {
         me.$emit(
@@ -601,7 +616,7 @@ export default {
     validatePhoneNumber() {
       let me = this,
         isValid = true,
-        valRes = me.$refs.requiredPhoneNumber.validatePhoneNumber();
+        valRes = me.$refs.txtrequiredPhoneNumber.validatePhoneNumber();
 
       if (valRes == false) {
         me.$emit(

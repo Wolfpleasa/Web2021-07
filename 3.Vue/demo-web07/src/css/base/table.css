@@ -48,46 +48,50 @@ th:hover {
 
 tr th:nth-child(1) {
     padding-left: 16px;
-    max-width: 150px;
+    padding-right: 10px;
+    max-width: 46px;
 }
 
 tr th:nth-child(2) {
-    padding-left: 16px;
-    max-width: 150px;
+    padding: 0;
 }
 
 tr th:nth-child(3) {
+    max-width: 150px;
+}
+
+tr th:nth-child(4) {
     padding-left: 16px;
     max-width: 164px;
 }
 
-tr th:nth-child(4) {
+tr th:nth-child(5) {
     max-width: 82px;
 }
 
-tr th:nth-child(5) {
+tr th:nth-child(6) {
     text-align: center;
     max-width: 102px;
 }
 
-tr th:nth-child(6) {
+tr th:nth-child(7) {
     max-width: 119px;
     margin-left: 16px;
 }
 
-tr th:nth-child(7) {
+tr th:nth-child(8) {
     max-width: 169px;
 }
 
-tr th:nth-child(8) {
+tr th:nth-child(9) {
     max-width: 81px;
 }
 
-tr th:nth-child(9) {
+tr th:nth-child(10) {
     max-width: 105px;
 }
 
-tr th:nth-child(10) {
+tr th:nth-child(11) {
     text-align: right;
     max-width: 174px;
 }
@@ -116,46 +120,50 @@ td:hover {
 
 tr td:first-child {
     padding-left: 16px;
-    max-width: 40px;
+    padding-right: 10px;
+    max-width: 46px;
 }
 
 tr td:nth-child(2) {
-    padding-left: 16px;
-    max-width: 150px;
+    padding: 0;
 }
 
 tr td:nth-child(3) {
+    max-width: 150px;
+}
+
+tr td:nth-child(4) {
     padding-left: 16px;
     max-width: 124px;
 }
 
-tr td:nth-child(4) {
+tr td:nth-child(5) {
     max-width: 82px;
 }
 
-tr td:nth-child(5) {
+tr td:nth-child(6) {
     text-align: center;
     max-width: 102px;
 }
 
-tr td:nth-child(6) {
+tr td:nth-child(7) {
     max-width: 119px;
     margin-left: 16px;
 }
 
-tr td:nth-child(7) {
+tr td:nth-child(8) {
     max-width: 169px;
 }
 
-tr td:nth-child(8) {
+tr td:nth-child(9) {
     max-width: 81px;
 }
 
-tr td:nth-child(9) {
+tr td:nth-child(10) {
     max-width: 105px;
 }
 
-tr td:nth-child(10) {
+tr td:nth-child(11) {
     text-align: right;
     max-width: 174px;
 }
@@ -193,4 +201,12 @@ tr td:last-child {
 
  ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+@media only screen and (max-width: 2000px) {
+    tr td:first-child {
+        padding-left: 16px;
+        padding-right: 10px;
+        max-width: 46px;
+    }
 }

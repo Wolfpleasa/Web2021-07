@@ -21,6 +21,10 @@ $(".select-arrow").click(function() {
     }
 })
 
+/**
+ * Sự kiện hiện/ẩn dropdown
+ * Ngọc 16/7/2021
+ */
 $(".inp").click(function() {
     let me = $(this),
         arrow = me.parent().find(".select-arrow"),
@@ -75,7 +79,6 @@ $(".dropdown").on("click", ".dropdown-item", function() {
 
     select.removeClass("notValidControl");
 })
-
 
 
 /**

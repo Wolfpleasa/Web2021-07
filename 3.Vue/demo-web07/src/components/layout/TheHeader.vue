@@ -10,6 +10,8 @@
                     <div class="arrow"></div>
                 </div>
                 <div class="user">
+                    <div class="redDot"></div>
+                    <div class="bell"></div>
                     <div class="user-avatar"></div>
                     <div class="user-fullname">Đỗ Minh Ngọc</div>
                     <div class="user-function"></div>

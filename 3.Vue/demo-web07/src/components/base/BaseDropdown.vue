@@ -286,19 +286,19 @@ export default {
       this.setValueDropdown();
     },
 
-    currentIndex: function () {
-      if (this.currentIndex != -1) {
-        this.hasNotValid = false;
-        this.hideToolTip = true;
-      }
+    // currentIndex: function () {
+    //   if (this.currentIndex != -1) {
+    //     this.hasNotValid = false;
+    //     this.hideToolTip = true;
+    //   }
 
-      if(this.currentIndex == -1){
-        this.hasNotValid = true;
-        // hiện tooltip
-        this.hideToolTip = false;
-        this.ToolTipText = "Vui lòng chọn giá trị cho hộp này"
-      }
-    },
+    //   if(this.currentIndex == -1){
+    //     this.hasNotValid = true;
+    //     // hiện tooltip
+    //     this.hideToolTip = false;
+    //     this.ToolTipText = "Vui lòng chọn giá trị cho hộp này"
+    //   }
+    // },
   },
   
 };

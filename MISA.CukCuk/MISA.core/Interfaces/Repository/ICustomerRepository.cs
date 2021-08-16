@@ -9,14 +9,6 @@ namespace MISA.Core.Interfaces.Repository
 {
     public interface ICustomerRepository
     {
-        List<Customer> Get();
-
-        Customer GetById(Guid customerId);
-
-        int Add(Customer customer);
-
-        int Edit(Customer customer, Guid customerId);
-
-        int Delete(Guid customerId);
+       
     }
 }

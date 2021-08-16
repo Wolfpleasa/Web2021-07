@@ -20,15 +20,17 @@
     height: 32px;
     line-height: 32px;
     margin: 0px 10px 0px 10px;
+    cursor: pointer;
 }
 
 .page-navigator .paging .page-number {
     border-radius: 50%;
     text-align: center;
-    border: 1px solid #fff;
+    border: 1px solid #bbbbbb;
+    box-sizing: border-box;
 }
 
-.page-navigator .btn:nth-child(3) {
+.page-navigator .btn.page-selected {
     background-color: #019160 !important;
     border-color: #019160;
     color: #fff;
@@ -41,6 +43,7 @@
 }
 
 .page-navigator .paging .page-number:hover {
+    border-color: #fff;
     background-color: #fff;
 }
 
@@ -70,5 +73,42 @@
 .first-page:hover,
 .next-page:hover,
 .last-page:hover {
+    border-color: #fff;
     background-color: #fff;
+}
+
+.NumberPerPage {
+    background-color: #fff;
+    width: auto;
+    height: 32px;
+    border-radius: 4px;
+    margin-top: 12px;
+    padding-left: 16px;
+    line-height: 32px;
+}
+
+.NumberPerPage .modifyNumber {
+    margin: 0 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 16px;
+}
+
+.NumberPerPage .modifyNumber .increaseNumber {
+    height: 50%;
+    width: 100%;
+    background-image: url("../../assets/icon/btn-up.svg");
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position: center 4px;
+}
+
+.NumberPerPage .modifyNumber .decreaseNumber {
+    height: 50%;
+    width: 100%;
+    background-image: url("../../assets/icon/chevron-down.svg");
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position: center -4px;
 }

@@ -1,6 +1,6 @@
 <template>
-  <div :class="['p-absolute', { 'd-none': dnone }]">
-    <div :id="idPopup" :employeeId="employeeId">
+
+    <div :id="idPopup" :employeeId="employeeId" :class="[' z-index-12', { 'd-none': dnone }]">
       <div class="head">
         <div class="head-text">{{ warning }}</div>
         <div class="head-close" @click="btnCancelOnClick"></div>
@@ -30,7 +30,7 @@
         />
       </div>
     </div>
-  </div>
+ 
 </template>
 
 <script>

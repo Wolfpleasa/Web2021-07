@@ -28,7 +28,6 @@ input::placeholder {
 
 .input-clear-icon {
     position: absolute;
-    visibility: hidden;
     height: 16px;
     width: 16px;
     margin-top: 12px;

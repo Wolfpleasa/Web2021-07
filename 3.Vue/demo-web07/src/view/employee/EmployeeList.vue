@@ -1,109 +1,126 @@
 <template>
   <div>
-    <div :class="{ 'o-40': opacity }">
-      <Header />
-      <Menu :isToggle="isToggle" @toggleMenu="toggleMenu" />
-      <div :class="['content', { narrow: isToggle }, { expand: !isToggle }]">
-        <div class="content-header">
-          <div class="title">Danh sách nhân viên</div>
-          <div class="d-flex">
-            <ButtonIcon
-              @btn-click="btnDuplicateOnClick"
-              iconName="icon-add"
-              buttonText="Nhân bản nhân viên"
-              id="btnDuplicate"
-              :class="{ 'v-hidden': HideBtnDuplicate }"
-            />
-            <ButtonIcon
-              @btn-click="btnDeleteOnClick"
-              iconName="icon-delete"
-              buttonText="Xóa nhân viên"
-              id="btnDelete"
-              :class="{ 'v-hidden': HideBtnDelete }"
-            />
-            <ButtonIcon
-              @btn-click="btnAddOnClick"
-              iconName="icon-add"
-              buttonText="Thêm nhân viên"
-              id="btnAdd"
-            />
-          </div>
+    <Header />
+    <Menu :isToggle="isToggle" @toggleMenu="toggleMenu" />
+    <div :class="['content', { narrow: isToggle }, { expand: !isToggle }]">
+      <div class="content-header">
+        <div class="title">Danh sách nhân viên</div>
+        <div class="d-flex">
+          <ButtonIcon
+            @btn-click="btnDuplicateOnClick"
+            iconName="icon-add"
+            buttonText="Nhân bản nhân viên"
+            id="btnDuplicate"
+            :class="{ 'v-hidden': HideBtnDuplicate }"
+          />
+          <ButtonIcon
+            @btn-click="btnDeleteOnClick"
+            iconName="icon-delete"
+            buttonText="Xóa nhân viên"
+            id="btnDelete"
+            :class="{ 'v-hidden': HideBtnDelete }"
+          />
+          <ButtonIcon
+            @btn-click="btnAddOnClick"
+            iconName="icon-add"
+            buttonText="Thêm nhân viên"
+            id="btnAdd"
+          />
         </div>
-        <div class="filter">
-          <div class="d-flex">
-            <FieldInputIcon />
-            <Dropdown
-              className="department"
-              defaultName="Tất cả phòng ban"
-              dd_dropdown="dd-Department"
-              Url="api/Department"
-              itemId="DepartmentId"
-              itemName="DepartmentName"
-            />
-            <Dropdown
-              className="position"
-              defaultName="Tất cả vị trí"
-              dd_dropdown="dd-Position"
-              Url="v1/Positions"
-              itemId="PositionId"
-              itemName="PositionName"
-            />
-          </div>
-          <div class="refresh"></div>
-        </div>
-        <div id="gridEntity">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  <div
-                    :class="['checkbox', { checked: checked }]"
-                    @click="clickCheckboxTh"
-                  ></div>
-                </th>
-                <th>Mã nhân viên</th>
-                <th>Họ và tên</th>
-                <th>Giới tính</th>
-                <th>Ngày sinh</th>
-                <th>Điện thoại</th>
-                <th>Email</th>
-                <th>Chức vụ</th>
-                <th>Phòng ban</th>
-                <th>Mức lương cơ bản</th>
-                <th>Tình trạng công việc</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(employee, index) in employees"
-                :key="employee.EmployeeId"
-                @dblclick="onDoubleClick(employee.EmployeeId)"
-                @click="trOnClick(index)"
-                :class="{ 'tr-select': isSelected[index] }"
-              >
-                <td>
-                  <CheckBox
-                    @clickCheckboxTd="clickCheckboxTd"
-                    :checked="isSelected[index]"
-                  />
-                </td>
-                <td>{{ employee.EmployeeCode }}</td>
-                <td>{{ employee.FullName }}</td>
-                <td>{{ employee.GenderName }}</td>
-                <td>{{ convertDate(employee.DateOfBirth) }}</td>
-                <td>{{ employee.PhoneNumber }}</td>
-                <td>{{ employee.Email }}</td>
-                <td>{{ employee.PositionName }}</td>
-                <td>{{ employee.DepartmentName }}</td>
-                <td>{{ formatMoney(employee.Salary) }}</td>
-                <td>{{ employee.WorkStatus }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <PageNavigation :totalEntity = "totalEntity"/>
       </div>
+      <div class="filter">
+        <div class="d-flex">
+          <FieldInputIcon />
+          <Dropdown
+            className="department"
+            defaultName="Tất cả phòng ban"
+            dd_dropdown="dd-Department"
+            Url="api/Department"
+            itemId="DepartmentId"
+            itemName="DepartmentName"
+          />
+          <Dropdown
+            className="position"
+            defaultName="Tất cả vị trí"
+            dd_dropdown="dd-Position"
+            Url="v1/Positions"
+            itemId="PositionId"
+            itemName="PositionName"
+          />
+        </div>
+        <div class="refresh" @click="RefreshOnClick"></div>
+      </div>
+      <div id="gridEntity">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <div
+                  :class="['checkbox', { checked: checked }]"
+                  @click="clickCheckboxTh"
+                ></div>
+              </th>
+              <th>#</th>
+              <th>Mã nhân viên</th>
+              <th>Họ và tên</th>
+              <th>Giới tính</th>
+              <th>Ngày sinh</th>
+              <th>Điện thoại</th>
+              <th>Email</th>
+              <th>Chức vụ</th>
+              <th>Phòng ban</th>
+              <th>Mức lương cơ bản</th>
+              <th>Tình trạng công việc</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(employee, index) in employees"
+              :key="employee.EmployeeId"
+              @dblclick="onDoubleClick(employee.EmployeeId)"
+              @click="trOnClick(index)"
+              :class="{ 'tr-select': isSelected[index] }"
+            >
+              <td>
+                <CheckBox
+                  @clickCheckboxTd="clickCheckboxTd"
+                  :checked="isSelected[index]"
+                />
+              </td>
+              <td>{{ ((currentPageNumber - 1) * EntityPerPage)+index + 1 }}</td>
+              <td>{{ employee.EmployeeCode }}</td>
+              <td>{{ employee.FullName }}</td>
+              <td>{{ employee.GenderName }}</td>
+              <td>{{ convertDate(employee.DateOfBirth) }}</td>
+              <td>{{ employee.PhoneNumber }}</td>
+              <td>{{ employee.Email }}</td>
+              <td>{{ employee.PositionName }}</td>
+              <td>{{ employee.DepartmentName }}</td>
+              <td>{{ formatMoney(employee.Salary) }}</td>
+              <td>{{ employee.WorkStatus }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <PageNavigation
+        :totalEntity="totalEntity"
+        @UpdatePage="UpdatePage"
+        :totalPageNumber="totalPageNumber"
+      />
     </div>
+
+    <!-- 3 page làm mờ -->
+    <!-- của popup -->
+    <div :class="['p-absolute z-index-1', { 'd-none': DialogHasDnone }]"></div>
+    <!--  của warningpopup -->
+    <div
+      :class="['p-absolute z-index-11', { 'd-none': WarningHasDnone }]"
+    ></div>
+    <!-- của loader -->
+    <div :class="['p-absolute z-index-1', { 'd-none': HideLoader }]"></div>
+
+    <Loader :HideLoader="HideLoader" />
+
     <EmployeeDetail
       v-bind:dnone="DialogHasDnone"
       :employeeId="employeeId"
@@ -114,7 +131,6 @@
       @callToastMessage="callToastMessage"
       :reopen="reopen"
       :response="response"
-      :blurr="blurr"
     />
 
     <WarningPopup
@@ -135,6 +151,7 @@
       :HideToastMessage="HideToastMessage"
       :ToastMessageText="ToastMessageText"
       @closeToastMessage="closeToastMessage"
+
       :active="active"
     />
   </div>
@@ -152,6 +169,7 @@ import Dropdown from "../../components/base/BaseDropdown.vue";
 import CheckBox from "../../components/base/BaseCheckBox.vue";
 import ToastMessage from "../../components/base/BaseToastMessage.vue";
 import PageNavigation from "../../components/base/BasePageNavigation.vue";
+import Loader from "../../components/base/BaseLoader.vue";
 
 import EmployeeDetail from "./EmployeeDetail.vue";
 import WarningPopup from "../../components/layout/WarningPopup.vue";
@@ -164,6 +182,7 @@ export default {
     ButtonIcon,
     Dropdown,
     CheckBox,
+    Loader,
     ToastMessage,
     FieldInputIcon,
     PageNavigation,
@@ -174,8 +193,6 @@ export default {
     return {
       //EmployeeList
       employees: [],
-      //làm mờ trang
-      opacity: false,
       //checkbox,tr
       isSelected: [],
       checked: false,
@@ -186,13 +203,14 @@ export default {
       //ToastMessage
       HideToastMessage: true,
       ToastMessageText: "",
+      //Loader
+      HideLoader: true,
       //EmployeeDetail
       DialogHasDnone: true,
       employeeId: null,
       reopen: true,
       formMode: -1,
       subClass: "",
-      blurr: false,
       // form cảnh báo/thông báo
       WarningHasDnone: true,
       warning: "",
@@ -203,16 +221,34 @@ export default {
       notifyMode: -1,
       response: "",
       bonusClass: "",
-      //menu
+      // Thay đổi menu
       isToggle: true,
-      //silde
+      // Silde
       active: false,
-      //tổng số nhân viên
-      totalEntity: ""
+      // Phân trang
+      // Tổng số nhân viên
+      totalEntity: "",
+      // Tổng số trang
+      totalPageNumber: 1,
+      // Trang hiện tại
+      currentPageNumber: 1,
+      // Số bản ghi mỗi trang
+      EntityPerPage: 20,
     };
   },
 
   methods: {
+    /**
+     * Hàm Ẩn/hiện Loader
+     * Ngọc 12/8/2021
+     */
+    RefreshOnClick() {
+      this.HideLoader = false;
+      setTimeout(() => {
+        this.HideLoader = true;
+      }, 2000);
+    },
+
     /**
      * Hàm mở popup
      * Ngọc 29/07/2021
@@ -221,8 +257,6 @@ export default {
       let me = this;
       me.DialogHasDnone = false;
       this.formMode = 0;
-      me.opacity = true;
-      me.blurr = false;
     },
 
     /**
@@ -333,9 +367,9 @@ export default {
           }
         });
         me.warning = `Xóa thông tin của nhân  viên ${fullname}`;
-        me.warningText = `Xác nhận xóa thông tin của nhân viên <b>${fullname} </b>`;
+        me.warningText = `Xác nhận xóa thông tin của nhân viên <b>${fullname}</b>`;
       }
-      me.opacity = true;
+
       me.WarningHasDnone = false;
       me.idPopup = "warning-popup";
       me.btnCancelText = "Hủy";
@@ -367,7 +401,7 @@ export default {
         me.warning = `Nhân bản thông tin của nhân  viên ${fullname}`;
         me.warningText = `Xác nhận nhân bản thông tin của nhân viên <b>${fullname} </b>`;
       }
-      me.opacity = true;
+
       me.WarningHasDnone = false;
       me.idPopup = "notify-popup";
       me.btnCancelText = "Hủy";
@@ -404,7 +438,7 @@ export default {
         });
         me.HideBtnDelete = true;
         me.HideBtnDuplicate = true;
-        me.opacity = false;
+        me.checked = false;
       }
       //Form thông báo được gọi
       else {
@@ -417,8 +451,7 @@ export default {
         else if (me.notifyMode == 1) {
           me.WarningHasDnone = true;
           me.DialogHasDnone = true;
-          me.opacity = false;
-          me.blurr = false;
+
           me.formMode = -1;
         }
         // Nút nhân bản được bấm
@@ -456,7 +489,6 @@ export default {
             // Ẩn nút nhân bản và xóa đi
             me.HideBtnDelete = true;
             me.HideBtnDuplicate = true;
-            me.opacity = false;
           })();
         }
       }
@@ -518,7 +550,19 @@ export default {
     },
 
     /**
-     * Hàm loaddata cho table
+     * Hàm được gọi khi thay đổi page hoặc số lượng nhân viên/trang
+     * Ngọc 12/8/2021
+     */
+    UpdatePage(currentPageNumber, EntityPerPage) {
+      let me = this;
+      console.log(currentPageNumber, EntityPerPage);
+      me.currentPageNumber = currentPageNumber;
+      me.EntityPerPage = EntityPerPage;
+      me.loadDataTable();
+    },
+
+    /**
+     * Hàm lấy dữ liệu cho table
      * Ngọc 30/07/2021
      */
     loadDataTable() {
@@ -526,10 +570,16 @@ export default {
       axios
         .get("http://cukcuk.manhnv.net/v1/Employees")
         .then((res) => {
-          //me.employees = res.data.slice(0, 100);
-          me.employees = res.data;
-          me.totalEntity = me.employees.length + "";
-          // reset các tr về không được chọn
+          me.employees = res.data.slice(
+            (me.currentPageNumber - 1) * me.EntityPerPage,
+            (me.currentPageNumber - 1) * me.EntityPerPage + me.EntityPerPage
+          );
+          me.totalEntity = res.data.length + "";
+          me.totalPageNumber = Number(
+            Math.ceil(res.data.length / me.EntityPerPage)
+          );
+          console.log(res.data.length, "|", me.EntityPerPage);
+          // reset các tr vme.ề không được chọn
           me.resetTr();
         })
         .catch((res) => {
@@ -555,11 +605,6 @@ export default {
     btnCancelOnClick() {
       let me = this;
       me.WarningHasDnone = true;
-      if(me.formMode == -1){
-        me.opacity = false;
-      }else{
-        me.blurr = false;
-      }
     },
 
     /**
@@ -584,7 +629,6 @@ export default {
       me.btnConfirmText = "Đóng";
       me.bonusClass = "w-auto";
       me.notifyMode = 1;
-      me.blurr = true;
     },
 
     /**
@@ -603,8 +647,6 @@ export default {
       me.isSelected = [];
       //tải lại dữ liệu cho table
       me.loadDataTable();
-      //làm rõ page
-      me.opacity = false;
     },
 
     /**

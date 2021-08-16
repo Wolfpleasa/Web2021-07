@@ -374,33 +374,33 @@ class BaseGrid {
         let me = this,
             isValid = me.validateRequire();
 
-        if (isValid) {
-            isValid = me.validateCode(formMode, itemId);
-        }
+        // if (isValid) {
+        //     isValid = me.validateCode(formMode, itemId);
+        // }
 
-        if (isValid) {
-            isValid = me.validateDropdown();
-        }
+        // if (isValid) {
+        //     isValid = me.validateDropdown();
+        // }
 
-        if (isValid) {
-            isValid = me.validateFieldNumber();
-        }
+        // if (isValid) {
+        //     isValid = me.validateFieldNumber();
+        // }
 
         if (isValid) {
             isValid = me.validateFieldDate();
         }
 
-        if (isValid) {
-            isValid = me.validateEmail();
-        }
+        // if (isValid) {
+        //     isValid = me.validateEmail();
+        // }
 
-        if (isValid) {
-            isValid = me.validatePhoneNumber();
-        }
+        // if (isValid) {
+        //     isValid = me.validatePhoneNumber();
+        // }
 
-        if (isValid) {
-            isValid = me.validateOnlyNumber();
-        }
+        // if (isValid) {
+        //     isValid = me.validateOnlyNumber();
+        // }
 
         if (isValid) {
             isValid = me.validateCustom();

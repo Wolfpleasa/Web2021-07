@@ -8,6 +8,7 @@
     background-color: #fff;
     border-radius: 4px;
     box-shadow: 0px 0px 5px 1px #ccc;
+    z-index: 12;
 }
 
 #warning-popup .head,

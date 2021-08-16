@@ -9,17 +9,27 @@ using System.Threading.Tasks;
 
 namespace MISA.Core.Services
 {
-    public class CustomerServicePro : ICustomerService
-    { 
-        public ServiceResult Add(Customer customer)
+    public class CustomerServicePro : BaseService<Customer>, ICustomerService
+    {
+        ServiceResult _serviceResult;
+
+        public CustomerServicePro(IBaseRepository baseRepository) : base(baseRepository)
         {
-          
-            throw new NotImplementedException();
+            _serviceResult = new ServiceResult();
+            //_customerRepository = customerRepository;
         }
 
-        public ServiceResult Edit(Customer customer, Guid customerId)
-        {        
-            throw new NotImplementedException();
-        }
+
+        //public ServiceResult Add(MISAEntity entity)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
+
+        //public ServiceResult Edit(MISAEntity entity, Guid entityId)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

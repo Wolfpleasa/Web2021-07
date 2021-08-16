@@ -439,6 +439,7 @@ export default {
         me.HideBtnDelete = true;
         me.HideBtnDuplicate = true;
         me.checked = false;
+        //me.checked = true;
       }
       //Form thông báo được gọi
       else {

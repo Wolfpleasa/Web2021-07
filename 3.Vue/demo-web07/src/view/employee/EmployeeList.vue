@@ -559,6 +559,7 @@ export default {
       console.log(currentPageNumber, EntityPerPage);
       me.currentPageNumber = currentPageNumber;
       me.EntityPerPage = EntityPerPage;
+      me.RefreshOnClick();
       me.loadDataTable();
     },
 

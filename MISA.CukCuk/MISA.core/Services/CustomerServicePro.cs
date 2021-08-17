@@ -13,7 +13,7 @@ namespace MISA.Core.Services
     {
         ServiceResult _serviceResult;
 
-        public CustomerServicePro(IBaseRepository baseRepository) : base(baseRepository)
+        public CustomerServicePro(IBaseRepository<Customer> baseRepository) : base(baseRepository)
         {
             _serviceResult = new ServiceResult();
             //_customerRepository = customerRepository;

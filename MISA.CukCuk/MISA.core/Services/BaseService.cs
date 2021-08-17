@@ -11,10 +11,10 @@ namespace MISA.Core.Services
 {
     public class BaseService<MISAEntity> : IBaseService<MISAEntity>
     {
-        IBaseRepository _baseRepository;
+        IBaseRepository<MISAEntity> _baseRepository;
         ServiceResult _serviceResult;
 
-        public BaseService(IBaseRepository baseRepository)
+        public BaseService(IBaseRepository<MISAEntity> baseRepository)
         {
             _serviceResult = new ServiceResult();
             _baseRepository = baseRepository;         
@@ -54,7 +54,7 @@ namespace MISA.Core.Services
             //    }
             //    // 3. Check mã trùng
             //Thực hiện thêm mới
-            _serviceResult.Data = _baseRepository.Add<MISAEntity>(entity);
+            _serviceResult.Data = _baseRepository.Add(entity);
             return _serviceResult;
             
         }
@@ -64,7 +64,7 @@ namespace MISA.Core.Services
             //validate dữ liệu và xử lí nghiệp vụ
 
             //Thực hiện sửa
-            _serviceResult.Data = _baseRepository.Edit<MISAEntity>(entity, entityId);
+            _serviceResult.Data = _baseRepository.Edit(entity, entityId);
             return _serviceResult;
         }
     }

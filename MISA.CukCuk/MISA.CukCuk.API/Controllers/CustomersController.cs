@@ -19,8 +19,8 @@ namespace MISA.CukCuk.API.Controllers
     public class CustomersController : ControllerBase
     {
         ICustomerService _customerSevice;
-        IBaseRepository _baseRepository;
-        public CustomersController(ICustomerService customerSevice, IBaseRepository baseRepository)
+        IBaseRepository<Customer> _baseRepository;
+        public CustomersController(ICustomerService customerSevice, IBaseRepository<Customer> baseRepository)
         {
             _customerSevice = customerSevice;
             _baseRepository = baseRepository;
@@ -37,7 +37,7 @@ namespace MISA.CukCuk.API.Controllers
         {
             try
             {
-                var customers = _baseRepository.GetAll<Customer>();
+                var customers = _baseRepository.GetAll();
                 return Ok(customers);           
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace MISA.CukCuk.API.Controllers
         {
             try
             {
-                var customer = _baseRepository.GetById<Customer>(customerId);
+                var customer = _baseRepository.GetById(customerId);
                 // Trả về cho client
                 return Ok(customer);                     
             }
@@ -231,18 +231,8 @@ namespace MISA.CukCuk.API.Controllers
         {
             try
             {
-                var rowEffects = _baseRepository.Delete<Customer>(customerId);
-                
-                if (rowEffects> 0)
-                {
-                    return StatusCode(200, rowEffects);
-                }
-                else
-                {
-                    return StatusCode(204, rowEffects);
-                }
-                    
-                      
+                var rowEffects = _baseRepository.Delete(customerId);
+                return Ok(rowEffects);
 
             }
             catch (Exception ex)

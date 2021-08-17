@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace MISA.Core.Interfaces.Repository
 {
-    public interface IBaseRepository
+    public interface IBaseRepository<MISAEntity>
     {
-        List<MISAEntity> GetAll<MISAEntity>();
+        List<MISAEntity> GetAll();
 
-        MISAEntity GetById<MISAEntity>(Guid entityId);
+        MISAEntity GetById(Guid entityId);
 
-        int Add<MISAEntity>(MISAEntity entity);
+        int Add(MISAEntity entity);
 
-        int Edit<MISAEntity>(MISAEntity entity, Guid entityId);
+        int Edit(MISAEntity entity, Guid entityId);
 
-        int Delete<MISAEntity>(Guid entityId);
+        int Delete(Guid entityId);
     }
 }

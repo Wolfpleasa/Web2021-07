@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MISA.CukCuk.API.Model;
+using MISA.Core.Entities;
 using System.Data;
 using MySqlConnector;
 using Dapper;
@@ -24,45 +24,46 @@ namespace MISA.CukCuk.API.Controllers
         /// Author: Ngọc 12/8/2021
         /// </summary>
         /// <returns>Danh sách nhân viên</returns>
-        [HttpGet]
-        public IActionResult GetAllEmployee()
-        {
-            try {
-                //Truy cập vào database:
-                // 1.Khai báo đối tượng
-                var connectionString = "Host = localhost;" +
-                     "Database = MISA.CukCuk_Demo;" +
-                     "User Id = root;" +
-                     "Password = 123456";
-                // 2.Khởi tạo đối tượng kết nối với database
-                IDbConnection dbConnection = new MySqlConnection(connectionString);
-                // 3.Lấy dữ liệu
-                var sqlCommand = "SELECT * FROM Employee";
-                var employees = dbConnection.Query<object>(sqlCommand);
-                // Trả về cho client
-                if (employees.Count() > 0)
-                {
-                    var response = StatusCode(200, employees);
-                    return response;
-                }
-                else {
-                    return StatusCode(204, employees);
-                }
+        //[HttpGet]
+        //public IActionResult GetAllEmployee()
+        //{
+        //    try {
+        //        //Truy cập vào database:
+        //        // 1.Khai báo đối tượng
+        //        var connectionString = "Host = localhost;" +
+        //             "Database = MISA.CukCuk_Demo;" +
+        //             "User Id = root;" +
+        //             "Password = 123456";
+        //        // 2.Khởi tạo đối tượng kết nối với database
+        //        IDbConnection dbConnection = new MySqlConnection(connectionString);
+        //        // 3.Lấy dữ liệu
+        //        var sqlCommand = "SELECT * FROM Employee";
+        //        var employees = dbConnection.Query<object>(sqlCommand);
+        //        // Trả về cho client
+        //        if (employees.Count() > 0)
+        //        {
+        //            var response = StatusCode(200, employees);
+        //            return response;
+        //        }
+        //        else {
+        //            return StatusCode(204, employees);
+        //        }
 
 
-            } catch (Exception ex)
-            {
-                var errorObj = new
-                {
-                    devMsg = ex.Message,
-                    userMsg = Properties.Resource.Error_Message_UserVN,
-                    errorCode = "misa-001",
-                    moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
-                    traceId = ""
-                };
-                return StatusCode(500, errorObj);
-            }
-        }
+        //    } catch (Exception ex)
+        //    {
+        //        var errorObj = new
+        //        {
+        //            devMsg = ex.Message,
+        //            userMsg = Properties.Resource.Error_Message_UserVN,
+        //            errorCode = "misa-001",
+        //            moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
+        //            traceId = ""
+        //        };
+        //        return StatusCode(500, errorObj);
+        //    }
+        //}
+
 
         /// <summary>
         /// Hàm lấy nhân viên theo Id
@@ -177,8 +178,11 @@ namespace MISA.CukCuk.API.Controllers
         /// <param name="pagenumber"></param>
         /// <param name="pagesize"></param>
         /// <returns>Tổng số trang, số bản ghi/trang</returns>
-        [HttpGet("{pagenumber}/{pagesize}")]
-        public IActionResult pagination(int pagenumber, int pagesize)
+        //pagesize = limit
+        //offset = (pagenumber-1) * pagesize
+        [HttpGet]
+
+        public IActionResult pagination(int pagesize, int pagenumber, string searchContent)
         {
             try
             {
@@ -187,15 +191,28 @@ namespace MISA.CukCuk.API.Controllers
                 var connectionString = "Host = localhost;" +
                      "Database = MISA.CukCuk_Demo;" +
                      "User Id = root;" +
-                     "Password = 123456";
+                     "Password = 123456;"+ 
+                     "Allow User Variables=true";
                 // 2.Khởi tạo đối tượng kết nối với database
                 IDbConnection dbConnection = new MySqlConnection(connectionString);
 
                 // 3.Bắt đầu phần trang
-
-
-                var response = StatusCode(200);
-                return response;
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@limit", pagesize);
+                parameters.Add("@offset", (pagenumber - 1) * pagesize);
+                parameters.Add("@searchContent", searchContent);
+                var sqlCommand = $"SELECT * FROM Employee Where EmployeeCode LIKE '%{searchContent}%' LIMIT {pagesize} OFFSET { (pagenumber - 1) * pagesize}";
+                var employees = dbConnection.Query<object>(sqlCommand, param: parameters);
+                // Trả về cho client
+                if (employees.Count() > 0)
+                {
+                    var response = StatusCode(200, employees);
+                    return response;
+                }
+                else
+                {
+                    return StatusCode(204, employees);
+                }        
             }
             catch (Exception ex)
             {

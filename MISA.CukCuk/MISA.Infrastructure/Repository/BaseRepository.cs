@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace MISA.Infrastructure.Repository
 {
-    public class BaseRepository : IBaseRepository
+    public class BaseRepository<MISAEntity> : IBaseRepository<MISAEntity>
     {
-        public List<MISAEntity> GetAll<MISAEntity>()
+        public List<MISAEntity> GetAll()
         {
             var className = typeof(MISAEntity).Name;
             //Truy cập vào database:
@@ -29,7 +29,7 @@ namespace MISA.Infrastructure.Repository
             return entities.ToList();
         }
 
-        public MISAEntity GetById<MISAEntity>(Guid entityId)
+        public MISAEntity GetById(Guid entityId)
         {
             var className = typeof(MISAEntity).Name;
             //Truy cập vào database:
@@ -48,7 +48,7 @@ namespace MISA.Infrastructure.Repository
             return entity;
         }
 
-        public int Add<MISAEntity>(MISAEntity entity)
+        public int Add(MISAEntity entity)
         {
             var className = typeof(MISAEntity).Name;
        
@@ -124,7 +124,7 @@ namespace MISA.Infrastructure.Repository
             return rowEffects;
         }
 
-        public int Edit<MISAEntity>(MISAEntity entity, Guid entityId)
+        public int Edit(MISAEntity entity, Guid entityId)
         {
             var className = typeof(MISAEntity).Name;
             //Truy cập vào database:
@@ -190,7 +190,7 @@ namespace MISA.Infrastructure.Repository
             return rowEffects;
         }
 
-        public int Delete<MISAEntity>(Guid entityId)
+        public int Delete(Guid entityId)
         {
             var className = typeof(MISAEntity).Name;
             //Truy cập vào database:

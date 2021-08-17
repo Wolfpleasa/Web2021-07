@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MISA.CukCuk.API.Model;
+using MISA.Core.Entities;
+using MISA.Core.Interfaces.Repository;
+using MISA.Core.Interfaces.Services;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,13 @@ namespace MISA.CukCuk.API.Controllers
     [ApiController]
     public class DepartmentsController : ControllerBase
     {
+        IDepartmentService _departmentService;
+        IBaseRepository<Department> _baseRepository;
+        public DepartmentsController(IDepartmentService departmentService, IBaseRepository<Department> baseRepository)
+        {
+            _departmentService = departmentService;
+            _baseRepository = baseRepository;
+        }
         //GET, POST, PUT, DELETE
         #region method GET
         /// <summary>
@@ -27,30 +36,8 @@ namespace MISA.CukCuk.API.Controllers
         {
             try
             {
-                //Truy cập vào database:
-                // 1.Khai báo đối tượng
-                var connectionString = "Host = localhost;" +
-                     "Database = MISA.CukCuk_Demo;" +
-                     "User Id = root;" +
-                     "Password = 123456";
-
-                // 2.Khởi tạo đối tượng kết nối với database
-                IDbConnection dbConnection = new MySqlConnection(connectionString);
-
-                // 3.Lấy dữ liệu
-                var sqlCommand = "SELECT * FROM Department";
-                var departments = dbConnection.Query<object>(sqlCommand);
-                // Trả về cho client
-                if (departments.Count() > 0)
-                {
-                    var response = StatusCode(200, departments);
-                    return response;
-                }
-                else
-                {
-                    return StatusCode(204);
-                }
-               
+                var departments = _baseRepository.GetAll();
+                return Ok(departments);
             }
             catch (Exception ex)
             {
@@ -76,23 +63,8 @@ namespace MISA.CukCuk.API.Controllers
         {
             try
             {
-                //Truy cập vào database:
-                // 1.Khai báo đối tượng
-                var connectionString = "Host = localhost;" +
-                    "Database = MISA.CukCuk_Demo;" +
-                    "User Id = root;" +
-                    "Password = 123456";
-                // 2.Khởi tạo đối tượng kết nối với database
-                IDbConnection dbConnection = new MySqlConnection(connectionString);
-                // 3.Lấy dữ liệu
-                var sqlCommand = $"SELECT * FROM Department WHERE departmentId = @DepartmentIdParam";
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@DepartmentIdParam", departmentId);
-                var department = dbConnection.QueryFirstOrDefault<object>(sqlCommand, param: parameters);
-                // Trả về cho client
-
-                var response = StatusCode(200, department);
-                return response;
+                var department = _baseRepository.GetById(departmentId);
+                return Ok(department);
             }
             catch (Exception ex)
             {
@@ -120,69 +92,17 @@ namespace MISA.CukCuk.API.Controllers
         public IActionResult InsertDepartment([FromBody]Department department)
         {
             try
-            {   
-                // Kiểm tra dữ liệu
-                // 1. Mã phòng ban bắt buộc nhập
-                if (department.DepartmentCode == "" || department.DepartmentCode == null)
+            {
+                var serviceResult = _departmentService.Add(department);
+
+                if (serviceResult.isValid)
                 {
-                    var errorObj = new
-                    {
-                        userMsg = Properties.Resource.Error_Message_UserVN,
-                        errorCode = "misa-001",
-                        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
-                        traceId = ""
-                    };
-                    return BadRequest(errorObj);
+                    return StatusCode(200, serviceResult.Data);
                 }
-
-                //sinh id phòng ban mới 
-                department.DepartmentId = Guid.NewGuid();
-                //Truy cập vào database:
-                // 1.Khai báo đối tượng
-                var connectionString = "Host = localhost;" +
-                    "Database = MISA.CukCuk_Demo;" +
-                    "User Id = root;" +
-                    "Password = 123456";
-                // 2.Khởi tạo đối tượng kết nối với database
-                IDbConnection dbConnection = new MySqlConnection(connectionString);
-                //khai báo dynamicParam:
-                var dynamicParam = new DynamicParameters();
-
-                // 3.Thêm dữ liệu vào database
-                var columnsName = string.Empty;
-                var columnsParam = string.Empty;
-
-                //Đọc từng property của object:
-                var properties = department.GetType().GetProperties();
-
-
-                //Duyệt từng property:
-                foreach (var prop in properties)
+                else
                 {
-                    //lấy tên của prop:
-                    var propName = prop.Name;
-
-                    //Lấy value của prop:
-                    var propValue = prop.GetValue(department);
-
-                    //Lấy kiểu dữ liệu của prop:
-                    var propType = prop.PropertyType;
-
-                    //thêm param tương ứng với mỗi property của đối tượng
-                    dynamicParam.Add($"@{propName}", propValue);
-
-                    columnsName += $"{propName},";
-                    columnsParam += $"@{propName},";
+                    return BadRequest(serviceResult.Data);
                 }
-                columnsName = columnsName.Remove(columnsName.Length - 1, 1);
-                columnsParam = columnsParam.Remove(columnsParam.Length - 1, 1);
-                var sqlCommand = $"INSERT INTO Department({columnsName}) VALUES({columnsParam}) ";
-
-                var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
-                // Trả về cho client
-
-                var response = StatusCode(200, rowEffects);
-                return response;
             }
             catch (Exception ex)
             {
@@ -210,51 +130,16 @@ namespace MISA.CukCuk.API.Controllers
         {
             try
             {
-                //Truy cập vào database:
-                // 1.Khai báo đối tượng
-                var connectionString = "Host = localhost;" +
-                     "Database = MISA.CukCuk_Demo;" +
-                     "User Id = root;" +
-                     "Password = 123456";
-                // 2.Khởi tạo đối tượng kết nối với database
-                IDbConnection dbConnection = new MySqlConnection(connectionString);
-                //khai báo dynamicParam:
-                var dynamicParam = new DynamicParameters();
+                var serviceResult = _departmentService.Edit(department, departmentId);
 
-                // 3.Thêm dữ liệu vào database
-                var columnsName = string.Empty;
-
-                //Đọc từng property của object:
-                var properties = department.GetType().GetProperties();
-
-                //Duyệt từng property:
-                foreach (var prop in properties)
+                if(serviceResult.isValid == true)
                 {
-                    //lấy tên của prop:
-                    var propName = prop.Name;
-
-                    //Lấy value của prop:
-                    var propValue = prop.GetValue(department);
-
-                    //Lấy kiểu dữ liệu của prop:
-                    var propType = prop.PropertyType;
-
-                    //thêm param tương ứng với mỗi property của đối tượng
-                    dynamicParam.Add($"@{propName}", propValue);
-
-                    columnsName += $"{propName} = @{propName},";
-
+                    return StatusCode(200, serviceResult.Data);
                 }
-                columnsName = columnsName.Remove(columnsName.Length - 1, 1);
-
-                var sqlCommand = $"UPDATE Department SET {columnsName} WHERE departmentId = @DepartmentIdParam ";
-
-                dynamicParam.Add("@DepartmentIdParam", departmentId);
-                var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
-
-                // Trả về cho client
-                var response = StatusCode(200, rowEffects);
-                return response;
+                else
+                {
+                    return BadRequest(serviceResult.Data);
+                }
             }
             catch (Exception ex)
             {
@@ -283,24 +168,8 @@ namespace MISA.CukCuk.API.Controllers
         {
             try
             {
-                //Truy cập vào database:
-                // 1.Khai báo đối tượng
-                var connectionString = "Host = localhost;" +
-                     "Database = MISA.CukCuk_Demo;" +
-                     "User Id = root;" +
-                     "Password = 123456";
-                // 2.Khởi tạo đối tượng kết nối với database
-                IDbConnection dbConnection = new MySqlConnection(connectionString);
-
-                // 3.Lấy dữ liệu
-                var sqlCommand = $"DELETE FROM Department WHERE DepartmentId = @DepartmentIdParam";
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@DepartmentIdParam", departmentId);
-                var rowEffects = dbConnection.Execute(sqlCommand, param: parameters);
-
-                // 4.Trả về cho client
-                var response = StatusCode(200, rowEffects);
-                return response;
+                var rowEffect = _baseRepository.Delete(departmentId);
+                return Ok(rowEffect);
             }
             catch (Exception ex)
             {

@@ -5,21 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MISA.Core.Services
 {
-    public class CustomerService : BaseService<Customer>,ICustomerService
+    public class DepartmentService : BaseService<Department>, IDepartmentService
     {
         //ICustomerRepository _customerRepository;
         ServiceResult _serviceResult;
 
-        public CustomerService( IBaseRepository<Customer> baseRepository):base(baseRepository)
+        public DepartmentService(IBaseRepository<Department> baseRepository) : base(baseRepository)
         {
             _serviceResult = new ServiceResult();
             //_customerRepository = customerRepository;
         }
-       
+
     }
 }

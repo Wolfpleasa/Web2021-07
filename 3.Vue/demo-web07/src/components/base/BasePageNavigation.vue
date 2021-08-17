@@ -35,7 +35,9 @@
       ></div>
     </div>
     <div class="mr-10 d-flex NumberPerPage">
-      <div><b>{{ EntityPerPage}}&nbsp;</b>nhân viên/trang</div>
+      <div>
+        <b>{{ EntityPerPage }}&nbsp;</b>nhân viên/trang
+      </div>
       <div class="modifyNumber">
         <div
           class="increaseNumber"
@@ -56,12 +58,10 @@ export default {
   props: {
     totalEntity: String,
     totalPageNumber: Number,
- 
   },
 
   data() {
     return {
-      selectedPage: false,
       totalShow: 5,
       currentPageNumber: 1,
       EntityPerPage: 20,
@@ -94,7 +94,7 @@ export default {
         default:
           me.currentPageNumber = btnPage;
           break;
-      }  
+      }
       me.$emit("UpdatePage", me.currentPageNumber, me.EntityPerPage);
       me.updatePageNumber();
     },
@@ -105,16 +105,15 @@ export default {
      */
     updatePageNumber() {
       let me = this;
-      //var currentPage = lowerLimit = upperLimit = Math.min(4, totalPages));
-      me.lowerLimit = me.upperLimit = me.currentPageNumber;// = 3 
+      me.lowerLimit = me.upperLimit = me.currentPageNumber;
       for (var b = 1; b < me.totalShow && b < me.totalPageNumber; ) {
         if (me.lowerLimit > 1) {
-          me.lowerLimit--;//=2
-          b++;//2
+          me.lowerLimit--;
+          b++;
         }
         if (b < me.totalShow && me.upperLimit < me.totalPageNumber) {
-          me.upperLimit++;//4
-          b++;//3
+          me.upperLimit++;
+          b++;
         }
       }
     },
@@ -138,10 +137,10 @@ export default {
       me.$emit("UpdatePage", me.currentPageNumber, me.EntityPerPage);
       //console.log("tăng/giảm");
     },
-  },
 
-  created() {
-    this.updatePageNumber();
+    created() {
+      this.updatePageNumber();
+    },
   },
 };
 </script>

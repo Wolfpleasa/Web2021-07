@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.Core.Interfaces.Repository
+namespace MISA.Core.Interfaces.Services
 {
-    public interface ICustomerRepository:IBaseRepository<Customer>
+    public interface IDepartmentService:IBaseService<Department>
     {
-       
     }
 }

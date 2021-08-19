@@ -61,11 +61,29 @@ namespace MISA.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thông tin này chỉ chứa chữ số.
+        /// </summary>
+        public static string Contain_Numbers_Only {
+            get {
+                return ResourceManager.GetString("Contain_Numbers_Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã nhập vào đã bị trùng.
         /// </summary>
         public static string Duplicate_Code {
             get {
                 return ResourceManager.GetString("Duplicate_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thông tin này không được phép để trống.
+        /// </summary>
+        public static string Empty_Field {
+            get {
+                return ResourceManager.GetString("Empty_Field", resourceCulture);
             }
         }
         
@@ -84,6 +102,15 @@ namespace MISA.Core.Properties {
         public static string Error_Message_UserVN {
             get {
                 return ResourceManager.GetString("Error_Message_UserVN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Số điện thoại không đúng định dạng.
+        /// </summary>
+        public static string Error_PhoneNumber {
+            get {
+                return ResourceManager.GetString("Error_PhoneNumber", resourceCulture);
             }
         }
     }

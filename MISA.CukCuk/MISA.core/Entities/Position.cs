@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MISA.Core.MISAAttribute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +18,13 @@ namespace MISA.Core.Entities
         /// <summary>
         /// Mã phòng ban
         /// </summary>
+        [MISARequired]
         public string PositionCode { get; set; }
 
         /// <summary>
         /// Tên phòng ban
         /// </summary>
+        [MISARequired]
         public string PositionName { get; set; }
         #endregion
     }

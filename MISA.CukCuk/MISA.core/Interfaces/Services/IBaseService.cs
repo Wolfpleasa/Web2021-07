@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace MISA.Core.Interfaces.Services
 {
     public interface IBaseService<MISAEntity>
-    {   
-
+    {
+        #region Methods
         /// <summary>
         /// Nghiệp vụ thêm mới khách hàng 
         /// Author: Ngọc 13/8/2021
@@ -25,5 +25,6 @@ namespace MISA.Core.Interfaces.Services
         /// <param name="customer"></param>
         /// <returns>ServiceResult: Kết quả xử lý nghiệp vụ</returns>
         ServiceResult Edit(MISAEntity entity, Guid entityId);
+        #endregion
     }
 }

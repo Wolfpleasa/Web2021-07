@@ -65,3 +65,4 @@ D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Core.dl
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Infrastructure.dll
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Core.pdb
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Infrastructure.pdb
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.MvcApplicationPartsAssemblyInfo.cs

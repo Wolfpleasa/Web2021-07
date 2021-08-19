@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\ResourceVN.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

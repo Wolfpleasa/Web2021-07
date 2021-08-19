@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using MISA.Core.Interfaces.Repository;
 using MySqlConnector;
 using System;
@@ -12,82 +13,53 @@ namespace MISA.Infrastructure.Repository
 {
     public class BaseRepository<MISAEntity> : IBaseRepository<MISAEntity>
     {
-        public List<MISAEntity> GetAll()
+        //IConfiguration _configuration;
+        IDbConnection _dbConnection;
+        public readonly string _connectionString;
+        string _className;
+
+        public BaseRepository(IConfiguration configuration)
         {
-            var className = typeof(MISAEntity).Name;
-            //Truy cập vào database:
-            // 1.Khai báo đối tượng
-            var connectionString = "Host = localhost;" +
-              "Database = MISA.CukCuk_Demo;" +
-              "User Id = root;" +
-              "Password = 123456";
+            _connectionString = configuration.GetConnectionString("CukCukDatabase");
+            _className = typeof(MISAEntity).Name;
+        }
+        public List<MISAEntity> GetAll()
+        {      
             // 2.Khởi tạo đối tượng kết nối với database
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            _dbConnection = new MySqlConnection(_connectionString);
             // 3.Lấy dữ liệu
-            var sqlCommand = $"SELECT * FROM {className}";
-            var entities = dbConnection.Query<MISAEntity>(sqlCommand);
+            var sqlCommand = $"SELECT * FROM {_className}";
+            var entities = _dbConnection.Query<MISAEntity>(sqlCommand);
             return entities.ToList();
         }
 
         public MISAEntity GetById(Guid entityId)
         {
-            var className = typeof(MISAEntity).Name;
-            //Truy cập vào database:
-            // 1.Khai báo đối tượng
-            var connectionString = "Host = localhost;" +
-                 "Database = MISA.CukCuk_Demo;" +
-                 "User Id = root;" +
-                 "Password = 123456";
+            
             // 2.Khởi tạo đối tượng kết nối với database
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            _dbConnection = new MySqlConnection(_connectionString);
             // 3.Lấy dữ liệu
-            var sqlCommand = $"SELECT * FROM {className} WHERE {className}Id = @EntityIdParam";
+            var sqlCommand = $"SELECT * FROM {_className} WHERE {_className}Id = @EntityIdParam";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@EntityIdParam", entityId);
-            var entity = dbConnection.QueryFirstOrDefault<MISAEntity>(sqlCommand, param: parameters);
+            var entity = _dbConnection.QueryFirstOrDefault<MISAEntity>(sqlCommand, param: parameters);
             return entity;
         }
 
         public int Add(MISAEntity entity)
         {
-            var className = typeof(MISAEntity).Name;
-       
-            //Truy cập vào database:
-            // 1.Khai báo đối tượng
-            var connectionString = "Host = localhost;" +
-               "Database = MISA.CukCuk_Demo;" +
-               "User Id = root;" +
-               "Password = 123456;" +
-               "Allow User Variables=true;";
+          
             // 2.Khởi tạo đối tượng kết nối với database
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+             _dbConnection = new MySqlConnection(_connectionString);
             //khai báo dynamicParam:
             var dynamicParam = new DynamicParameters();
-            // .2.1 Check mã trùng
-            //var validateCommand = "SELECT * FROM Customer WHERE CustomerCode = @CustomerCodeParam";
-            //DynamicParameters parameters = new DynamicParameters();
-            //parameters.Add("@CustomerCodeParam", customer.CustomerCode);
-            //var customerCheck = dbConnection.QueryFirstOrDefault<Customer>(validateCommand, param: parameters);
-            //// Trả về cho client
-            //if (customerCheck != null)
-            //{
-            //    var errorObj = new
-            //    {
-            //        userMsg = Properties.Resource.Duplicate_Code,
-            //        errorCode = "misa-003",
-            //        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-003",
-            //        traceId = ""
-            //    };
-            //    return BadRequest(errorObj);
-            //}
-
+           
             // 3.Thêm dữ liệu vào database
             var columnsName = string.Empty;
             var columnsParam = string.Empty;
 
             //Đọc từng property của object:
             var properties = entity.GetType().GetProperties();
-
 
             //Duyệt từng property:
             foreach (var prop in properties)
@@ -98,7 +70,7 @@ namespace MISA.Infrastructure.Repository
              
                 //Lấy value của prop:
                 var propValue = prop.GetValue(entity);
-                if (propName == $"{className}Id" && prop.PropertyType == typeof(Guid))
+                if (propName == $"{_className}Id" && prop.PropertyType == typeof(Guid))
                 {
                     //sinh id mới
                     propValue = Guid.NewGuid();
@@ -119,43 +91,18 @@ namespace MISA.Infrastructure.Repository
             columnsParam = columnsParam.Remove(columnsParam.Length - 1, 1);
 
     
-            var sqlCommand = $"INSERT INTO {className}({columnsName}) VALUES({columnsParam}) ";
-            var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
+            var sqlCommand = $"INSERT INTO {_className} ({columnsName}) VALUES({columnsParam}) ";
+            var rowEffects = _dbConnection.Execute(sqlCommand, param: dynamicParam);
             return rowEffects;
         }
 
         public int Edit(MISAEntity entity, Guid entityId)
         {
-            var className = typeof(MISAEntity).Name;
-            //Truy cập vào database:
-            // 1.Khai báo đối tượng
-            var connectionString = "Host = localhost;" +
-             "Database = MISA.CukCuk_Demo;" +
-            "User Id = root;" +
-            "Password = 123456;" +
-            "Allow User Variables=true;";
+            
             // 2.Khởi tạo đối tượng kết nối với database
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            _dbConnection = new MySqlConnection(_connectionString);
             //khai báo dynamicParam:
             var dynamicParam = new DynamicParameters();
-
-            // .2.1 Check mã trùng
-            //var validateCommand = "SELECT * FROM Customer WHERE CustomerCode = @CustomerCodeParam";
-            //DynamicParameters parameters = new DynamicParameters();
-            //parameters.Add("@CustomerCodeParam", customer.CustomerCode);
-            //Customer customerCheck = dbConnection.QueryFirstOrDefault<Customer>(validateCommand, param: parameters);
-            //// Trả về cho client
-            //if (customerCheck != null && customerCheck.CustomerId != customer.CustomerId)
-            //{
-            //    var errorObj = new
-            //    {
-            //        userMsg = Properties.ResourcVN.Duplicate_Code,
-            //        errorCode = "misa-003",
-            //        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-003",
-            //        traceId = ""
-            //    };
-            //    return BadRequest(errorObj);
-            //}
 
             // 3.Thêm dữ liệu vào database
             var columnsName = string.Empty;
@@ -183,33 +130,58 @@ namespace MISA.Infrastructure.Repository
             }
             columnsName = columnsName.Remove(columnsName.Length - 1, 1);
 
-            var sqlCommand = $"UPDATE {className} SET {columnsName} WHERE {className}Id = @EntityIdParam ";
+            var sqlCommand = $"UPDATE {_className} SET {columnsName} WHERE {_className}Id = @EntityIdParam ";
 
             dynamicParam.Add("@EntityIdParam", entityId);
-            var rowEffects = dbConnection.Execute(sqlCommand, param: dynamicParam);
+            var rowEffects = _dbConnection.Execute(sqlCommand, param: dynamicParam);
             return rowEffects;
+        }
+
+        public bool checkedCodeExist(string entityCode, Guid entityId)
+        {
+            // 2.Khởi tạo đối tượng kết nối với database
+            _dbConnection = new MySqlConnection(_connectionString);
+
+            var sqlCommand = $"SELECT * FROM {_className} WHERE {_className}Code = @EntityCodeParam";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@EntityCodeParam", entityCode);
+            var entityCheck = _dbConnection.QueryFirstOrDefault<MISAEntity>(sqlCommand, param: parameters);
+
+            var propValue = "";
+            if(entityCheck != null)
+            {
+                propValue = entityCheck.GetType().GetProperty($"{_className}Id").GetValue(entityCheck).ToString();
+            }
+    
+
+            if (entityId == Guid.Empty)
+            {
+                if(entityCheck != null)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (entityCheck != null && entityId.ToString() == propValue)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public int Delete(Guid entityId)
         {
-            var className = typeof(MISAEntity).Name;
-            //Truy cập vào database:
-            // 1.Khai báo đối tượng
-            var connectionString = "Host = localhost;" +
-                 "Database = MISA.CukCuk_Demo;" +
-                 "User Id = root;" +
-                 "Password = 123456";
             // 2.Khởi tạo đối tượng kết nối với database
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            _dbConnection = new MySqlConnection(_connectionString);
 
             // 3.Lấy dữ liệu
-            var sqlCommand = $"DELETE FROM {className} WHERE {className}Id = @EntityIdParam";
-            Console.WriteLine(sqlCommand);
+            var sqlCommand = $"DELETE FROM {_className} WHERE {_className}Id = @EntityIdParam";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@EntityIdParam", entityId);
-            var rowEffects = dbConnection.Execute(sqlCommand, param: parameters);
+            var rowEffects = _dbConnection.Execute(sqlCommand, param: parameters);
             return rowEffects;
         }
-
     }
 }

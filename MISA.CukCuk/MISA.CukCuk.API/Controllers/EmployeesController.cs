@@ -167,8 +167,7 @@ namespace MISA.CukCuk.API.Controllers
                     traceId = ""
                 };
                 return StatusCode(500, errorObj);
-            }
-           
+            }       
         }
 
         /// <summary>
@@ -200,8 +199,8 @@ namespace MISA.CukCuk.API.Controllers
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@limit", pagesize);
                 parameters.Add("@offset", (pagenumber - 1) * pagesize);
-                parameters.Add("@searchContent", searchContent);
-                var sqlCommand = $"SELECT * FROM Employee Where EmployeeCode LIKE '%{searchContent}%' LIMIT {pagesize} OFFSET { (pagenumber - 1) * pagesize}";
+                parameters.Add("@searchContent",  $"%{searchContent}%");
+                var sqlCommand = $"SELECT * FROM Employee Where EmployeeCode LIKE @searchContent LIMIT @limit OFFSET @offset";
                 var employees = dbConnection.Query<object>(sqlCommand, param: parameters);
                 // Trả về cho client
                 if (employees.Count() > 0)

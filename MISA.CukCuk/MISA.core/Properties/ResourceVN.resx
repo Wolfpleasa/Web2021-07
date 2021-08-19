@@ -117,13 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Contain_Numbers_Only" xml:space="preserve">
+    <value>Thông tin này chỉ chứa chữ số</value>
+  </data>
   <data name="Duplicate_Code" xml:space="preserve">
     <value>Mã nhập vào đã bị trùng</value>
+  </data>
+  <data name="Empty_Field" xml:space="preserve">
+    <value>Thông tin này không được phép để trống</value>
   </data>
   <data name="Error_Email" xml:space="preserve">
     <value>Email không đúng định dạng</value>
   </data>
   <data name="Error_Message_UserVN" xml:space="preserve">
     <value>Có lỗi xảy ra! Vui lòng liên hệ MISA</value>
+  </data>
+  <data name="Error_PhoneNumber" xml:space="preserve">
+    <value>Số điện thoại không đúng định dạng</value>
   </data>
 </root>

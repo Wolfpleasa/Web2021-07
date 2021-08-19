@@ -12,14 +12,14 @@ namespace MISA.Core.Services
 {
     public class CustomerService : BaseService<Customer>,ICustomerService
     {
-        //ICustomerRepository _customerRepository;
+        ICustomerRepository _customerRepository;
         ServiceResult _serviceResult;
 
-        public CustomerService( IBaseRepository<Customer> baseRepository):base(baseRepository)
+        public CustomerService(ICustomerRepository customerRepository, IBaseRepository<Customer> baseRepository):base(baseRepository)
         {
             _serviceResult = new ServiceResult();
-            //_customerRepository = customerRepository;
+            _customerRepository = customerRepository;
         }
-       
+  
     }
 }

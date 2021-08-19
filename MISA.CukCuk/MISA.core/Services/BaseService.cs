@@ -1,64 +1,80 @@
 ﻿using MISA.Core.Entities;
 using MISA.Core.Interfaces.Repository;
 using MISA.Core.Interfaces.Services;
+using MISA.Core.MISAAttribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MISA.Core.Services
 {
     public class BaseService<MISAEntity> : IBaseService<MISAEntity>
     {
+        #region DECLARE
         IBaseRepository<MISAEntity> _baseRepository;
         ServiceResult _serviceResult;
+        #endregion
 
+        #region Constructor
         public BaseService(IBaseRepository<MISAEntity> baseRepository)
         {
             _serviceResult = new ServiceResult();
             _baseRepository = baseRepository;         
         }
-        public ServiceResult Add(MISAEntity entity)
-        {
-            //validate dữ liệu và xử lí nghiệp vụ
-            //    // Kiểm tra dữ liệu
-            //    // 1. Mã khách hàng bắt buộc nhập
-            //    if (customer.CustomerCode == "" || customer.CustomerCode == null)
-            //    {
-            //        var errorObj = new
-            //        {
-            //            userMsg = Properties.ResourceVN.Error_Message_UserVN,
-            //            errorCode = "misa-001",
-            //            moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
-            //            traceId = ""
-            //        };
-            //        _serviceResult.isValid = false;
-            //        _serviceResult.Data = errorObj;
-            //    }
+        #endregion
 
-            //    // 2. Email phải đúng định dạng
-            //    var emailFormat = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-            //    var isMatch = Regex.IsMatch(customer.Email, emailFormat, RegexOptions.IgnoreCase);
-            //    if (isMatch == false)
-            //    {
-            //        var errorObj = new
-            //        {
-            //            userMsg = Properties.ResourceVN.Error_Email,
-            //            errorCode = "misa-003",
-            //            moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-003",
-            //            traceId = ""
-            //        };
-            //        _serviceResult.isValid = false;
-            //        _serviceResult.Data = errorObj;
-            //    }
-            //    // 3. Check mã trùng
-            //Thực hiện thêm mới
-            _serviceResult.Data = _baseRepository.Add(entity);
+        #region Methods
+        /// <summary>
+        /// Hàm thực hiện thêm mới
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// CreatedBy : Ngọc 18/8/2021
+        public ServiceResult Add(MISAEntity entity)
+        {   
+            var className = typeof(MISAEntity).Name;
+            var entityCode = entity.GetType().GetProperty($"{className}Code").GetValue(entity).ToString();
+            //validate dữ liệu và xử lí nghiệp vụ
+            var isValid = true;
+            isValid = validateRequired(entity);
+            if (isValid)
+            {
+                isValid = validateEmail(entity);
+            }
+
+            if (isValid)
+            {
+                isValid = validateIsNumber(entity);
+            }
+
+            if (isValid)
+            {
+                isValid = validatePhoneNumber(entity);
+            }
+
+            if (isValid)
+            {
+                isValid = checkedCodeExist(entityCode, Guid.Empty);
+            }
+
+            if (isValid)
+            {
+                //Thực hiện thêm mới
+                _serviceResult.Data = _baseRepository.Add(entity);           
+            }
             return _serviceResult;
-            
+
         }
 
+        /// <summary>
+        /// Hàm thực hiện sửa
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// CreatedBy : Ngọc 18/8/2021
         public ServiceResult Edit(MISAEntity entity, Guid entityId)
         {
             //validate dữ liệu và xử lí nghiệp vụ
@@ -67,5 +83,135 @@ namespace MISA.Core.Services
             _serviceResult.Data = _baseRepository.Edit(entity, entityId);
             return _serviceResult;
         }
+        #endregion
+
+        #region Validate
+        /// <summary>
+        /// Hàm kiểm tra nhập các trường bắt buộc
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// CreatedBy : Ngọc 18/8/2021
+        public bool validateRequired(MISAEntity entity)
+        {
+            var isValid = true;
+            var properties = typeof(MISAEntity).GetProperties();
+            foreach(var prop in properties)
+            {
+                var requiredProp = prop.GetCustomAttributes(typeof(MISARequired), true);
+                if(requiredProp.Length > 0)
+                {
+                    var propValue = prop.GetValue(entity).ToString();
+                    if (string.IsNullOrEmpty(propValue))
+                    {
+                        isValid = false;
+                        throw new Exception(Properties.ResourceVN.Empty_Field);
+                    }
+                }
+            }
+            return isValid;
+        }
+
+        /// <summary>
+        /// Hàm kiểm tra định dạng Email
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// CreatedBy : Ngọc 18/8/2021
+        public bool validateEmail(MISAEntity entity)
+        {
+            var isValid = true;
+            var properties = typeof(MISAEntity).GetProperties();
+            foreach (var prop in properties)
+            {
+                var emailProp = prop.GetCustomAttributes(typeof(MISAEmail), true);
+                if (emailProp.Length > 0)
+                {   
+                    var propValue = prop.GetValue(entity).ToString();
+                    var emailFormat = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+                    var isMatch = Regex.IsMatch(propValue, emailFormat, RegexOptions.IgnoreCase);
+                    if (!isMatch)
+                    {
+                        isValid = false;
+                        throw new Exception(Properties.ResourceVN.Error_Email);
+                    }
+                }
+            }
+            return isValid;
+        }
+
+        /// <summary>
+        /// Hàm kiểm tra các trường chỉ chứa chữ số
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// CreatedBy : Ngọc 18/8/2021
+        public bool validateIsNumber(MISAEntity entity)
+        {
+            var isValid = true;
+            var properties = typeof(MISAEntity).GetProperties();
+            foreach (var prop in properties)
+            {
+                var NumProp = prop.GetCustomAttributes(typeof(MISAIsNumber), true);
+                if (NumProp.Length > 0)
+                {
+                    var propValue = prop.GetValue(entity).ToString();
+                    var NumFormat = @"^([0-9]\d*)$";
+                    var isMatch = Regex.IsMatch(propValue, NumFormat, RegexOptions.IgnoreCase);
+                    if (!isMatch)
+                    {
+                        isValid = false;
+                        throw new Exception(Properties.ResourceVN.Contain_Numbers_Only);
+                    }
+                }
+            }
+            return isValid;
+        }
+
+        /// <summary>
+        /// Hàm kiểm tra định dạng số điện thoại
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// CreatedBy : Ngọc 18/8/2021
+        public bool validatePhoneNumber(MISAEntity entity)
+        {
+            var isValid = true;
+            var properties = typeof(MISAEntity).GetProperties();
+            foreach (var prop in properties)
+            {
+                var phoneNumProp = prop.GetCustomAttributes(typeof(MISAPhoneNumber), true);
+                if (phoneNumProp.Length > 0)
+                {
+                    var propValue = prop.GetValue(entity).ToString();
+                    var phoneNumFormat = @"^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$";
+                    var isMatch = Regex.IsMatch(propValue, phoneNumFormat, RegexOptions.IgnoreCase);
+                    if (!isMatch)
+                    {
+                        isValid = false;
+                        throw new Exception(Properties.ResourceVN.Error_PhoneNumber);
+                    }
+                }
+            }
+            return isValid;
+        }
+
+        /// <summary>
+        /// Hàm kiểm tra trùng mã 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// CreatedBy : Ngọc 18/8/2021
+        public virtual bool checkedCodeExist(string entityCode, Guid entityId)
+        {
+            var isValid = _baseRepository.checkedCodeExist(entityCode, entityId);
+            if (!isValid)
+            {
+                throw new Exception(Properties.ResourceVN.Duplicate_Code);
+            }
+            return isValid;
+        }
+
+        #endregion
     }
 }

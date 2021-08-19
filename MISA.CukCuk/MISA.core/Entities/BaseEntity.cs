@@ -12,14 +12,17 @@ namespace MISA.Core.Entities
         /// Ngày thành lập
         /// </summary>
         public DateTime? CreatedDate { get; set; }
+
         /// <summary>
         /// Người sáng lập
         /// </summary>
         public string CreatedBy { get; set; }
+
         /// <summary>
         /// Ngày chỉnh sửa
         /// </summary>
         public DateTime? ModifiedDate { get; set; }
+
         /// <summary>
         /// Người chỉnh sửa
         /// </summary>

@@ -17,5 +17,7 @@ namespace MISA.Core.Interfaces.Repository
         int Edit(MISAEntity entity, Guid entityId);
 
         int Delete(Guid entityId);
+
+        bool checkedCodeExist(string entityCode, Guid entityId);
     }
 }

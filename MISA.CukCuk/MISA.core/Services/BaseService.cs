@@ -33,30 +33,35 @@ namespace MISA.Core.Services
         /// <param name="entity"></param>
         /// <returns></returns>
         /// CreatedBy : Ngọc 18/8/2021
-        public ServiceResult Add(MISAEntity entity)
+        public virtual ServiceResult Add(MISAEntity entity)
         {   
             var className = typeof(MISAEntity).Name;
             var entityCode = entity.GetType().GetProperty($"{className}Code").GetValue(entity).ToString();
             //validate dữ liệu và xử lí nghiệp vụ
             var isValid = true;
+            //validate các trường bắt buộc
             isValid = validateRequired(entity);
             if (isValid)
             {
+                //validate Email
                 isValid = validateEmail(entity);
             }
 
             if (isValid)
             {
+                //validate các trường chỉ chứa số
                 isValid = validateIsNumber(entity);
             }
 
             if (isValid)
             {
+                //validate số điện thoại
                 isValid = validatePhoneNumber(entity);
             }
 
             if (isValid)
-            {
+            {   
+                //check trùng mã
                 isValid = checkedCodeExist(entityCode, Guid.Empty);
             }
 
@@ -78,14 +83,49 @@ namespace MISA.Core.Services
         public ServiceResult Edit(MISAEntity entity, Guid entityId)
         {
             //validate dữ liệu và xử lí nghiệp vụ
+            var className = typeof(MISAEntity).Name;
+            var entityCode = entity.GetType().GetProperty($"{className}Code").GetValue(entity).ToString();
+            //validate dữ liệu và xử lí nghiệp vụ
+            var isValid = true;
 
-            //Thực hiện sửa
-            _serviceResult.Data = _baseRepository.Edit(entity, entityId);
-            return _serviceResult;
+            //validate các trường bắt buộc
+            isValid = validateRequired(entity);
+            if (isValid)
+            {   
+                //validate Email
+                isValid = validateEmail(entity);
+            }
+
+            if (isValid)
+            {   
+                //validate các trường chỉ chứa số
+                isValid = validateIsNumber(entity);
+            }
+
+            if (isValid)
+            {   
+                //validate số điện thoại
+                isValid = validatePhoneNumber(entity);
+            }
+
+            if (isValid)
+            {   
+                //validate trùng mã
+                isValid = checkedCodeExist(entityCode, entityId);
+            }
+
+            if (isValid)
+            {
+                //Thực hiện sửa
+                _serviceResult.Data = _baseRepository.Edit(entity, entityId);
+            }
+
+            return _serviceResult;      
         }
         #endregion
 
         #region Validate
+        
         /// <summary>
         /// Hàm kiểm tra nhập các trường bắt buộc
         /// </summary>
@@ -99,13 +139,16 @@ namespace MISA.Core.Services
             foreach(var prop in properties)
             {
                 var requiredProp = prop.GetCustomAttributes(typeof(MISARequired), true);
+              
                 if(requiredProp.Length > 0)
                 {
+                    var propName = (requiredProp[0] as MISARequired).Name;
                     var propValue = prop.GetValue(entity).ToString();
                     if (string.IsNullOrEmpty(propValue))
                     {
                         isValid = false;
-                        throw new Exception(Properties.ResourceVN.Empty_Field);
+                        _serviceResult.Messenger = string.Format(Properties.ResourceVN.Empty_Field, propName);
+                        _serviceResult.isValid = false;
                     }
                 }
             }
@@ -133,7 +176,8 @@ namespace MISA.Core.Services
                     if (!isMatch)
                     {
                         isValid = false;
-                        throw new Exception(Properties.ResourceVN.Error_Email);
+                        _serviceResult.Messenger = Properties.ResourceVN.Error_Email;
+                        _serviceResult.isValid = false;
                     }
                 }
             }
@@ -155,13 +199,15 @@ namespace MISA.Core.Services
                 var NumProp = prop.GetCustomAttributes(typeof(MISAIsNumber), true);
                 if (NumProp.Length > 0)
                 {
-                    var propValue = prop.GetValue(entity).ToString();
+                    var propName = (NumProp[0] as MISAIsNumber).Name.ToString();
+                    var propValue = prop.GetValue(entity);
                     var NumFormat = @"^([0-9]\d*)$";
-                    var isMatch = Regex.IsMatch(propValue, NumFormat, RegexOptions.IgnoreCase);
+                    var isMatch = Regex.IsMatch(propValue.ToString(), NumFormat, RegexOptions.IgnoreCase);
                     if (!isMatch)
                     {
                         isValid = false;
-                        throw new Exception(Properties.ResourceVN.Contain_Numbers_Only);
+                        _serviceResult.Messenger = string.Format(Properties.ResourceVN.Contain_Numbers_Only, propName);
+                        _serviceResult.isValid = false;
                     }
                 }
             }
@@ -189,7 +235,8 @@ namespace MISA.Core.Services
                     if (!isMatch)
                     {
                         isValid = false;
-                        throw new Exception(Properties.ResourceVN.Error_PhoneNumber);
+                        _serviceResult.Messenger = Properties.ResourceVN.Error_PhoneNumber;
+                        _serviceResult.isValid = false;
                     }
                 }
             }
@@ -207,7 +254,8 @@ namespace MISA.Core.Services
             var isValid = _baseRepository.checkedCodeExist(entityCode, entityId);
             if (!isValid)
             {
-                throw new Exception(Properties.ResourceVN.Duplicate_Code);
+                _serviceResult.Messenger = Properties.ResourceVN.Duplicate_Code;
+                _serviceResult.isValid = false;
             }
             return isValid;
         }

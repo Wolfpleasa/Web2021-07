@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MISA.Core.Entities;
 using MISA.Core.Interfaces.Repository;
 using MISA.Core.Interfaces.Services;
 using System;
@@ -16,6 +17,7 @@ namespace MISA.CukCuk.API.Controllers
         #region DECLARE
         IBaseRepository<MISAEntity> _baseRepository;
         IBaseService<MISAEntity> _baseService;
+        ServiceResult _serviceResult;
         #endregion
 
         #region Constructor
@@ -23,6 +25,7 @@ namespace MISA.CukCuk.API.Controllers
         {
             _baseRepository = baseRepository;
             _baseService = baseService;
+            _serviceResult = new ServiceResult();
         }
         #endregion
 
@@ -80,6 +83,7 @@ namespace MISA.CukCuk.API.Controllers
                 return BadRequest(newObj);
             }
         }
+
         #endregion
 
         #region method POST
@@ -103,7 +107,14 @@ namespace MISA.CukCuk.API.Controllers
                 }
                 else
                 {
-                    return BadRequest(serviceResult.Data);
+                    var errorObj = new
+                    {                  
+                        userMsg = serviceResult.Messenger,
+                        errorCode = "misa-001",
+                        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
+                        traceId = ""
+                    };
+                    return StatusCode(400, errorObj);
                 }
             }
             catch (Exception ex)
@@ -144,7 +155,7 @@ namespace MISA.CukCuk.API.Controllers
                 }
                 else
                 {
-                    return BadRequest(serviceResult.Data);
+                    return BadRequest(serviceResult.Messenger);
                 }
             }
             catch (Exception ex)

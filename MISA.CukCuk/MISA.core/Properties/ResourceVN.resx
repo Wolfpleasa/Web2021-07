@@ -118,13 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Contain_Numbers_Only" xml:space="preserve">
-    <value>Thông tin này chỉ chứa chữ số</value>
+    <value>Thông tin {0} chỉ chứa chữ số</value>
   </data>
   <data name="Duplicate_Code" xml:space="preserve">
     <value>Mã nhập vào đã bị trùng</value>
   </data>
+  <data name="EmployeeCode" xml:space="preserve">
+    <value>Vui lòng nhập mã nhân viên theo định dạng NV-XXX</value>
+  </data>
   <data name="Empty_Field" xml:space="preserve">
-    <value>Thông tin này không được phép để trống</value>
+    <value>Thông tin {0} không được phép để trống</value>
   </data>
   <data name="Error_Email" xml:space="preserve">
     <value>Email không đúng định dạng</value>
@@ -134,5 +137,8 @@
   </data>
   <data name="Error_PhoneNumber" xml:space="preserve">
     <value>Số điện thoại không đúng định dạng</value>
+  </data>
+  <data name="Form_File_IsNot_Null" xml:space="preserve">
+    <value>Vui lòng chọn 1 tệp excel rồi tiếp tục</value>
   </data>
 </root>

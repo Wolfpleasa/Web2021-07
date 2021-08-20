@@ -1,10 +1,12 @@
-﻿using MISA.Core.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using MISA.Core.Entities;
 using MISA.Core.Interfaces.Repository;
 using MISA.Core.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MISA.Core.Services
@@ -19,17 +21,9 @@ namespace MISA.Core.Services
             //_customerRepository = customerRepository;
         }
 
-
-        //public ServiceResult Add(MISAEntity entity)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
-
-        //public ServiceResult Edit(MISAEntity entity, Guid entityId)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public ServiceResult Import(IFormFile formFile, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

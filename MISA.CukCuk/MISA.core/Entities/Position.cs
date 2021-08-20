@@ -16,15 +16,15 @@ namespace MISA.Core.Entities
         public Guid PositionId { get; set; }
 
         /// <summary>
-        /// Mã phòng ban
+        /// Mã vị trí
         /// </summary>
-        [MISARequired]
+        [MISARequired("Mã vị trí")]
         public string PositionCode { get; set; }
 
         /// <summary>
-        /// Tên phòng ban
+        /// Tên vị trí
         /// </summary>
-        [MISARequired]
+        [MISARequired("Tên vị trí")]
         public string PositionName { get; set; }
         #endregion
     }

@@ -66,3 +66,9 @@ D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Infrast
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Core.pdb
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\MISA.Infrastructure.pdb
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\obj\Debug\net5.0\MISA.CukCuk.API.MvcApplicationPartsAssemblyInfo.cs
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\EPPlus.dll
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\Microsoft.IO.RecyclableMemoryStream.dll
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\System.Xml.XPath.XmlDocument.dll
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\Microsoft.AspNetCore.Http.Features.dll
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\Microsoft.Extensions.Primitives.dll
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.CukCuk.API\bin\Debug\net5.0\System.IO.Pipelines.dll

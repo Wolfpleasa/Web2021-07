@@ -45,11 +45,13 @@ namespace MISA.CukCuk.API
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
 
             // Repository DI
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             //Base DI
             //services.AddScoped<IBaseService, BaseService>();

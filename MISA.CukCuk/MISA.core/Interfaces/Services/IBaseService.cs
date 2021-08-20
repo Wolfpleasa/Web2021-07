@@ -26,5 +26,6 @@ namespace MISA.Core.Interfaces.Services
         /// <returns>ServiceResult: Kết quả xử lý nghiệp vụ</returns>
         ServiceResult Edit(MISAEntity entity, Guid entityId);
         #endregion
+
     }
 }

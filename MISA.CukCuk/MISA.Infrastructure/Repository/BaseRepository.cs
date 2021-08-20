@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MISA.Core.Interfaces.Repository;
+using MISA.Core.MISAAttribute;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -64,27 +65,33 @@ namespace MISA.Infrastructure.Repository
             //Duyệt từng property:
             foreach (var prop in properties)
             {
-                //lấy tên của prop:
-                var propName = prop.Name;
-                // Nếu  tên của prop là EmployeeId,CustomerId...
-             
-                //Lấy value của prop:
-                var propValue = prop.GetValue(entity);
-                if (propName == $"{_className}Id" && prop.PropertyType == typeof(Guid))
+                // kiểm tra có thuộc tính nào là not map không
+                var notMapProp = prop.GetCustomAttributes(typeof(MISANotMap),true);
+
+                // các thuộc tính là not map sẽ ko dc thêm vào database
+                if(notMapProp.Length == 0)
                 {
-                    //sinh id mới
-                    propValue = Guid.NewGuid();
-                }
+                    //lấy tên của prop:
+                    var propName = prop.Name;
+                    // Nếu  tên của prop là EmployeeId,CustomerId...
 
-                //Lấy kiểu dữ liệu của prop:
-                var propType = prop.PropertyType;
+                    //Lấy value của prop:
+                    var propValue = prop.GetValue(entity);
+                    if (propName == $"{_className}Id" && prop.PropertyType == typeof(Guid))
+                    {
+                        //sinh id mới
+                        propValue = Guid.NewGuid();
+                    }
 
-                //thêm param tương ứng với mỗi property của đối tượng
-                dynamicParam.Add($"@{propName}", propValue);
+                    //Lấy kiểu dữ liệu của prop:
+                    var propType = prop.PropertyType;
 
-                columnsName += $"{propName},";
-                columnsParam += $"@{propName},";
-               
+                    //thêm param tương ứng với mỗi property của đối tượng
+                    dynamicParam.Add($"@{propName}", propValue);
+
+                    columnsName += $"{propName},";
+                    columnsParam += $"@{propName},";
+                }            
             }
           
             columnsName = columnsName.Remove(columnsName.Length - 1, 1);

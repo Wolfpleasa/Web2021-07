@@ -61,7 +61,7 @@ namespace MISA.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thông tin này chỉ chứa chữ số.
+        ///   Looks up a localized string similar to Thông tin {0} chỉ chứa chữ số.
         /// </summary>
         public static string Contain_Numbers_Only {
             get {
@@ -79,7 +79,16 @@ namespace MISA.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thông tin này không được phép để trống.
+        ///   Looks up a localized string similar to Vui lòng nhập mã nhân viên theo định dạng NV-XXX.
+        /// </summary>
+        public static string EmployeeCode {
+            get {
+                return ResourceManager.GetString("EmployeeCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thông tin {0} không được phép để trống.
         /// </summary>
         public static string Empty_Field {
             get {
@@ -111,6 +120,15 @@ namespace MISA.Core.Properties {
         public static string Error_PhoneNumber {
             get {
                 return ResourceManager.GetString("Error_PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn 1 tệp excel rồi tiếp tục.
+        /// </summary>
+        public static string Form_File_IsNot_Null {
+            get {
+                return ResourceManager.GetString("Form_File_IsNot_Null", resourceCulture);
             }
         }
     }

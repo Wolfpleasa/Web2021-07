@@ -36,30 +36,65 @@ namespace MISA.Core.Entities
         /// <summary>
         /// Giới tính
         /// </summary>
+       
         public int? Gender { get; set; }
+
         /// <summary>
-        /// Địa chỉ
+        /// Thẻ thành viên
         /// </summary>
-        public string Address { get; set; }
+        public string MemberCardCode { get; set; }
+
+        /// <summary>
+        /// Nhóm khách hàng
+        /// </summary>
+        [MISANotMap]
+        public string CustomerGroupName { get; set; }
+
+
+        /// <summary>
+        /// Số điện thoại
+        /// </summary>
+        [MISARequired]
+        [MISAPhoneNumber]
+        public string PhoneNumber { get; set; }
+
         /// <summary>
         /// Ngày sinh
         /// </summary>
         public DateTime? DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Tên công ty
+        /// </summary>
+        public string CompanyName { get; set; }
+
+        /// <summary>
+        /// Mã số thuế cty
+        /// </summary>
+        [MISAIsNumber]
+        public string CompanyTaxCode { get; set; }
+
         /// <summary>
         /// Email
         /// </summary>
         [MISARequired]
         [MISAEmail]
         public string Email { get; set; }
+
         /// <summary>
-        /// Số điện thoại
+        /// Địa chỉ
         /// </summary>
-        [MISARequired]
-        [MISAPhoneNumber]
-        [MISAIsNumber]
-        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
+
+        /// <summary>
+        /// Các lối khi duyệt từ excel
+        /// </summary>
+        [MISANotMap]
+        public List<string> ImportError { get; set; } = new List<string>();
 
         #endregion
+
+        
     }
     
 }

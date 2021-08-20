@@ -18,13 +18,13 @@ namespace MISA.Core.Entities
         /// <summary>
         /// Mã phòng ban
         /// </summary>
-        [MISARequired]
+        [MISARequired ("Mã phòng ban")]
         public string DepartmentCode { get; set; }
 
         /// <summary>
         /// Tên phòng ban
         /// </summary>
-        [MISARequired]
+        [MISARequired("Tên phòng ban")]
         public string DepartmentName { get; set; }
         #endregion
     }

@@ -15,16 +15,16 @@ namespace MISA.CukCuk.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class PositionsController :  BaseEntityController<Position>
+    public class PositionsController :  BaseEntityController<Possition>
     {
         #region DECLARE
         //IPositionService _positionService;
-        IBaseRepository<Position> _baseRepository;
-        IBaseService<Position> _baseService;
+        IBaseRepository<Possition> _baseRepository;
+        IBaseService<Possition> _baseService;
         #endregion
 
         #region Constructor
-        public PositionsController(IBaseService<Position> baseService, IBaseRepository<Position> baseRepository):base(baseService, baseRepository)
+        public PositionsController(IBaseService<Possition> baseService, IBaseRepository<Possition> baseRepository):base(baseService, baseRepository)
         {
             _baseService = baseService;
             _baseRepository = baseRepository;

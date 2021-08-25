@@ -21,6 +21,7 @@ export default {
     ToastMessageText: String,
     active: Boolean,
   },
+  
   watch: {
     HideToastMessage: function () {
       setTimeout(() => {

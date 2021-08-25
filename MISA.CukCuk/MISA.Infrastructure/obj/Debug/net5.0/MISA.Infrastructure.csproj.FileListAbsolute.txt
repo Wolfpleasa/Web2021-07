@@ -13,3 +13,5 @@ D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.Infrastructure\obj\Debug\net5.0\MISA.Inf
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.Infrastructure\obj\Debug\net5.0\MISA.Infrastructure.dll
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.Infrastructure\obj\Debug\net5.0\ref\MISA.Infrastructure.dll
 D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.Infrastructure\obj\Debug\net5.0\MISA.Infrastructure.pdb
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.Infrastructure\obj\Debug\net5.0\MISA.Infrastructure.Properties.ResourceVN.resources
+D:\MISA JSC\Web2021_07\MISA.CukCuk\MISA.Infrastructure\obj\Debug\net5.0\MISA.Infrastructure.csproj.GenerateResource.cache

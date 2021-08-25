@@ -12,6 +12,6 @@ namespace MISA.Core.Entities
 
         public object Data { get; set; }
 
-        public string Messenger { get; set; }
+        public string Message { get; set; }
     }
 }

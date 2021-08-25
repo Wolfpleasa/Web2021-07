@@ -9,6 +9,8 @@
     width: 225px;
     align-items: center;
     display: flex;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
 .header .header-left .toggle {
@@ -31,12 +33,11 @@
 }
 
 .header .header-right {
+    left: 226px;
     height: 100%;
-    width: calc(100% - 218px);
-    border-left: 1px solid #ccc;
+    width: calc(100% - 226px);
     display: flex;
     justify-content: space-between;
-    box-sizing: border-box;
 }
 
 .header-right .restaurant-selector {

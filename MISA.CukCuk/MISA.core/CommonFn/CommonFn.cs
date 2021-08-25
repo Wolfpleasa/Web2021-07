@@ -27,12 +27,8 @@ namespace MISA.Core.CommonFunction
 
         public static string FormatPhoneNumber(string phoneNumer)
         {
-            var str = phoneNumer.Replace('.', ' ');
-
-            Regex trimmer = new Regex(@"\s\s+"); // Xóa khoảng trắng thừa trong chuỗi
-            str = trimmer.Replace(str, "");
-
-            return str;
+            return phoneNumer.Replace(".","").Replace(" ", "");
+        
         }
     }
 }

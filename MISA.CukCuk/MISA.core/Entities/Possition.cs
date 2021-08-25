@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Core.Entities
 {
-    public class Position : BaseEntity
+    public class Possition : BaseEntity
     {
         #region Property
         /// <summary>

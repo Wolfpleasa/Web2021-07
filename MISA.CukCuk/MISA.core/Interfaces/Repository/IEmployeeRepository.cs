@@ -12,15 +12,20 @@ namespace MISA.Core.Interfaces.Repository
         /// <summary>
         /// Phân trang nhân viên
         /// </summary>
-        /// <param name="pagesize"></param>
-        /// <param name="pagenumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNumber"></param>
         /// <param name="searchContent"></param>
         /// <param name="positionId"></param>
         /// <param name="departmentId"></param>
         /// <returns>Danh sách nhân viên</returns>
         /// Created By: Ngọc 19/8/2021
-        public List<Employee> Pagination(int? pagesize, int? pagenumber, string searchContent, Guid? positionId, Guid? departmentId);
+        public PagingResult<Employee> Pagination(int? pageSize, int? pageNumber, string searchContent, Guid? positionId, Guid? departmentId);
 
+        /// <summary>
+        /// Lấy mã nhân viên mới
+        /// </summary>
+        /// <returns>Danh sách nhân viên</returns>
+        /// Created By: Ngọc 19/8/2021
         public string GetNewCode();
     }
 }

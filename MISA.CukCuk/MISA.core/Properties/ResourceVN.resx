@@ -126,6 +126,9 @@
   <data name="EmployeeCode" xml:space="preserve">
     <value>Vui lòng nhập mã nhân viên theo định dạng NV-XXX</value>
   </data>
+  <data name="Empty_EmployeeCode" xml:space="preserve">
+    <value>Mã nhân viên không được phép để trống</value>
+  </data>
   <data name="Empty_Field" xml:space="preserve">
     <value>Thông tin {0} không được phép để trống</value>
   </data>

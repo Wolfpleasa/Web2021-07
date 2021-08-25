@@ -13,17 +13,21 @@ namespace MISA.Core.Entities
         /// Khóa chính
         /// </summary>
         public Guid CustomerGroupId { get; set; }
+
+        /// <summary>
+        /// Mã nhóm khách hàng
+        /// </summary>
+        public string CustomerGroupCode { get; set; }
+
         /// <summary>
         /// Tên nhóm khách hàng
         /// </summary>
         public string CustomerGroupName { get; set; }
+
         /// <summary>
         /// Mô tả
         /// </summary>
         public string Description { get; set; }
-
-
-
         #endregion
     }
 }

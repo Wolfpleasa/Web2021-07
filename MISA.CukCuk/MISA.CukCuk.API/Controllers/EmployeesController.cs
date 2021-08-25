@@ -42,21 +42,25 @@ namespace MISA.CukCuk.API.Controllers
         /// <summary>
         /// Phân trang nhân viên
         /// </summary>
-        /// <param name="pagesize"></param>
-        /// <param name="pagenumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNumber"></param>
         /// <param name="searchContent"></param>
         /// <param name="positionId"></param>
         /// <param name="departmentId"></param>
         /// <returns>Danh sách nhân viên</returns>
         /// Created By: Ngọc 19/8/2021
-        [HttpGet("paging")]
-        public  IActionResult Pagination(int? pagesize, int? pagenumber, string searchContent, Guid? positionId, Guid? departmentId)
+        [HttpGet("Paging")]
+        public  IActionResult Pagination(int? pageSize, int? pageNumber, string searchContent, Guid? positionId, Guid? departmentId)
         {
             try
             {
-                var employees = _employeeRepository.Pagination(pagesize, pagenumber, searchContent, positionId, departmentId);
+                var pagingResult = _employeeRepository.Pagination(pageSize, pageNumber, searchContent, positionId, departmentId);
                 // Trả về cho client
-                return Ok(employees);
+                if(pagingResult.TotalPageNumber == 0)
+                {
+                    return StatusCode(204);
+                }
+                return Ok(pagingResult);
             }
             catch (Exception ex)
             {
@@ -115,7 +119,7 @@ namespace MISA.CukCuk.API.Controllers
                 {
                     var errorObj = new
                     {
-                        userMsg = serviceResult.Messenger,
+                        userMsg = serviceResult.Message,
                         errorCode = "misa-001",
                         moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
                         traceId = ""
@@ -137,7 +141,42 @@ namespace MISA.CukCuk.API.Controllers
             }
         }
 
-      
+        public override IActionResult UpdateEntity(Guid entityId, Employee entity)
+        {
+            try
+            {
+                var serviceResult = _employeeService.Edit(entity, entityId);
+
+                // Trả về cho client
+                if (serviceResult.isValid == true)
+                {
+                    return StatusCode(200, serviceResult.Data);
+                }
+                else
+                {
+                    var errorObj = new
+                    {
+                        userMsg = serviceResult.Message,
+                        errorCode = "misa-001",
+                        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
+                        traceId = ""
+                    };
+                    return StatusCode(400, errorObj);
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorObj = new
+                {
+                    devMsg = ex.Message,
+                    userMsg = MISA.Core.Properties.ResourceVN.Error_Message_UserVN,
+                    errorCode = "misa-001",
+                    moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
+                    traceId = ""
+                };
+                return StatusCode(500, errorObj);
+            }
+        }
         #endregion
     }
 

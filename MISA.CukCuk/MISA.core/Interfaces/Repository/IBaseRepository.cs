@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MISA.Core.Entities;
 
 namespace MISA.Core.Interfaces.Repository
 {
@@ -42,6 +43,13 @@ namespace MISA.Core.Interfaces.Repository
         /// <returns></returns>
         /// Created By: Ngọc 15/8/2021
         int Delete(Guid entityId);
+
+        /// <summary>
+        /// Hàm xóa nhiều dữ liệu
+        /// </summary>
+        /// <returns></returns>
+        /// Created By: Ngọc 15/8/2021
+        ServiceResult MultiDelete(List<Guid> ids);
 
         /// <summary>
         /// Hàm kiểm tra trùng mã

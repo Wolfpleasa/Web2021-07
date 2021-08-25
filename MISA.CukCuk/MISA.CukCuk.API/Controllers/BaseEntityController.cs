@@ -41,6 +41,10 @@ namespace MISA.CukCuk.API.Controllers
             try
             {
                 var entities = _baseRepository.GetAll();
+                if (!entities.Any())// == entities.Count() == 0
+                {
+                    return NoContent();
+                }
                 return Ok(entities);
             }
             catch (Exception ex)
@@ -68,6 +72,10 @@ namespace MISA.CukCuk.API.Controllers
             try
             {
                 var entity = _baseRepository.GetById(entityId);
+                if (entity == null)
+                {
+                    return NoContent();
+                }
                 return Ok(entity);
             }
             catch (Exception ex)
@@ -109,7 +117,7 @@ namespace MISA.CukCuk.API.Controllers
                 {
                     var errorObj = new
                     {                  
-                        userMsg = serviceResult.Messenger,
+                        userMsg = serviceResult.Message,
                         errorCode = "misa-001",
                         moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
                         traceId = ""
@@ -155,7 +163,14 @@ namespace MISA.CukCuk.API.Controllers
                 }
                 else
                 {
-                    return BadRequest(serviceResult.Messenger);
+                    var errorobj = new
+                    {
+                        userMsg = serviceResult.Message,
+                        errorCode = "misa-001",
+                        moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
+                        traceId = "",
+                    };
+                    return BadRequest(errorobj);
                 }
             }
             catch (Exception ex)
@@ -187,7 +202,6 @@ namespace MISA.CukCuk.API.Controllers
             {
                 var rowEffects = _baseRepository.Delete(entityId);
                 return Ok(rowEffects);
-
             }
             catch (Exception ex)
             {
@@ -198,8 +212,46 @@ namespace MISA.CukCuk.API.Controllers
                 };
                 return StatusCode(500, errorObj);
             }
-
         }
+
+        /// <summary>
+        /// Hàm xóa nhiều dữ liệu
+        /// </summary>
+        /// <returns></returns>
+        /// Created By: Ngọc 15/8/2021
+        [HttpPost("Multiple/Delete")]
+        public IActionResult MultiDelete(List<Guid> ids)
+        {
+            try
+            {
+                var serviceResult = _baseRepository.MultiDelete(ids);
+                if (serviceResult.isValid)
+                {
+                    return Ok(serviceResult.Data);
+                }
+                else
+                {
+                    var errorObj = new
+                    {
+                        userMsg = serviceResult.Message,
+                    };
+                return BadRequest(errorObj);
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorObj = new
+                {
+                    devMsg = ex.Message,
+                    userMsg = MISA.Core.Properties.ResourceVN.Error_Message_UserVN,
+                    errorCode = "misa-001",
+                    moreInfo = @"https:/openapi.misa.com.vn/errorcode/misa-001",
+                    traceId = ""
+                };
+                return StatusCode(500, errorObj);
+            }
+        }
+    
         #endregion
     }
 }

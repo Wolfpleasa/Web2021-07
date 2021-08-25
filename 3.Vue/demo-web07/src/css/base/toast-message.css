@@ -8,6 +8,7 @@
     line-height: 48px;
     box-shadow: 0 3px 6px 0 rgb(0, 0, 0, 0.16);
     border-radius: 4px;
+    z-index: 10;
 }
 
 .toast .toast-message {

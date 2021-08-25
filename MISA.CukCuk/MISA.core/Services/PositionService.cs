@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace MISA.Core.Services
 {
-    public class PositionService:BaseService<Position> , IPositionService
+    public class PositionService:BaseService<Possition> , IPositionService
     {
-        public PositionService(IBaseRepository<Position> baseRepository):base(baseRepository)
+        public PositionService(IBaseRepository<Possition> baseRepository):base(baseRepository)
         {
 
         }

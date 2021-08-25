@@ -2,7 +2,7 @@
   <div class="page-navigator">
     <!-- <div class="ml-10" id="div1-paging"></div> -->
     <div class="ml-10">
-      Hiển thị <b>{{ EntityPerPage }}/{{ totalEntity }}</b> nhân viên
+      Hiển thị <b>{{ realEntityPerPage }}/{{ totalEntity }}</b> nhân viên
     </div>
     <div class="paging">
       <div
@@ -36,7 +36,7 @@
     </div>
     <div class="mr-10 d-flex NumberPerPage">
       <div>
-        <b>{{ EntityPerPage }}&nbsp;</b>nhân viên/trang
+        <b>{{ entityPerPage }}&nbsp;</b>nhân viên/trang
       </div>
       <div class="modifyNumber">
         <div
@@ -56,15 +56,18 @@
 export default {
   name: "BasePageNavigation",
   props: {
-    totalEntity: String,
+    totalEntity: Number,
     totalPageNumber: Number,
+    searchContent: String,
+    entityPerPage: Number,
+    realEntityPerPage: Number,
   },
 
   data() {
     return {
       totalShow: 5,
       currentPageNumber: 1,
-      EntityPerPage: 20,
+    
       lowerLimit: 1,
       upperLimit: 5,
     };
@@ -95,16 +98,17 @@ export default {
           me.currentPageNumber = btnPage;
           break;
       }
-      me.$emit("UpdatePage", me.currentPageNumber, me.EntityPerPage);
-      me.updatePageNumber();
+      me.updatePage();
+
     },
 
     /**
      * Hàm cập nhật trang đang được xem
      * Ngọc 12/8/2021
      */
-    updatePageNumber() {
+    updateCenterNumber() {
       let me = this;
+      me.currentPageNumber = Math.min(me.currentPageNumber, me.totalPageNumber);
       me.lowerLimit = me.upperLimit = me.currentPageNumber;
       for (var b = 1; b < me.totalShow && b < me.totalPageNumber; ) {
         if (me.lowerLimit > 1) {
@@ -124,23 +128,42 @@ export default {
      */
     modifyNumber(modifyStatus) {
       let me = this;
-      switch (modifyStatus) {
-        case "increaseNumber":
-          if (me.EntityPerPage <= me.totalEntity - 10) me.EntityPerPage += 10;
-          break;
-        case "decreaseNumber":
-          if (me.EntityPerPage > 10) me.EntityPerPage -= 10;
-          break;
-        default:
-          break;
-      }
-      me.$emit("UpdatePage", me.currentPageNumber, me.EntityPerPage);
-      //console.log("tăng/giảm");
+      me.$emit("modifyNumber" , modifyStatus);
+   
+      me.updatePage();
     },
 
-    created() {
-      this.updatePageNumber();
+    /**
+     * Hàm gọi lên hàm update ở cha
+     * Ngọc 22/8/2021
+     */
+    updatePage() {
+      let me = this;
+      me.$emit("updatePage", me.currentPageNumber);
+      me.updateCenterNumber();
     },
+  },
+
+  created() {
+    this.updatePage();
+  },
+
+  watch: {
+    searchContent: function () {   
+        this.updatePage();     
+    },
+
+    currentPageNumber: function(){
+      this.updatePage();
+    },
+
+    totalPageNumber: function(){
+      this.updatePage();
+    },
+
+    totalEntity:function(){
+      this.updatePage();
+    }
   },
 };
 </script>

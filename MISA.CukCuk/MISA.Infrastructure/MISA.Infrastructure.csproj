@@ -14,4 +14,19 @@
     <ProjectReference Include="..\MISA.core\MISA.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Properties\ResourceVN.Designer.cs">
+      <DependentUpon>ResourceVN.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\ResourceVN.resx">
+      <LastGenOutput>ResourceVN.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Core.Interfaces.Services
 {
-    public interface IPositionService:IBaseService<Position>
+    public interface IPositionService:IBaseService<Possition>
     {
     }
 }

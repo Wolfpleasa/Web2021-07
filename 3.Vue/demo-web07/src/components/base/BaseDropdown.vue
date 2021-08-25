@@ -47,6 +47,7 @@ import axios from "axios";
 import { mixin as clickaway } from "vue-clickaway";
 
 import ToolTip from "./BaseToolTip.vue";
+import Constant from '../../Common/Constant';
 export default {
   mixins: [clickaway],
   name: "BaseDropdown",
@@ -168,7 +169,7 @@ export default {
       this.HideX = true;
       this.currentName = this.defaultName;
       this.dnone = true;
-      this.$emit("chooseDropdownItem", "", this.itemId);
+      this.$emit("chooseDropdownItem", null, this.itemId);
 
       if (this.rotate) {
         this.rotate = !this.rotate;
@@ -186,7 +187,7 @@ export default {
       let me = this;
       // nếu selectedId(PostionId,DepartmentId) mà tồn tại(tức là được Employeelist truyền vào => form sửa dùng)
       if ((me.selectedId + "").length > 0) {
-        //duyệt từng items(department,postion)
+        // duyệt từng items(department,postion)
         me.items.forEach(function (item, index) {
           // nếu selectedId(PostionId,DepartmentId) từ cha truyền vào mà trùng với itemId(PostionId,DepartmentId) trong list
           if (me.selectedId == item[me.itemId]) {
@@ -198,10 +199,10 @@ export default {
         });
       } else {
         // form thêm dùng
-        //không hàng nào được tích
+        // không hàng nào được tích
         me.currentIndex = -1;
-        // không hiển thị tên gì cả
-        me.currentName = " ";
+        // không hiển thị tên nào cả
+        me.currentName = "Chưa chọn";
         // ẩn nút X
         me.HideX = true;
       }
@@ -246,7 +247,7 @@ export default {
         ];
         break;
       case "WorkStatusName":
-        this.items = [
+        this.items = [  
           {
             WorkStatus: 0,
             WorkStatusName: "Chờ phỏng vấn",
@@ -268,7 +269,7 @@ export default {
 
       default:
         axios
-          .get(`http://cukcuk.manhnv.net/${me.Url}`)
+          .get(`${Constant.LocalUrl}${me.Url}`)
           .then((res) => {
             me.items = res.data;
           })

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Infrastructure.Repository
 {
-    public class PositionRepository:BaseRepository<Position>, IPositionRepository
+    public class PositionRepository:BaseRepository<Possition>, IPositionRepository
     {
         public PositionRepository(IConfiguration configuration) : base(configuration)
         {

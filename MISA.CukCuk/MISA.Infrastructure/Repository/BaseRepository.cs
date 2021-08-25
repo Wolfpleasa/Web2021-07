@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using MISA.Core.Entities;
 using MISA.Core.Interfaces.Repository;
 using MISA.Core.MISAAttribute;
 using MySqlConnector;
@@ -18,11 +19,13 @@ namespace MISA.Infrastructure.Repository
         IDbConnection _dbConnection;
         public readonly string _connectionString;
         string _className;
+        ServiceResult _serviceResult;
 
         public BaseRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("CukCukDatabase");
+            _connectionString = configuration.GetConnectionString("LocalDatabase");
             _className = typeof(MISAEntity).Name;
+            _serviceResult = new ServiceResult();
         }
         public List<MISAEntity> GetAll()
         {      
@@ -170,7 +173,7 @@ namespace MISA.Infrastructure.Repository
             }
             else
             {
-                if (entityCheck != null && entityId.ToString() == propValue)
+                if (entityCheck != null && entityId.ToString() != propValue)
                 {
                     return false;
                 }
@@ -189,6 +192,37 @@ namespace MISA.Infrastructure.Repository
             parameters.Add("@EntityIdParam", entityId);
             var rowEffects = _dbConnection.Execute(sqlCommand, param: parameters);
             return rowEffects;
+        }
+
+        public ServiceResult MultiDelete(List<Guid> ids)
+        {
+            // 2.Khởi tạo đối tượng kết nối với database
+            _dbConnection = new MySqlConnection(_connectionString);
+
+            _dbConnection.Open();
+            var transaction = _dbConnection.BeginTransaction();
+            var rowEffects = 0;
+            var sqlCommand = $"DELETE FROM {_className} WHERE {_className}Id = @EntityIdParam";
+            // 3.Lấy dữ liệu
+            foreach (var id in ids)
+            {            
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@EntityIdParam", id);
+                rowEffects += _dbConnection.Execute(sqlCommand, param: parameters,transaction: transaction);    
+            }
+            if(rowEffects == ids.Count())
+            {
+                transaction.Commit();
+                _serviceResult.Data = rowEffects;
+            }
+            else
+            {
+                _serviceResult.Message = Properties.ResourceVN.Cannot_Commit;
+                _serviceResult.isValid = false;
+                transaction.Rollback();              
+            }
+                
+            return _serviceResult;
         }
     }
 }

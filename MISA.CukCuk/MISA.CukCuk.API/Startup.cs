@@ -30,8 +30,17 @@ namespace MISA.CukCuk.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("CukCukDatabase");
+            var connectionString = Configuration.GetConnectionString("LocalDatabase");
+            //var connectionString = Configuration.GetConnectionString("CukCukDatabase");
             services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                                  {
+                                      builder.WithOrigins("https://localhost:44373",
+                                                          "http://www.contoso.com");
+                                  });
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -73,6 +82,15 @@ namespace MISA.CukCuk.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(x => x
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .SetIsOriginAllowed(origin => true)
+              // allow any origin
+              //.WithOrigins("https://localhost:44351")); 
+              // Allow only this origin can also have multiple origins separated with comma
+              .AllowCredentials()); // allow credentials
 
             app.UseAuthorization();
 

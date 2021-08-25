@@ -88,6 +88,15 @@ namespace MISA.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã nhân viên không được phép để trống.
+        /// </summary>
+        public static string Empty_EmployeeCode {
+            get {
+                return ResourceManager.GetString("Empty_EmployeeCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thông tin {0} không được phép để trống.
         /// </summary>
         public static string Empty_Field {

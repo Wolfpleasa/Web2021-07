@@ -1,5 +1,5 @@
 <template>
-  <div class="p-relative" >
+  <div class="p-relative">
     <div v-if="labelText.length > 0">
       <label for=""
         >{{ labelText }}
@@ -24,7 +24,7 @@
       @blur="onBlur($event.target.value)"
     />
     <div
-      v-if="type == 'text'"
+      v-if="type == 'text' && FieldName != 'Salary' "
       :class="['input-clear-icon', { 'v-hidden': isHide }]"
       @click="clearInput"
     ></div>
@@ -98,6 +98,11 @@ export default {
       me.$emit("input", inputValue);
       // Hiện icon X
       me.isHide = false;
+
+      // Nếu xóa hết giá trị thì tự ẩn nút X
+      if (inputValue == "") {
+        me.clearInput();
+      }
 
       //format ô input tiền lương
       if (me.FieldName == "Salary") {
@@ -273,7 +278,7 @@ export default {
         me.hasNotValid = true;
         // hiện tooltip
         me.hideToolTip = false;
-        me.ToolTipText = "Ngày tháng sai định dạng";
+        me.ToolTipText = "Ngày tháng không hợp <br> lệ";
         return false;
       }
       //bỏ boder đỏ
@@ -344,8 +349,11 @@ export default {
      */
     removeError() {
       let me = this;
+      // Bỏ boder đỏ
       me.hasNotValid = false;
+      // Ẩn tooltip
       me.hideToolTip = true;
+      // Ẩn nút X
       me.isHide = true;
     },
 
@@ -380,7 +388,8 @@ export default {
      */
     isDateFormat(date) {
       let regex = new RegExp(
-        "(19[0-9]{2}|20[0-9]{2}[-](0[1-9]|1[0-2])[-]([0-2]{1}[0-9]{1}|3[0-1]{1})|([0-2]{1}[0-9]{1}|3[0-1]{1})[/](0[1-9]|1[0-2])[/][0-9]{4})"
+        "((19[0-9]{2}|20[0-1][0-9]|2020[-](0[1-9]|1[0-2])[-]([0][1-9]|[1-2][0-9]|3[0-1])|(2021[-](0[1-8])[-]([0][1-9]|[1-2][0-9]|3[0-1])))" +
+          "|([0-2]{1}[0-9]{1}|3[0-1]{1})[/](0[1-9]|1[0-2])[/][0-9]{4})"
       );
       return regex.test(date);
     },
@@ -388,14 +397,12 @@ export default {
   watch: {
     initValue: function () {
       this.inputValue = this.initValue;
-     
     },
 
     reFocus: function () {
       if (this.autoFocus == "true") {
         this.$refs.inputREF.focus();
       }
-       
     },
   },
 };

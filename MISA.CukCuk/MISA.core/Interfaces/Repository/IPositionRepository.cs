@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Core.Interfaces.Repository
 {
-    public interface IPositionRepository:IBaseRepository<Position>
+    public interface IPositionRepository:IBaseRepository<Possition>
     {
     }
 }

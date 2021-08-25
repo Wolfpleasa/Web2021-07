@@ -1,7 +1,11 @@
 <template>
   <div>
     <Header />
-    <Menu :isToggle="isToggle" @toggleMenu="toggleMenu" />
+    <Menu
+      :isToggle="isToggle"
+      @toggleMenu="toggleMenu"
+      :isFocusEmployee="isFocusEmployee"
+    />
     <div :class="['content', { narrow: isToggle }, { expand: !isToggle }]">
       <div class="content-header">
         <div class="title">Danh sách nhân viên</div>
@@ -30,22 +34,27 @@
       </div>
       <div class="filter">
         <div class="d-flex">
-          <FieldInputIcon />
+          <FieldInputIcon
+            v-model="searchContent"
+            :searchContent="searchContent"
+          />
           <Dropdown
             className="department"
             defaultName="Tất cả phòng ban"
             dd_dropdown="dd-Department"
-            Url="api/Department"
+            Url="Departments"
             itemId="DepartmentId"
             itemName="DepartmentName"
+            @chooseDropdownItem="chooseDropdownItem"
           />
           <Dropdown
             className="position"
             defaultName="Tất cả vị trí"
             dd_dropdown="dd-Position"
-            Url="v1/Positions"
+            Url="Positions"
             itemId="PositionId"
             itemName="PositionName"
+            @chooseDropdownItem="chooseDropdownItem"
           />
         </div>
         <div class="refresh" @click="RefreshOnClick"></div>
@@ -87,25 +96,31 @@
                   :checked="isSelected[index]"
                 />
               </td>
-              <td>{{ ((currentPageNumber - 1) * EntityPerPage)+index + 1 }}</td>
+              <td>{{ (currentPageNumber - 1) * entityPerPage + index + 1 }}</td>
               <td>{{ employee.EmployeeCode }}</td>
-              <td>{{ employee.FullName }}</td>
+              <td :title="employee.FullName">{{ employee.FullName }}</td>
               <td>{{ employee.GenderName }}</td>
-              <td>{{ convertDate(employee.DateOfBirth) }}</td>
+              <!-- <td>{{ convertDate(employee.DateOfBirth) }}</td> -->
+              <td>{{ employee.DateOfBirth }}</td>
               <td>{{ employee.PhoneNumber }}</td>
-              <td>{{ employee.Email }}</td>
+              <td :title="employee.Email">{{ employee.Email }}</td>
               <td>{{ employee.PositionName }}</td>
               <td>{{ employee.DepartmentName }}</td>
-              <td>{{ formatMoney(employee.Salary) }}</td>
-              <td>{{ employee.WorkStatus }}</td>
+              <!-- <td>{{ formatMoney(employee.Salary) }}</td> -->
+              <td>{{ employee.Salary }}</td>
+              <td>{{ employee.WorkStatusName }}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <PageNavigation
         :totalEntity="totalEntity"
-        @UpdatePage="UpdatePage"
         :totalPageNumber="totalPageNumber"
+        :searchContent="searchContent"
+        :entityPerPage="entityPerPage"
+        :realEntityPerPage="realEntityPerPage"
+        @modifyNumber="modifyNumber"
+        @updatePage="updatePage"
       />
     </div>
 
@@ -125,41 +140,41 @@
       v-bind:dnone="DialogHasDnone"
       :employeeId="employeeId"
       :formMode="formMode"
+      :reopen="reopen"
+      :response="response"
       @btnDialogCancelOnClick="btnDialogCancelOnClick"
       @btnSaveOnClick="btnSaveOnClick"
       @resetAfterSaveData="resetAfterSaveData"
       @callToastMessage="callToastMessage"
-      :reopen="reopen"
-      :response="response"
     />
 
     <WarningPopup
       :idPopup="idPopup"
       v-bind:dnone="WarningHasDnone"
       :employeeId="employeeId"
-      @btnCancelOnClick="btnCancelOnClick"
       :warning="warning"
       :warningText="warningText"
       :btnCancelText="btnCancelText"
       :btnConfirmText="btnConfirmText"
-      @btnConfirmOnClick="btnConfirmOnClick"
       :subClass="bonusClass"
+      @btnCancelOnClick="btnCancelOnClick"
+      @btnConfirmOnClick="btnConfirmOnClick"
     />
 
     <ToastMessage
       :subClass="subClass"
       :HideToastMessage="HideToastMessage"
       :ToastMessageText="ToastMessageText"
-      @closeToastMessage="closeToastMessage"
-
       :active="active"
+      @closeToastMessage="closeToastMessage"
     />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { CommonFn } from "../../js/mixins.js";
+import CommonFn from "../../Common/Common.js";
+import Constant from "../../Common/Constant.js";
 
 import Header from "../../components/layout/TheHeader.vue";
 import Menu from "../../components/layout/TheMenu.vue";
@@ -174,7 +189,6 @@ import Loader from "../../components/base/BaseLoader.vue";
 import EmployeeDetail from "./EmployeeDetail.vue";
 import WarningPopup from "../../components/layout/WarningPopup.vue";
 export default {
-  mixins: [CommonFn],
   name: "EmployeeList",
   components: {
     Header,
@@ -193,6 +207,10 @@ export default {
     return {
       //EmployeeList
       employees: [],
+      //Phòng ban
+      departments: [],
+      //Vị trí
+      positions: [],
       //checkbox,tr
       isSelected: [],
       checked: false,
@@ -205,13 +223,15 @@ export default {
       ToastMessageText: "",
       //Loader
       HideLoader: true,
+
       //EmployeeDetail
       DialogHasDnone: true,
       employeeId: null,
       reopen: true,
       formMode: -1,
       subClass: "",
-      // form cảnh báo/thông báo
+
+      //--------------- form cảnh báo/thông báo ------------------
       WarningHasDnone: true,
       warning: "",
       warningText: "",
@@ -221,19 +241,34 @@ export default {
       notifyMode: -1,
       response: "",
       bonusClass: "",
+
+      //------------------------ Menu -------------------------
       // Thay đổi menu
       isToggle: true,
       // Silde
       active: false,
-      // Phân trang
+      // Tô đậm danh mục nhân viên
+      isFocusEmployee: true,
+
+      // -------------------- Phân trang ----------------------
       // Tổng số nhân viên
-      totalEntity: "",
+      totalEntity: 0,
       // Tổng số trang
       totalPageNumber: 1,
       // Trang hiện tại
       currentPageNumber: 1,
-      // Số bản ghi mỗi trang
-      EntityPerPage: 20,
+      // Số bản ghi mỗi trang dự kiến
+      entityPerPage: 5,
+      // Số bản ghi thực tế mỗi trang
+      realEntityPerPage: 1,
+
+      // ------------ Tìm kiếm ------------
+      // Nội dung tìm kiếm
+      searchContent: "",
+      // id vị trí
+      positionId: "",
+      //id phòng ban
+      departmentId: "",
     };
   },
 
@@ -246,7 +281,7 @@ export default {
       this.HideLoader = false;
       setTimeout(() => {
         this.HideLoader = true;
-      }, 2000);
+      }, 1000);
     },
 
     /**
@@ -416,31 +451,69 @@ export default {
      */
     btnConfirmOnClick(idPopup) {
       let me = this;
-      // Nếu form cảnh báo được gọi
+      // Nếu form cảnh báo xóa được gọi
       me.WarningHasDnone = true;
+      // if (idPopup == "warning-popup") {
+      //   me.isSelected.forEach((selected, index) => {
+      //     if (selected) {
+      //       me.employeeId = me.employees[index]["EmployeeId"];
+      //       axios
+      //         .delete(
+      //           `https://localhost:44373/api/v1/Employees/${me.employeeId}`
+      //         )
+      //         .then(() => {
+      //           me.callToastMessage("Xóa dữ liệu thành công", "message-green");
+      //           // reset các hàng thành không được chọn
+      //           me.isSelected = [];
+      //           // Tải lại bảng
+      //           me.loadDataTable();
+      //         })
+      //         .catch(() => {
+      //            me.callToastMessage("Có vấn đề xảy ra, không thể xóa dữ liệu", "message-red");
+      //         });
+      //     }
+      //   });
+      //   me.HideBtnDelete = true;
+      //   me.HideBtnDuplicate = true;
+      //   me.checked = false;
+      //   //me.checked = true;
+      // }
+
       if (idPopup == "warning-popup") {
+        let ids = [];
         me.isSelected.forEach((selected, index) => {
           if (selected) {
-            me.employeeId = me.employees[index]["EmployeeId"];
-            axios
-              .delete(`http://cukcuk.manhnv.net/v1/Employees/${me.employeeId}`)
-              .then(() => {
-                me.callToastMessage("Xóa dữ liệu thành công", "message-green");
-                // reset các hàng thành không được chọn
-                me.isSelected = [];
-                // Tải lại bảng
-                me.loadDataTable();
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            ids.push(me.employees[index]["EmployeeId"]);
           }
         });
+
+        setTimeout(function () {
+          axios
+            .post(
+              `https://localhost:44373/api/v1/Employees/Multiple/Delete`,
+              ids
+            )
+            .then(() => {
+              me.callToastMessage("Xóa dữ liệu thành công", "message-green");
+              // reset các hàng thành không được chọn
+              me.isSelected = [];
+              // Tải lại bảng
+              me.loadDataTable();
+            })
+            .catch(() => {
+              me.callToastMessage(
+                "Có vấn đề xảy ra, không thể xóa dữ liệu",
+                "message-red"
+              );
+            });
+        }, 500);
+
         me.HideBtnDelete = true;
         me.HideBtnDuplicate = true;
         me.checked = false;
         //me.checked = true;
       }
+
       //Form thông báo được gọi
       else {
         //Nút lưu của from detail được bấm
@@ -452,7 +525,6 @@ export default {
         else if (me.notifyMode == 1) {
           me.WarningHasDnone = true;
           me.DialogHasDnone = true;
-
           me.formMode = -1;
         }
         // Nút nhân bản được bấm
@@ -468,12 +540,6 @@ export default {
                 let employeeDuplicated = await me.getInfo(employeeId);
                 // lấy mã nhân viên mới
                 let newCode = await me.getNewCode();
-                console.log(
-                  newCode,
-                  " | ",
-                  employeeDuplicated,
-                  Number(new Date())
-                );
                 // gán mã nhân viên vừa lấy dc vào mã nhân viên của nhân viên được chọn để tạo ra 1 nhân viên nhân bản
                 employeeDuplicated["EmployeeCode"] = newCode;
                 // gửi nhân viên nhân bản lên để thêm vào db
@@ -551,14 +617,50 @@ export default {
     },
 
     /**
+     * Hàm lấy id của dropdown được chọn để tìm kiếm
+     * Ngọc 24/08/2021
+     */
+    chooseDropdownItem(itemValue, itemID) {
+      let me = this;
+      switch (itemID) {
+        case "DepartmentId":
+          me.departmentId = itemValue;
+          break;
+        case "PositionId":
+          me.positionId = itemValue;
+          break;
+        default:
+          break;
+      }
+      me.loadDataTable();
+    },
+
+    /**
+     * Hàm tăng/giảm số lượng thực thể theo trang
+     * Ngọc 12/8/2021
+     */
+    modifyNumber(modifyStatus) {
+      let me = this;
+      switch (modifyStatus) {
+        case "increaseNumber":
+          if (me.entityPerPage <= me.totalEntity - 5) me.entityPerPage += 5;
+          break;
+        case "decreaseNumber":
+          if (me.entityPerPage > 5) me.entityPerPage -= 5;
+          break;
+        default:
+          break;
+      }
+      me.loadDataTable();
+    },
+
+    /**
      * Hàm được gọi khi thay đổi page hoặc số lượng nhân viên/trang
      * Ngọc 12/8/2021
      */
-    UpdatePage(currentPageNumber, EntityPerPage) {
+    updatePage(currentPageNumber) {
       let me = this;
-      console.log(currentPageNumber, EntityPerPage);
       me.currentPageNumber = currentPageNumber;
-      me.EntityPerPage = EntityPerPage;
       me.RefreshOnClick();
       me.loadDataTable();
     },
@@ -569,24 +671,91 @@ export default {
      */
     loadDataTable() {
       let me = this;
+      me.employees = [];
+      let url = `${Constant.LocalUrl}Employees/Paging?pageSize=${me.entityPerPage}&pageNumber=${me.currentPageNumber}`;
+
+      if (me.searchContent != "") {
+        url += `&searchContent=${me.searchContent}`;
+      }
+
+      if (me.positionId != "") {
+        url += `&positionId=${me.positionId}`;
+      }
+
+      if (me.departmentId != "") {
+        url += `&departmentId=${me.departmentId}`;
+      }
+
       axios
-        .get("http://cukcuk.manhnv.net/v1/Employees")
+        .get(url)
         .then((res) => {
-          me.employees = res.data.slice(
-            (me.currentPageNumber - 1) * me.EntityPerPage,
-            (me.currentPageNumber - 1) * me.EntityPerPage + me.EntityPerPage
-          );
-          me.totalEntity = res.data.length + "";
-          me.totalPageNumber = Number(
-            Math.ceil(res.data.length / me.EntityPerPage)
-          );
-          console.log(res.data.length, "|", me.EntityPerPage);
-          // reset các tr vme.ề không được chọn
-          me.resetTr();
+          if (res.status == 200) {
+            me.employees = res.data.Entities;
+            me.totalEntity = res.data.TotalRecord;
+            me.totalPageNumber = res.data.TotalPageNumber;
+            me.realEntityPerPage = res.data.Entities.length;
+            // format các employee
+            me.format(me.employees);
+            // reset các tr về không được chọn
+            me.resetTr();
+          } else if (res.status == 204) {
+            me.totalEntity = 0;
+            me.totalPageNumber = 1;
+            me.currentPageNumber = 1;
+          }
         })
         .catch((res) => {
           console.log(res);
         });
+    },
+
+    /**
+     * Hàm format sau khi lấy dữ liệu
+     * Ngọc 12/8/2021
+     */
+    format(employees) {
+      let me = this;
+      employees.forEach(function (employee) {
+        if (employee["Salary"]) {
+          employee["Salary"] = CommonFn.formatMoney(employee["Salary"]);
+        }
+
+        if (employee.DateOfBirth) {
+          employee.DateOfBirth = CommonFn.formatDate(employee.DateOfBirth);
+        }
+
+        me.getDepartmentName(employee);
+        me.getPositionName(employee);
+
+        employee.GenderName = CommonFn.getValueEnum(employee.Gender, "Gender");
+        employee.WorkStatusName =  CommonFn.getValueEnum(employee.WorkStatus, "WorkStatus");
+      });
+    },
+
+    /**
+     * Hàm render tên phòng ban
+     * Ngọc 25/7/2021
+     */
+    getDepartmentName(employee) {
+      let me = this;
+      me.departments.forEach(function (department) {
+        if (employee.DepartmentId == department.DepartmentId) {
+          employee.DepartmentName = department.DepartmentName;
+        }
+      });
+    },
+
+    /**
+     * Hàm render tên vị trí
+     * Ngọc 25/7/2021
+     */
+    getPositionName(employee) {
+      let me = this;
+      me.positions.forEach(function (position) {
+        if (employee.PositionId == position.PositionId) {
+          employee.PositionName = position.PositionName;
+        }
+      });
     },
 
     /**
@@ -703,13 +872,48 @@ export default {
     toggleMenu() {
       this.isToggle = !this.isToggle;
     },
+
+    /**
+     * load dữ liệu phòng ban
+     * Ngọc 25/07/2021
+     */
+    getDepartment() {
+      let me = this;
+      axios
+        .get(`${Constant.LocalUrl}Departments`)
+        .then((res) => {
+          me.departments = res.data;
+        })
+        .catch((res) => {
+          me.callToastMessage(res, "message-red");
+        });
+    },
+
+     /**
+     * load dữ liệu vị trí
+     * Ngọc 25/07/2021
+     */
+    getPosition() {
+      let me = this;
+      axios
+        .get(`${Constant.LocalUrl}Positions`)
+        .then((res) => {
+          me.positions = res.data;
+        })
+        .catch((res) => {
+          me.callToastMessage(res, "message-red");
+        });
+    },
   },
 
   created() {
-    this.loadDataTable();
+    this.getDepartment();
+    this.getPosition();
   },
 
   watch: {},
+
+  mounted() {},
 };
 </script>
 

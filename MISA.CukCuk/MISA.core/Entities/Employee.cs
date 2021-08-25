@@ -33,14 +33,18 @@ namespace MISA.Core.Entities
         /// </summary>
         [MISARequired ("Họ và tên")]
         public string FullName { get; set; }
+
         /// <summary>
         /// Giới tính
         /// </summary>
         public int? Gender { get; set; }
+
+
         /// <summary>
         /// Địa chỉ
         /// </summary>
         public string Address { get; set; }
+
         /// <summary>
         /// Ngày sinh
         /// </summary>
@@ -84,9 +88,21 @@ namespace MISA.Core.Entities
         public string Salary { get; set; }
 
         /// <summary>
+        /// Ngày gia nhập công ty
+        /// </summary>
+        public DateTime? JoinDate { get; set; }
+
+
+        /// <summary>
+        /// Tình trạng công việc
+        /// </summary>
+        public int? WorkStatus { get; set; }
+
+        /// <summary>
         /// Khóa ngoại
         /// </summary>
         public Guid? PositionId { get; set; }
+
 
         /// <summary>
         /// Khóa ngoại

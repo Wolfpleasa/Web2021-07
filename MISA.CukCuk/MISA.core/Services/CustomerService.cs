@@ -39,7 +39,7 @@ namespace MISA.Core.Services
             // Check file có hợp lệ không
             if (formFile == null)
             {
-                _serviceResult.Messenger = Properties.ResourceVN.Form_File_IsNot_Null;
+                _serviceResult.Message = Properties.ResourceVN.Form_File_IsNot_Null;
                 _serviceResult.isValid = false;
                 return _serviceResult;
             }
@@ -74,7 +74,7 @@ namespace MISA.Core.Services
                             FullName = (FullName != null) ? FullName.ToString().Trim() : string.Empty,
                             MemberCardCode = (MemberCardCode != null) ? MemberCardCode.ToString().Trim() : string.Empty,
                             CustomerGroupName = (CustomerGroupName != null) ? CustomerGroupName.ToString().Trim() : string.Empty,
-                            PhoneNumber = (PhoneNumber != null) ? PhoneNumber.ToString().Trim() : string.Empty,
+                            PhoneNumber = (PhoneNumber != null) ? CommonFn.FormatPhoneNumber(PhoneNumber.ToString().Trim()) : string.Empty,
                             DateOfBirth = (DateOfBirth != null) ? CommonFn.ConvertToYMD(DateOfBirth.ToString().Trim()) : null,
                             CompanyName = (CompanyName != null) ? CompanyName.ToString().Trim() : string.Empty,
                             CompanyTaxCode = (CompanyTaxCode != null) ? CompanyTaxCode.ToString().Trim() : string.Empty,

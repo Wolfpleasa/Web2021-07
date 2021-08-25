@@ -60,7 +60,7 @@ namespace MISA.CukCuk.API.Controllers
                 {
                     var errorObj = new
                     {                    
-                        userMsg = serviceResult.Messenger
+                        userMsg = serviceResult.Message
                     };
                     return BadRequest(errorObj);
                 }

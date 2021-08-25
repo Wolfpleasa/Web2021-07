@@ -1,16 +1,18 @@
 <template>
   <div id="app">
-      <EmployeeList/>
+      <router-view></router-view>
   </div>
 </template>
 
 <script>
-import EmployeeList from "./view/employee/EmployeeList.vue"
+// import EmployeeList from "./view/employee/EmployeeList.vue";
+// import CustomerList from "./view/employee/CustomerList.vue";
 
 export default {
   name: 'App',
   components: {
-    EmployeeList
+    // EmployeeList,
+    // CustomerList,
   }
 }
 </script>

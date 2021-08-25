@@ -6,19 +6,20 @@
     height: auto;
     position: absolute;
     width: calc(100% - 84px);
-    left: 42px;
-    right: 42px;
+    left: 28px;
+    right: 28px;
     bottom: 45px;
     z-index: 10;
     background-color: #ff4747;
     text-align: center;
     line-height: 17px;
     border-radius: 4px;
-    padding: 4px 0;
+    padding: 12px 16px;
 }
 
 .tooltip .tooltip-text {
     max-width: 200px;
+    color: #fff;
 }
 
 .tooltip .tooltip-icon {
@@ -30,4 +31,5 @@
     width: 16px;
     height: 16px;
     left: calc((100% - 16px) / 2);
+    top: 55px
 }

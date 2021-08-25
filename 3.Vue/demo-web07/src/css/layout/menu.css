@@ -42,11 +42,10 @@
     color: #fff;
 }
 
-
-/* .menu .menu-item.selected {
+.menu .menu-item.selected {
     background-color: #019160 !important;
     color: #fff;
-} */
+}
 
 .menu .menu-item:nth-last-child(4) {
     background-color: #019160 !important;
@@ -81,15 +80,14 @@
     overflow: hidden;
 }
 
-
-/* a {
+a {
     text-decoration: none;
     color: #000;
 }
 
 .menu .menu-item.selected a {
     color: #fff;
-} */
+}
 
 .toggle-menu {
     float: right;

@@ -39,13 +39,6 @@ th {
     text-overflow: ellipsis;
 }
 
-th:hover {
-    text-align: left;
-    overflow: auto;
-    white-space: nowrap;
-    text-overflow: initial;
-}
-
 tr th:nth-child(1) {
     padding-left: 16px;
     padding-right: 10px;
@@ -109,13 +102,6 @@ td {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-
-td:hover {
-    text-align: left;
-    overflow: auto;
-    white-space: nowrap;
-    text-overflow: initial;
 }
 
 tr td:first-child {

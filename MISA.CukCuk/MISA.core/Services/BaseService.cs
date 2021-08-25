@@ -80,7 +80,7 @@ namespace MISA.Core.Services
         /// <param name="entity"></param>
         /// <returns></returns>
         /// CreatedBy : Ngọc 18/8/2021
-        public ServiceResult Edit(MISAEntity entity, Guid entityId)
+        public virtual ServiceResult Edit(MISAEntity entity, Guid entityId)
         {
             //validate dữ liệu và xử lí nghiệp vụ
             var className = typeof(MISAEntity).Name;
@@ -147,7 +147,7 @@ namespace MISA.Core.Services
                     if (string.IsNullOrEmpty(propValue))
                     {
                         isValid = false;
-                        _serviceResult.Messenger = string.Format(Properties.ResourceVN.Empty_Field, propName);
+                        _serviceResult.Message = string.Format(Properties.ResourceVN.Empty_Field, propName);
                         _serviceResult.isValid = false;
                     }
                 }
@@ -176,7 +176,7 @@ namespace MISA.Core.Services
                     if (!isMatch)
                     {
                         isValid = false;
-                        _serviceResult.Messenger = Properties.ResourceVN.Error_Email;
+                        _serviceResult.Message = Properties.ResourceVN.Error_Email;
                         _serviceResult.isValid = false;
                     }
                 }
@@ -206,7 +206,7 @@ namespace MISA.Core.Services
                     if (!isMatch)
                     {
                         isValid = false;
-                        _serviceResult.Messenger = string.Format(Properties.ResourceVN.Contain_Numbers_Only, propName);
+                        _serviceResult.Message = string.Format(Properties.ResourceVN.Contain_Numbers_Only, propName);
                         _serviceResult.isValid = false;
                     }
                 }
@@ -235,7 +235,7 @@ namespace MISA.Core.Services
                     if (!isMatch)
                     {
                         isValid = false;
-                        _serviceResult.Messenger = Properties.ResourceVN.Error_PhoneNumber;
+                        _serviceResult.Message = Properties.ResourceVN.Error_PhoneNumber;
                         _serviceResult.isValid = false;
                     }
                 }
@@ -254,7 +254,7 @@ namespace MISA.Core.Services
             var isValid = _baseRepository.checkedCodeExist(entityCode, entityId);
             if (!isValid)
             {
-                _serviceResult.Messenger = Properties.ResourceVN.Duplicate_Code;
+                _serviceResult.Message = Properties.ResourceVN.Duplicate_Code;
                 _serviceResult.isValid = false;
             }
             return isValid;
